@@ -1,4 +1,5 @@
 import { readFileSync } from 'fs';
+import helmet from 'helmet';
 import { join } from 'path';
 
 import { ValidationPipe, VersioningType } from '@nestjs/common';
@@ -9,6 +10,18 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use(helmet());
+
+  const crossOrigins = (process.env.CORS_ORIGINS ?? '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+  app.enableCors({
+    origin: crossOrigins,
+    credentials: true,
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
