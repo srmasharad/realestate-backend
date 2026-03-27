@@ -1,14 +1,13 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import {
-  ApiBadRequestResponse,
-  ApiOperation,
-  ApiTags,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger';
+import { CurrentUser } from 'src/common/decorators/current-user.decorator';
+
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { ApiBadRequestResponse, ApiBearerAuth, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { type AuthenticatedUser } from './types/authenticated-user.type';
 
 @ApiTags('Auth')
 @Controller({
@@ -32,5 +31,13 @@ export class AuthController {
   @ApiUnauthorizedResponse({ description: 'Invalid email or password' })
   login(@Body() body: LoginDto) {
     return this.authService.login(body);
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get current authenticated user' })
+  me(@CurrentUser() user: AuthenticatedUser) {
+    return user;
   }
 }

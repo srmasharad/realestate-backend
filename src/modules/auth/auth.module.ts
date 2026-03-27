@@ -1,8 +1,5 @@
 import { Module } from '@nestjs/common';
-import {
-  ConfigModule,
-  ConfigService,
-} from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 
 import { AuthController } from './auth.controller';
@@ -18,9 +15,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
       useFactory: (configService: ConfigService) => {
         const secret = configService.get<string>('JWT_ACCESS_SECRET');
 
-        const expiresIn = Number(
-          configService.getOrThrow<number>('JWT_ACCESS_EXPIRES_IN'),
-        );
+        const expiresIn = Number(configService.getOrThrow<number>('JWT_ACCESS_EXPIRES_IN'));
 
         return {
           secret,
