@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 
 import { PrismaModule } from './database/prisma.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { HealthModule } from './modules/health/health.module';
 import { UsersModule } from './modules/users/users.module';
 
 @Module({
@@ -13,9 +14,7 @@ import { UsersModule } from './modules/users/users.module';
       isGlobal: true,
       validationSchema: Joi.object({
         PORT: Joi.number().default(3000),
-        NODE_ENV: Joi.string()
-          .valid('development', 'test', 'production')
-          .default('development'),
+        NODE_ENV: Joi.string().valid('development', 'test', 'production').default('development'),
         API_PREFIX: Joi.string().default('api'),
         API_VERSION: Joi.string().default('1'),
         DATABASE_URL: Joi.string().required(),
@@ -27,6 +26,7 @@ import { UsersModule } from './modules/users/users.module';
     PrismaModule,
     UsersModule,
     AuthModule,
+    HealthModule,
   ],
   controllers: [],
   providers: [],

@@ -2,13 +2,16 @@ import { readFileSync } from 'fs';
 import helmet from 'helmet';
 import { join } from 'path';
 
-import { ValidationPipe, VersioningType } from '@nestjs/common';
+import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
+import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
+import { TransformResponseInterceptor } from './common/interceptors/transform-response.interceptor';
 
 async function bootstrap() {
+  const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
 
   app.use(helmet());
@@ -30,6 +33,9 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  app.useGlobalFilters(new GlobalExceptionFilter());
+  app.useGlobalInterceptors(new TransformResponseInterceptor());
 
   const apiPrefix = process.env.API_PREFIX ?? 'api';
   const apiVersion = process.env.API_VERSION ?? '1';
@@ -59,5 +65,24 @@ async function bootstrap() {
   SwaggerModule.setup(`${apiPrefix}/docs`, app, swaggerDocument);
 
   await app.listen(port);
+
+  const baseUrl = await app.getUrl();
+  const apiBaseUrl = `${baseUrl}/${apiPrefix}`;
+  const swaggerUrl = `${baseUrl}/${apiPrefix}/docs`;
+
+  logger.log(`Real Estate Backend API running at ${apiBaseUrl}`);
+  logger.log(`Swagger Docs available at ${swaggerUrl}`);
+  logger.log(`Environment: ${process.env.NODE_ENV ?? 'development'}`);
+  logger.log(`API Version: v${apiVersion}`);
 }
-bootstrap();
+bootstrap().catch((error: unknown) => {
+  const logger = new Logger('Bootstrap');
+
+  if (error instanceof Error) {
+    logger.error(`Failed to start application: ${error.message}`, error.stack);
+  } else {
+    logger.error('Failed to start application due to an unknown error');
+  }
+
+  process.exit(1);
+});

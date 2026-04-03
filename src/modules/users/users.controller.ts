@@ -1,9 +1,10 @@
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { Roles } from 'src/common/decorators/roles.decorator';
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { UserRole } from 'src/generated/prisma';
 
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -27,8 +28,8 @@ export class UsersController {
 
   @Get()
   @ApiOperation({ summary: 'Get all users' })
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@Query() query: PaginationQueryDto) {
+    return this.usersService.findAll(query);
   }
 
   @Get('admin-only')
