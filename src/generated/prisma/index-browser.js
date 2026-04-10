@@ -133,6 +133,42 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PersonProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  fullName: 'fullName',
+  phone: 'phone',
+  addressLine1: 'addressLine1',
+  suburb: 'suburb',
+  state: 'state',
+  postcode: 'postcode',
+  employmentStatus: 'employmentStatus',
+  monthlyIncome: 'monthlyIncome',
+  householdSize: 'householdSize',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PropertyScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  listingType: 'listingType',
+  propertyType: 'propertyType',
+  price: 'price',
+  addressLine1: 'addressLine1',
+  suburb: 'suburb',
+  state: 'state',
+  postcode: 'postcode',
+  bedrooms: 'bedrooms',
+  bathrooms: 'bathrooms',
+  parkingSpaces: 'parkingSpaces',
+  isPublished: 'isPublished',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -153,8 +189,24 @@ exports.UserRole = exports.$Enums.UserRole = {
   ADMIN: 'ADMIN'
 };
 
+exports.ListingType = exports.$Enums.ListingType = {
+  RENT: 'RENT',
+  SALE: 'SALE'
+};
+
+exports.PropertyType = exports.$Enums.PropertyType = {
+  HOUSE: 'HOUSE',
+  UNIT: 'UNIT',
+  TOWNHOUSE: 'TOWNHOUSE',
+  APARTMENT: 'APARTMENT',
+  COMMERCIAL: 'COMMERCIAL',
+  LAND: 'LAND'
+};
+
 exports.Prisma.ModelName = {
-  User: 'User'
+  User: 'User',
+  PersonProfile: 'PersonProfile',
+  Property: 'Property'
 };
 
 /**

@@ -18,6 +18,16 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  * 
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
+/**
+ * Model PersonProfile
+ * 
+ */
+export type PersonProfile = $Result.DefaultSelection<Prisma.$PersonProfilePayload>
+/**
+ * Model Property
+ * 
+ */
+export type Property = $Result.DefaultSelection<Prisma.$PropertyPayload>
 
 /**
  * Enums
@@ -31,11 +41,39 @@ export namespace $Enums {
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
+
+export const ListingType: {
+  RENT: 'RENT',
+  SALE: 'SALE'
+};
+
+export type ListingType = (typeof ListingType)[keyof typeof ListingType]
+
+
+export const PropertyType: {
+  HOUSE: 'HOUSE',
+  UNIT: 'UNIT',
+  TOWNHOUSE: 'TOWNHOUSE',
+  APARTMENT: 'APARTMENT',
+  COMMERCIAL: 'COMMERCIAL',
+  LAND: 'LAND'
+};
+
+export type PropertyType = (typeof PropertyType)[keyof typeof PropertyType]
+
 }
 
 export type UserRole = $Enums.UserRole
 
 export const UserRole: typeof $Enums.UserRole
+
+export type ListingType = $Enums.ListingType
+
+export const ListingType: typeof $Enums.ListingType
+
+export type PropertyType = $Enums.PropertyType
+
+export const PropertyType: typeof $Enums.PropertyType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -167,6 +205,26 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.personProfile`: Exposes CRUD operations for the **PersonProfile** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PersonProfiles
+    * const personProfiles = await prisma.personProfile.findMany()
+    * ```
+    */
+  get personProfile(): Prisma.PersonProfileDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.property`: Exposes CRUD operations for the **Property** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Properties
+    * const properties = await prisma.property.findMany()
+    * ```
+    */
+  get property(): Prisma.PropertyDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -601,7 +659,9 @@ export namespace Prisma {
 
 
   export const ModelName: {
-    User: 'User'
+    User: 'User',
+    PersonProfile: 'PersonProfile',
+    Property: 'Property'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -617,7 +677,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user"
+      modelProps: "user" | "personProfile" | "property"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -692,6 +752,154 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      PersonProfile: {
+        payload: Prisma.$PersonProfilePayload<ExtArgs>
+        fields: Prisma.PersonProfileFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PersonProfileFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonProfilePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PersonProfileFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonProfilePayload>
+          }
+          findFirst: {
+            args: Prisma.PersonProfileFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonProfilePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PersonProfileFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonProfilePayload>
+          }
+          findMany: {
+            args: Prisma.PersonProfileFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonProfilePayload>[]
+          }
+          create: {
+            args: Prisma.PersonProfileCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonProfilePayload>
+          }
+          createMany: {
+            args: Prisma.PersonProfileCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PersonProfileCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonProfilePayload>[]
+          }
+          delete: {
+            args: Prisma.PersonProfileDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonProfilePayload>
+          }
+          update: {
+            args: Prisma.PersonProfileUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonProfilePayload>
+          }
+          deleteMany: {
+            args: Prisma.PersonProfileDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PersonProfileUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PersonProfileUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonProfilePayload>[]
+          }
+          upsert: {
+            args: Prisma.PersonProfileUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonProfilePayload>
+          }
+          aggregate: {
+            args: Prisma.PersonProfileAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePersonProfile>
+          }
+          groupBy: {
+            args: Prisma.PersonProfileGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PersonProfileGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PersonProfileCountArgs<ExtArgs>
+            result: $Utils.Optional<PersonProfileCountAggregateOutputType> | number
+          }
+        }
+      }
+      Property: {
+        payload: Prisma.$PropertyPayload<ExtArgs>
+        fields: Prisma.PropertyFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PropertyFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PropertyPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PropertyFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PropertyPayload>
+          }
+          findFirst: {
+            args: Prisma.PropertyFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PropertyPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PropertyFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PropertyPayload>
+          }
+          findMany: {
+            args: Prisma.PropertyFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PropertyPayload>[]
+          }
+          create: {
+            args: Prisma.PropertyCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PropertyPayload>
+          }
+          createMany: {
+            args: Prisma.PropertyCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PropertyCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PropertyPayload>[]
+          }
+          delete: {
+            args: Prisma.PropertyDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PropertyPayload>
+          }
+          update: {
+            args: Prisma.PropertyUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PropertyPayload>
+          }
+          deleteMany: {
+            args: Prisma.PropertyDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PropertyUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PropertyUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PropertyPayload>[]
+          }
+          upsert: {
+            args: Prisma.PropertyUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PropertyPayload>
+          }
+          aggregate: {
+            args: Prisma.PropertyAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProperty>
+          }
+          groupBy: {
+            args: Prisma.PropertyGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PropertyGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PropertyCountArgs<ExtArgs>
+            result: $Utils.Optional<PropertyCountAggregateOutputType> | number
           }
         }
       }
@@ -804,6 +1012,8 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     user?: UserOmit
+    personProfile?: PersonProfileOmit
+    property?: PropertyOmit
   }
 
   /* Types for Logging */
@@ -878,6 +1088,36 @@ export namespace Prisma {
    * Count Types
    */
 
+
+  /**
+   * Count Type UserCountOutputType
+   */
+
+  export type UserCountOutputType = {
+    properties: number
+  }
+
+  export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    properties?: boolean | UserCountOutputTypeCountPropertiesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCountOutputType
+     */
+    select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPropertiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PropertyWhereInput
+  }
 
 
   /**
@@ -1088,6 +1328,9 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    properties?: boolean | User$propertiesArgs<ExtArgs>
+    profile?: boolean | User$profileArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1130,10 +1373,20 @@ export namespace Prisma {
   }
 
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "fullName" | "passwordHash" | "phone" | "googleId" | "role" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    properties?: boolean | User$propertiesArgs<ExtArgs>
+    profile?: boolean | User$profileArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
-    objects: {}
+    objects: {
+      properties: Prisma.$PropertyPayload<ExtArgs>[]
+      profile: Prisma.$PersonProfilePayload<ExtArgs> | null
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       email: string
@@ -1539,6 +1792,8 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    properties<T extends User$propertiesArgs<ExtArgs> = {}>(args?: Subset<T, User$propertiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    profile<T extends User$profileArgs<ExtArgs> = {}>(args?: Subset<T, User$profileArgs<ExtArgs>>): Prisma__PersonProfileClient<$Result.GetResult<Prisma.$PersonProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1595,6 +1850,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -1613,6 +1872,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -1630,6 +1893,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * Filter, which User to fetch.
      */
@@ -1679,6 +1946,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where?: UserWhereInput
@@ -1726,6 +1997,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * Filter, which Users to fetch.
      */
@@ -1775,6 +2050,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * The data needed to create a User.
      */
     data: XOR<UserCreateInput, UserUncheckedCreateInput>
@@ -1822,6 +2101,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The data needed to update a User.
      */
@@ -1889,6 +2172,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * The filter to search for the User to update in case it exists.
      */
     where: UserWhereUniqueInput
@@ -1915,6 +2202,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter which User to delete.
      */
     where: UserWhereUniqueInput
@@ -1935,6 +2226,49 @@ export namespace Prisma {
   }
 
   /**
+   * User.properties
+   */
+  export type User$propertiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Property
+     */
+    select?: PropertySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Property
+     */
+    omit?: PropertyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyInclude<ExtArgs> | null
+    where?: PropertyWhereInput
+    orderBy?: PropertyOrderByWithRelationInput | PropertyOrderByWithRelationInput[]
+    cursor?: PropertyWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PropertyScalarFieldEnum | PropertyScalarFieldEnum[]
+  }
+
+  /**
+   * User.profile
+   */
+  export type User$profileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonProfile
+     */
+    select?: PersonProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonProfile
+     */
+    omit?: PersonProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonProfileInclude<ExtArgs> | null
+    where?: PersonProfileWhereInput
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1946,6 +2280,2480 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PersonProfile
+   */
+
+  export type AggregatePersonProfile = {
+    _count: PersonProfileCountAggregateOutputType | null
+    _avg: PersonProfileAvgAggregateOutputType | null
+    _sum: PersonProfileSumAggregateOutputType | null
+    _min: PersonProfileMinAggregateOutputType | null
+    _max: PersonProfileMaxAggregateOutputType | null
+  }
+
+  export type PersonProfileAvgAggregateOutputType = {
+    monthlyIncome: Decimal | null
+    householdSize: number | null
+  }
+
+  export type PersonProfileSumAggregateOutputType = {
+    monthlyIncome: Decimal | null
+    householdSize: number | null
+  }
+
+  export type PersonProfileMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    fullName: string | null
+    phone: string | null
+    addressLine1: string | null
+    suburb: string | null
+    state: string | null
+    postcode: string | null
+    employmentStatus: string | null
+    monthlyIncome: Decimal | null
+    householdSize: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PersonProfileMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    fullName: string | null
+    phone: string | null
+    addressLine1: string | null
+    suburb: string | null
+    state: string | null
+    postcode: string | null
+    employmentStatus: string | null
+    monthlyIncome: Decimal | null
+    householdSize: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PersonProfileCountAggregateOutputType = {
+    id: number
+    userId: number
+    fullName: number
+    phone: number
+    addressLine1: number
+    suburb: number
+    state: number
+    postcode: number
+    employmentStatus: number
+    monthlyIncome: number
+    householdSize: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PersonProfileAvgAggregateInputType = {
+    monthlyIncome?: true
+    householdSize?: true
+  }
+
+  export type PersonProfileSumAggregateInputType = {
+    monthlyIncome?: true
+    householdSize?: true
+  }
+
+  export type PersonProfileMinAggregateInputType = {
+    id?: true
+    userId?: true
+    fullName?: true
+    phone?: true
+    addressLine1?: true
+    suburb?: true
+    state?: true
+    postcode?: true
+    employmentStatus?: true
+    monthlyIncome?: true
+    householdSize?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PersonProfileMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    fullName?: true
+    phone?: true
+    addressLine1?: true
+    suburb?: true
+    state?: true
+    postcode?: true
+    employmentStatus?: true
+    monthlyIncome?: true
+    householdSize?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PersonProfileCountAggregateInputType = {
+    id?: true
+    userId?: true
+    fullName?: true
+    phone?: true
+    addressLine1?: true
+    suburb?: true
+    state?: true
+    postcode?: true
+    employmentStatus?: true
+    monthlyIncome?: true
+    householdSize?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PersonProfileAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PersonProfile to aggregate.
+     */
+    where?: PersonProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PersonProfiles to fetch.
+     */
+    orderBy?: PersonProfileOrderByWithRelationInput | PersonProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PersonProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PersonProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PersonProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PersonProfiles
+    **/
+    _count?: true | PersonProfileCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PersonProfileAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PersonProfileSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PersonProfileMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PersonProfileMaxAggregateInputType
+  }
+
+  export type GetPersonProfileAggregateType<T extends PersonProfileAggregateArgs> = {
+        [P in keyof T & keyof AggregatePersonProfile]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePersonProfile[P]>
+      : GetScalarType<T[P], AggregatePersonProfile[P]>
+  }
+
+
+
+
+  export type PersonProfileGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PersonProfileWhereInput
+    orderBy?: PersonProfileOrderByWithAggregationInput | PersonProfileOrderByWithAggregationInput[]
+    by: PersonProfileScalarFieldEnum[] | PersonProfileScalarFieldEnum
+    having?: PersonProfileScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PersonProfileCountAggregateInputType | true
+    _avg?: PersonProfileAvgAggregateInputType
+    _sum?: PersonProfileSumAggregateInputType
+    _min?: PersonProfileMinAggregateInputType
+    _max?: PersonProfileMaxAggregateInputType
+  }
+
+  export type PersonProfileGroupByOutputType = {
+    id: string
+    userId: string
+    fullName: string
+    phone: string
+    addressLine1: string
+    suburb: string
+    state: string
+    postcode: string
+    employmentStatus: string
+    monthlyIncome: Decimal
+    householdSize: number
+    createdAt: Date
+    updatedAt: Date
+    _count: PersonProfileCountAggregateOutputType | null
+    _avg: PersonProfileAvgAggregateOutputType | null
+    _sum: PersonProfileSumAggregateOutputType | null
+    _min: PersonProfileMinAggregateOutputType | null
+    _max: PersonProfileMaxAggregateOutputType | null
+  }
+
+  type GetPersonProfileGroupByPayload<T extends PersonProfileGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PersonProfileGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PersonProfileGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PersonProfileGroupByOutputType[P]>
+            : GetScalarType<T[P], PersonProfileGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PersonProfileSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    fullName?: boolean
+    phone?: boolean
+    addressLine1?: boolean
+    suburb?: boolean
+    state?: boolean
+    postcode?: boolean
+    employmentStatus?: boolean
+    monthlyIncome?: boolean
+    householdSize?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["personProfile"]>
+
+  export type PersonProfileSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    fullName?: boolean
+    phone?: boolean
+    addressLine1?: boolean
+    suburb?: boolean
+    state?: boolean
+    postcode?: boolean
+    employmentStatus?: boolean
+    monthlyIncome?: boolean
+    householdSize?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["personProfile"]>
+
+  export type PersonProfileSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    fullName?: boolean
+    phone?: boolean
+    addressLine1?: boolean
+    suburb?: boolean
+    state?: boolean
+    postcode?: boolean
+    employmentStatus?: boolean
+    monthlyIncome?: boolean
+    householdSize?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["personProfile"]>
+
+  export type PersonProfileSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    fullName?: boolean
+    phone?: boolean
+    addressLine1?: boolean
+    suburb?: boolean
+    state?: boolean
+    postcode?: boolean
+    employmentStatus?: boolean
+    monthlyIncome?: boolean
+    householdSize?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PersonProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "fullName" | "phone" | "addressLine1" | "suburb" | "state" | "postcode" | "employmentStatus" | "monthlyIncome" | "householdSize" | "createdAt" | "updatedAt", ExtArgs["result"]["personProfile"]>
+  export type PersonProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type PersonProfileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type PersonProfileIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $PersonProfilePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PersonProfile"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      fullName: string
+      phone: string
+      addressLine1: string
+      suburb: string
+      state: string
+      postcode: string
+      employmentStatus: string
+      monthlyIncome: Prisma.Decimal
+      householdSize: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["personProfile"]>
+    composites: {}
+  }
+
+  type PersonProfileGetPayload<S extends boolean | null | undefined | PersonProfileDefaultArgs> = $Result.GetResult<Prisma.$PersonProfilePayload, S>
+
+  type PersonProfileCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PersonProfileFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PersonProfileCountAggregateInputType | true
+    }
+
+  export interface PersonProfileDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PersonProfile'], meta: { name: 'PersonProfile' } }
+    /**
+     * Find zero or one PersonProfile that matches the filter.
+     * @param {PersonProfileFindUniqueArgs} args - Arguments to find a PersonProfile
+     * @example
+     * // Get one PersonProfile
+     * const personProfile = await prisma.personProfile.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PersonProfileFindUniqueArgs>(args: SelectSubset<T, PersonProfileFindUniqueArgs<ExtArgs>>): Prisma__PersonProfileClient<$Result.GetResult<Prisma.$PersonProfilePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PersonProfile that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PersonProfileFindUniqueOrThrowArgs} args - Arguments to find a PersonProfile
+     * @example
+     * // Get one PersonProfile
+     * const personProfile = await prisma.personProfile.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PersonProfileFindUniqueOrThrowArgs>(args: SelectSubset<T, PersonProfileFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PersonProfileClient<$Result.GetResult<Prisma.$PersonProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PersonProfile that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PersonProfileFindFirstArgs} args - Arguments to find a PersonProfile
+     * @example
+     * // Get one PersonProfile
+     * const personProfile = await prisma.personProfile.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PersonProfileFindFirstArgs>(args?: SelectSubset<T, PersonProfileFindFirstArgs<ExtArgs>>): Prisma__PersonProfileClient<$Result.GetResult<Prisma.$PersonProfilePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PersonProfile that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PersonProfileFindFirstOrThrowArgs} args - Arguments to find a PersonProfile
+     * @example
+     * // Get one PersonProfile
+     * const personProfile = await prisma.personProfile.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PersonProfileFindFirstOrThrowArgs>(args?: SelectSubset<T, PersonProfileFindFirstOrThrowArgs<ExtArgs>>): Prisma__PersonProfileClient<$Result.GetResult<Prisma.$PersonProfilePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PersonProfiles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PersonProfileFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PersonProfiles
+     * const personProfiles = await prisma.personProfile.findMany()
+     * 
+     * // Get first 10 PersonProfiles
+     * const personProfiles = await prisma.personProfile.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const personProfileWithIdOnly = await prisma.personProfile.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PersonProfileFindManyArgs>(args?: SelectSubset<T, PersonProfileFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PersonProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PersonProfile.
+     * @param {PersonProfileCreateArgs} args - Arguments to create a PersonProfile.
+     * @example
+     * // Create one PersonProfile
+     * const PersonProfile = await prisma.personProfile.create({
+     *   data: {
+     *     // ... data to create a PersonProfile
+     *   }
+     * })
+     * 
+     */
+    create<T extends PersonProfileCreateArgs>(args: SelectSubset<T, PersonProfileCreateArgs<ExtArgs>>): Prisma__PersonProfileClient<$Result.GetResult<Prisma.$PersonProfilePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PersonProfiles.
+     * @param {PersonProfileCreateManyArgs} args - Arguments to create many PersonProfiles.
+     * @example
+     * // Create many PersonProfiles
+     * const personProfile = await prisma.personProfile.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PersonProfileCreateManyArgs>(args?: SelectSubset<T, PersonProfileCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PersonProfiles and returns the data saved in the database.
+     * @param {PersonProfileCreateManyAndReturnArgs} args - Arguments to create many PersonProfiles.
+     * @example
+     * // Create many PersonProfiles
+     * const personProfile = await prisma.personProfile.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PersonProfiles and only return the `id`
+     * const personProfileWithIdOnly = await prisma.personProfile.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PersonProfileCreateManyAndReturnArgs>(args?: SelectSubset<T, PersonProfileCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PersonProfilePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PersonProfile.
+     * @param {PersonProfileDeleteArgs} args - Arguments to delete one PersonProfile.
+     * @example
+     * // Delete one PersonProfile
+     * const PersonProfile = await prisma.personProfile.delete({
+     *   where: {
+     *     // ... filter to delete one PersonProfile
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PersonProfileDeleteArgs>(args: SelectSubset<T, PersonProfileDeleteArgs<ExtArgs>>): Prisma__PersonProfileClient<$Result.GetResult<Prisma.$PersonProfilePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PersonProfile.
+     * @param {PersonProfileUpdateArgs} args - Arguments to update one PersonProfile.
+     * @example
+     * // Update one PersonProfile
+     * const personProfile = await prisma.personProfile.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PersonProfileUpdateArgs>(args: SelectSubset<T, PersonProfileUpdateArgs<ExtArgs>>): Prisma__PersonProfileClient<$Result.GetResult<Prisma.$PersonProfilePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PersonProfiles.
+     * @param {PersonProfileDeleteManyArgs} args - Arguments to filter PersonProfiles to delete.
+     * @example
+     * // Delete a few PersonProfiles
+     * const { count } = await prisma.personProfile.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PersonProfileDeleteManyArgs>(args?: SelectSubset<T, PersonProfileDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PersonProfiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PersonProfileUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PersonProfiles
+     * const personProfile = await prisma.personProfile.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PersonProfileUpdateManyArgs>(args: SelectSubset<T, PersonProfileUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PersonProfiles and returns the data updated in the database.
+     * @param {PersonProfileUpdateManyAndReturnArgs} args - Arguments to update many PersonProfiles.
+     * @example
+     * // Update many PersonProfiles
+     * const personProfile = await prisma.personProfile.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PersonProfiles and only return the `id`
+     * const personProfileWithIdOnly = await prisma.personProfile.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PersonProfileUpdateManyAndReturnArgs>(args: SelectSubset<T, PersonProfileUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PersonProfilePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PersonProfile.
+     * @param {PersonProfileUpsertArgs} args - Arguments to update or create a PersonProfile.
+     * @example
+     * // Update or create a PersonProfile
+     * const personProfile = await prisma.personProfile.upsert({
+     *   create: {
+     *     // ... data to create a PersonProfile
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PersonProfile we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PersonProfileUpsertArgs>(args: SelectSubset<T, PersonProfileUpsertArgs<ExtArgs>>): Prisma__PersonProfileClient<$Result.GetResult<Prisma.$PersonProfilePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PersonProfiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PersonProfileCountArgs} args - Arguments to filter PersonProfiles to count.
+     * @example
+     * // Count the number of PersonProfiles
+     * const count = await prisma.personProfile.count({
+     *   where: {
+     *     // ... the filter for the PersonProfiles we want to count
+     *   }
+     * })
+    **/
+    count<T extends PersonProfileCountArgs>(
+      args?: Subset<T, PersonProfileCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PersonProfileCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PersonProfile.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PersonProfileAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PersonProfileAggregateArgs>(args: Subset<T, PersonProfileAggregateArgs>): Prisma.PrismaPromise<GetPersonProfileAggregateType<T>>
+
+    /**
+     * Group by PersonProfile.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PersonProfileGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PersonProfileGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PersonProfileGroupByArgs['orderBy'] }
+        : { orderBy?: PersonProfileGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PersonProfileGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPersonProfileGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PersonProfile model
+   */
+  readonly fields: PersonProfileFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PersonProfile.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PersonProfileClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PersonProfile model
+   */
+  interface PersonProfileFieldRefs {
+    readonly id: FieldRef<"PersonProfile", 'String'>
+    readonly userId: FieldRef<"PersonProfile", 'String'>
+    readonly fullName: FieldRef<"PersonProfile", 'String'>
+    readonly phone: FieldRef<"PersonProfile", 'String'>
+    readonly addressLine1: FieldRef<"PersonProfile", 'String'>
+    readonly suburb: FieldRef<"PersonProfile", 'String'>
+    readonly state: FieldRef<"PersonProfile", 'String'>
+    readonly postcode: FieldRef<"PersonProfile", 'String'>
+    readonly employmentStatus: FieldRef<"PersonProfile", 'String'>
+    readonly monthlyIncome: FieldRef<"PersonProfile", 'Decimal'>
+    readonly householdSize: FieldRef<"PersonProfile", 'Int'>
+    readonly createdAt: FieldRef<"PersonProfile", 'DateTime'>
+    readonly updatedAt: FieldRef<"PersonProfile", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PersonProfile findUnique
+   */
+  export type PersonProfileFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonProfile
+     */
+    select?: PersonProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonProfile
+     */
+    omit?: PersonProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which PersonProfile to fetch.
+     */
+    where: PersonProfileWhereUniqueInput
+  }
+
+  /**
+   * PersonProfile findUniqueOrThrow
+   */
+  export type PersonProfileFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonProfile
+     */
+    select?: PersonProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonProfile
+     */
+    omit?: PersonProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which PersonProfile to fetch.
+     */
+    where: PersonProfileWhereUniqueInput
+  }
+
+  /**
+   * PersonProfile findFirst
+   */
+  export type PersonProfileFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonProfile
+     */
+    select?: PersonProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonProfile
+     */
+    omit?: PersonProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which PersonProfile to fetch.
+     */
+    where?: PersonProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PersonProfiles to fetch.
+     */
+    orderBy?: PersonProfileOrderByWithRelationInput | PersonProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PersonProfiles.
+     */
+    cursor?: PersonProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PersonProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PersonProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PersonProfiles.
+     */
+    distinct?: PersonProfileScalarFieldEnum | PersonProfileScalarFieldEnum[]
+  }
+
+  /**
+   * PersonProfile findFirstOrThrow
+   */
+  export type PersonProfileFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonProfile
+     */
+    select?: PersonProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonProfile
+     */
+    omit?: PersonProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which PersonProfile to fetch.
+     */
+    where?: PersonProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PersonProfiles to fetch.
+     */
+    orderBy?: PersonProfileOrderByWithRelationInput | PersonProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PersonProfiles.
+     */
+    cursor?: PersonProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PersonProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PersonProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PersonProfiles.
+     */
+    distinct?: PersonProfileScalarFieldEnum | PersonProfileScalarFieldEnum[]
+  }
+
+  /**
+   * PersonProfile findMany
+   */
+  export type PersonProfileFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonProfile
+     */
+    select?: PersonProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonProfile
+     */
+    omit?: PersonProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which PersonProfiles to fetch.
+     */
+    where?: PersonProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PersonProfiles to fetch.
+     */
+    orderBy?: PersonProfileOrderByWithRelationInput | PersonProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PersonProfiles.
+     */
+    cursor?: PersonProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PersonProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PersonProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PersonProfiles.
+     */
+    distinct?: PersonProfileScalarFieldEnum | PersonProfileScalarFieldEnum[]
+  }
+
+  /**
+   * PersonProfile create
+   */
+  export type PersonProfileCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonProfile
+     */
+    select?: PersonProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonProfile
+     */
+    omit?: PersonProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonProfileInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PersonProfile.
+     */
+    data: XOR<PersonProfileCreateInput, PersonProfileUncheckedCreateInput>
+  }
+
+  /**
+   * PersonProfile createMany
+   */
+  export type PersonProfileCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PersonProfiles.
+     */
+    data: PersonProfileCreateManyInput | PersonProfileCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PersonProfile createManyAndReturn
+   */
+  export type PersonProfileCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonProfile
+     */
+    select?: PersonProfileSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonProfile
+     */
+    omit?: PersonProfileOmit<ExtArgs> | null
+    /**
+     * The data used to create many PersonProfiles.
+     */
+    data: PersonProfileCreateManyInput | PersonProfileCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonProfileIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PersonProfile update
+   */
+  export type PersonProfileUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonProfile
+     */
+    select?: PersonProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonProfile
+     */
+    omit?: PersonProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonProfileInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PersonProfile.
+     */
+    data: XOR<PersonProfileUpdateInput, PersonProfileUncheckedUpdateInput>
+    /**
+     * Choose, which PersonProfile to update.
+     */
+    where: PersonProfileWhereUniqueInput
+  }
+
+  /**
+   * PersonProfile updateMany
+   */
+  export type PersonProfileUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PersonProfiles.
+     */
+    data: XOR<PersonProfileUpdateManyMutationInput, PersonProfileUncheckedUpdateManyInput>
+    /**
+     * Filter which PersonProfiles to update
+     */
+    where?: PersonProfileWhereInput
+    /**
+     * Limit how many PersonProfiles to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PersonProfile updateManyAndReturn
+   */
+  export type PersonProfileUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonProfile
+     */
+    select?: PersonProfileSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonProfile
+     */
+    omit?: PersonProfileOmit<ExtArgs> | null
+    /**
+     * The data used to update PersonProfiles.
+     */
+    data: XOR<PersonProfileUpdateManyMutationInput, PersonProfileUncheckedUpdateManyInput>
+    /**
+     * Filter which PersonProfiles to update
+     */
+    where?: PersonProfileWhereInput
+    /**
+     * Limit how many PersonProfiles to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonProfileIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PersonProfile upsert
+   */
+  export type PersonProfileUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonProfile
+     */
+    select?: PersonProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonProfile
+     */
+    omit?: PersonProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonProfileInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PersonProfile to update in case it exists.
+     */
+    where: PersonProfileWhereUniqueInput
+    /**
+     * In case the PersonProfile found by the `where` argument doesn't exist, create a new PersonProfile with this data.
+     */
+    create: XOR<PersonProfileCreateInput, PersonProfileUncheckedCreateInput>
+    /**
+     * In case the PersonProfile was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PersonProfileUpdateInput, PersonProfileUncheckedUpdateInput>
+  }
+
+  /**
+   * PersonProfile delete
+   */
+  export type PersonProfileDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonProfile
+     */
+    select?: PersonProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonProfile
+     */
+    omit?: PersonProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonProfileInclude<ExtArgs> | null
+    /**
+     * Filter which PersonProfile to delete.
+     */
+    where: PersonProfileWhereUniqueInput
+  }
+
+  /**
+   * PersonProfile deleteMany
+   */
+  export type PersonProfileDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PersonProfiles to delete
+     */
+    where?: PersonProfileWhereInput
+    /**
+     * Limit how many PersonProfiles to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PersonProfile without action
+   */
+  export type PersonProfileDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonProfile
+     */
+    select?: PersonProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonProfile
+     */
+    omit?: PersonProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonProfileInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Property
+   */
+
+  export type AggregateProperty = {
+    _count: PropertyCountAggregateOutputType | null
+    _avg: PropertyAvgAggregateOutputType | null
+    _sum: PropertySumAggregateOutputType | null
+    _min: PropertyMinAggregateOutputType | null
+    _max: PropertyMaxAggregateOutputType | null
+  }
+
+  export type PropertyAvgAggregateOutputType = {
+    price: Decimal | null
+    bedrooms: number | null
+    bathrooms: number | null
+    parkingSpaces: number | null
+  }
+
+  export type PropertySumAggregateOutputType = {
+    price: Decimal | null
+    bedrooms: number | null
+    bathrooms: number | null
+    parkingSpaces: number | null
+  }
+
+  export type PropertyMinAggregateOutputType = {
+    id: string | null
+    title: string | null
+    description: string | null
+    listingType: $Enums.ListingType | null
+    propertyType: $Enums.PropertyType | null
+    price: Decimal | null
+    addressLine1: string | null
+    suburb: string | null
+    state: string | null
+    postcode: string | null
+    bedrooms: number | null
+    bathrooms: number | null
+    parkingSpaces: number | null
+    isPublished: boolean | null
+    createdById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PropertyMaxAggregateOutputType = {
+    id: string | null
+    title: string | null
+    description: string | null
+    listingType: $Enums.ListingType | null
+    propertyType: $Enums.PropertyType | null
+    price: Decimal | null
+    addressLine1: string | null
+    suburb: string | null
+    state: string | null
+    postcode: string | null
+    bedrooms: number | null
+    bathrooms: number | null
+    parkingSpaces: number | null
+    isPublished: boolean | null
+    createdById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PropertyCountAggregateOutputType = {
+    id: number
+    title: number
+    description: number
+    listingType: number
+    propertyType: number
+    price: number
+    addressLine1: number
+    suburb: number
+    state: number
+    postcode: number
+    bedrooms: number
+    bathrooms: number
+    parkingSpaces: number
+    isPublished: number
+    createdById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PropertyAvgAggregateInputType = {
+    price?: true
+    bedrooms?: true
+    bathrooms?: true
+    parkingSpaces?: true
+  }
+
+  export type PropertySumAggregateInputType = {
+    price?: true
+    bedrooms?: true
+    bathrooms?: true
+    parkingSpaces?: true
+  }
+
+  export type PropertyMinAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    listingType?: true
+    propertyType?: true
+    price?: true
+    addressLine1?: true
+    suburb?: true
+    state?: true
+    postcode?: true
+    bedrooms?: true
+    bathrooms?: true
+    parkingSpaces?: true
+    isPublished?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PropertyMaxAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    listingType?: true
+    propertyType?: true
+    price?: true
+    addressLine1?: true
+    suburb?: true
+    state?: true
+    postcode?: true
+    bedrooms?: true
+    bathrooms?: true
+    parkingSpaces?: true
+    isPublished?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PropertyCountAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    listingType?: true
+    propertyType?: true
+    price?: true
+    addressLine1?: true
+    suburb?: true
+    state?: true
+    postcode?: true
+    bedrooms?: true
+    bathrooms?: true
+    parkingSpaces?: true
+    isPublished?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PropertyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Property to aggregate.
+     */
+    where?: PropertyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Properties to fetch.
+     */
+    orderBy?: PropertyOrderByWithRelationInput | PropertyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PropertyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Properties from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Properties.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Properties
+    **/
+    _count?: true | PropertyCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PropertyAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PropertySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PropertyMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PropertyMaxAggregateInputType
+  }
+
+  export type GetPropertyAggregateType<T extends PropertyAggregateArgs> = {
+        [P in keyof T & keyof AggregateProperty]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProperty[P]>
+      : GetScalarType<T[P], AggregateProperty[P]>
+  }
+
+
+
+
+  export type PropertyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PropertyWhereInput
+    orderBy?: PropertyOrderByWithAggregationInput | PropertyOrderByWithAggregationInput[]
+    by: PropertyScalarFieldEnum[] | PropertyScalarFieldEnum
+    having?: PropertyScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PropertyCountAggregateInputType | true
+    _avg?: PropertyAvgAggregateInputType
+    _sum?: PropertySumAggregateInputType
+    _min?: PropertyMinAggregateInputType
+    _max?: PropertyMaxAggregateInputType
+  }
+
+  export type PropertyGroupByOutputType = {
+    id: string
+    title: string
+    description: string
+    listingType: $Enums.ListingType
+    propertyType: $Enums.PropertyType
+    price: Decimal
+    addressLine1: string
+    suburb: string
+    state: string
+    postcode: string
+    bedrooms: number | null
+    bathrooms: number | null
+    parkingSpaces: number | null
+    isPublished: boolean
+    createdById: string
+    createdAt: Date
+    updatedAt: Date
+    _count: PropertyCountAggregateOutputType | null
+    _avg: PropertyAvgAggregateOutputType | null
+    _sum: PropertySumAggregateOutputType | null
+    _min: PropertyMinAggregateOutputType | null
+    _max: PropertyMaxAggregateOutputType | null
+  }
+
+  type GetPropertyGroupByPayload<T extends PropertyGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PropertyGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PropertyGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PropertyGroupByOutputType[P]>
+            : GetScalarType<T[P], PropertyGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PropertySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    listingType?: boolean
+    propertyType?: boolean
+    price?: boolean
+    addressLine1?: boolean
+    suburb?: boolean
+    state?: boolean
+    postcode?: boolean
+    bedrooms?: boolean
+    bathrooms?: boolean
+    parkingSpaces?: boolean
+    isPublished?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["property"]>
+
+  export type PropertySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    listingType?: boolean
+    propertyType?: boolean
+    price?: boolean
+    addressLine1?: boolean
+    suburb?: boolean
+    state?: boolean
+    postcode?: boolean
+    bedrooms?: boolean
+    bathrooms?: boolean
+    parkingSpaces?: boolean
+    isPublished?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["property"]>
+
+  export type PropertySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    listingType?: boolean
+    propertyType?: boolean
+    price?: boolean
+    addressLine1?: boolean
+    suburb?: boolean
+    state?: boolean
+    postcode?: boolean
+    bedrooms?: boolean
+    bathrooms?: boolean
+    parkingSpaces?: boolean
+    isPublished?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["property"]>
+
+  export type PropertySelectScalar = {
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    listingType?: boolean
+    propertyType?: boolean
+    price?: boolean
+    addressLine1?: boolean
+    suburb?: boolean
+    state?: boolean
+    postcode?: boolean
+    bedrooms?: boolean
+    bathrooms?: boolean
+    parkingSpaces?: boolean
+    isPublished?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PropertyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "listingType" | "propertyType" | "price" | "addressLine1" | "suburb" | "state" | "postcode" | "bedrooms" | "bathrooms" | "parkingSpaces" | "isPublished" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["property"]>
+  export type PropertyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type PropertyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type PropertyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $PropertyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Property"
+    objects: {
+      createdBy: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      title: string
+      description: string
+      listingType: $Enums.ListingType
+      propertyType: $Enums.PropertyType
+      price: Prisma.Decimal
+      addressLine1: string
+      suburb: string
+      state: string
+      postcode: string
+      bedrooms: number | null
+      bathrooms: number | null
+      parkingSpaces: number | null
+      isPublished: boolean
+      createdById: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["property"]>
+    composites: {}
+  }
+
+  type PropertyGetPayload<S extends boolean | null | undefined | PropertyDefaultArgs> = $Result.GetResult<Prisma.$PropertyPayload, S>
+
+  type PropertyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PropertyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PropertyCountAggregateInputType | true
+    }
+
+  export interface PropertyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Property'], meta: { name: 'Property' } }
+    /**
+     * Find zero or one Property that matches the filter.
+     * @param {PropertyFindUniqueArgs} args - Arguments to find a Property
+     * @example
+     * // Get one Property
+     * const property = await prisma.property.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PropertyFindUniqueArgs>(args: SelectSubset<T, PropertyFindUniqueArgs<ExtArgs>>): Prisma__PropertyClient<$Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Property that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PropertyFindUniqueOrThrowArgs} args - Arguments to find a Property
+     * @example
+     * // Get one Property
+     * const property = await prisma.property.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PropertyFindUniqueOrThrowArgs>(args: SelectSubset<T, PropertyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PropertyClient<$Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Property that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PropertyFindFirstArgs} args - Arguments to find a Property
+     * @example
+     * // Get one Property
+     * const property = await prisma.property.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PropertyFindFirstArgs>(args?: SelectSubset<T, PropertyFindFirstArgs<ExtArgs>>): Prisma__PropertyClient<$Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Property that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PropertyFindFirstOrThrowArgs} args - Arguments to find a Property
+     * @example
+     * // Get one Property
+     * const property = await prisma.property.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PropertyFindFirstOrThrowArgs>(args?: SelectSubset<T, PropertyFindFirstOrThrowArgs<ExtArgs>>): Prisma__PropertyClient<$Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Properties that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PropertyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Properties
+     * const properties = await prisma.property.findMany()
+     * 
+     * // Get first 10 Properties
+     * const properties = await prisma.property.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const propertyWithIdOnly = await prisma.property.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PropertyFindManyArgs>(args?: SelectSubset<T, PropertyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Property.
+     * @param {PropertyCreateArgs} args - Arguments to create a Property.
+     * @example
+     * // Create one Property
+     * const Property = await prisma.property.create({
+     *   data: {
+     *     // ... data to create a Property
+     *   }
+     * })
+     * 
+     */
+    create<T extends PropertyCreateArgs>(args: SelectSubset<T, PropertyCreateArgs<ExtArgs>>): Prisma__PropertyClient<$Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Properties.
+     * @param {PropertyCreateManyArgs} args - Arguments to create many Properties.
+     * @example
+     * // Create many Properties
+     * const property = await prisma.property.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PropertyCreateManyArgs>(args?: SelectSubset<T, PropertyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Properties and returns the data saved in the database.
+     * @param {PropertyCreateManyAndReturnArgs} args - Arguments to create many Properties.
+     * @example
+     * // Create many Properties
+     * const property = await prisma.property.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Properties and only return the `id`
+     * const propertyWithIdOnly = await prisma.property.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PropertyCreateManyAndReturnArgs>(args?: SelectSubset<T, PropertyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Property.
+     * @param {PropertyDeleteArgs} args - Arguments to delete one Property.
+     * @example
+     * // Delete one Property
+     * const Property = await prisma.property.delete({
+     *   where: {
+     *     // ... filter to delete one Property
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PropertyDeleteArgs>(args: SelectSubset<T, PropertyDeleteArgs<ExtArgs>>): Prisma__PropertyClient<$Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Property.
+     * @param {PropertyUpdateArgs} args - Arguments to update one Property.
+     * @example
+     * // Update one Property
+     * const property = await prisma.property.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PropertyUpdateArgs>(args: SelectSubset<T, PropertyUpdateArgs<ExtArgs>>): Prisma__PropertyClient<$Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Properties.
+     * @param {PropertyDeleteManyArgs} args - Arguments to filter Properties to delete.
+     * @example
+     * // Delete a few Properties
+     * const { count } = await prisma.property.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PropertyDeleteManyArgs>(args?: SelectSubset<T, PropertyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Properties.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PropertyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Properties
+     * const property = await prisma.property.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PropertyUpdateManyArgs>(args: SelectSubset<T, PropertyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Properties and returns the data updated in the database.
+     * @param {PropertyUpdateManyAndReturnArgs} args - Arguments to update many Properties.
+     * @example
+     * // Update many Properties
+     * const property = await prisma.property.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Properties and only return the `id`
+     * const propertyWithIdOnly = await prisma.property.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PropertyUpdateManyAndReturnArgs>(args: SelectSubset<T, PropertyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Property.
+     * @param {PropertyUpsertArgs} args - Arguments to update or create a Property.
+     * @example
+     * // Update or create a Property
+     * const property = await prisma.property.upsert({
+     *   create: {
+     *     // ... data to create a Property
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Property we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PropertyUpsertArgs>(args: SelectSubset<T, PropertyUpsertArgs<ExtArgs>>): Prisma__PropertyClient<$Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Properties.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PropertyCountArgs} args - Arguments to filter Properties to count.
+     * @example
+     * // Count the number of Properties
+     * const count = await prisma.property.count({
+     *   where: {
+     *     // ... the filter for the Properties we want to count
+     *   }
+     * })
+    **/
+    count<T extends PropertyCountArgs>(
+      args?: Subset<T, PropertyCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PropertyCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Property.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PropertyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PropertyAggregateArgs>(args: Subset<T, PropertyAggregateArgs>): Prisma.PrismaPromise<GetPropertyAggregateType<T>>
+
+    /**
+     * Group by Property.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PropertyGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PropertyGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PropertyGroupByArgs['orderBy'] }
+        : { orderBy?: PropertyGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PropertyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPropertyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Property model
+   */
+  readonly fields: PropertyFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Property.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PropertyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Property model
+   */
+  interface PropertyFieldRefs {
+    readonly id: FieldRef<"Property", 'String'>
+    readonly title: FieldRef<"Property", 'String'>
+    readonly description: FieldRef<"Property", 'String'>
+    readonly listingType: FieldRef<"Property", 'ListingType'>
+    readonly propertyType: FieldRef<"Property", 'PropertyType'>
+    readonly price: FieldRef<"Property", 'Decimal'>
+    readonly addressLine1: FieldRef<"Property", 'String'>
+    readonly suburb: FieldRef<"Property", 'String'>
+    readonly state: FieldRef<"Property", 'String'>
+    readonly postcode: FieldRef<"Property", 'String'>
+    readonly bedrooms: FieldRef<"Property", 'Int'>
+    readonly bathrooms: FieldRef<"Property", 'Int'>
+    readonly parkingSpaces: FieldRef<"Property", 'Int'>
+    readonly isPublished: FieldRef<"Property", 'Boolean'>
+    readonly createdById: FieldRef<"Property", 'String'>
+    readonly createdAt: FieldRef<"Property", 'DateTime'>
+    readonly updatedAt: FieldRef<"Property", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Property findUnique
+   */
+  export type PropertyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Property
+     */
+    select?: PropertySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Property
+     */
+    omit?: PropertyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyInclude<ExtArgs> | null
+    /**
+     * Filter, which Property to fetch.
+     */
+    where: PropertyWhereUniqueInput
+  }
+
+  /**
+   * Property findUniqueOrThrow
+   */
+  export type PropertyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Property
+     */
+    select?: PropertySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Property
+     */
+    omit?: PropertyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyInclude<ExtArgs> | null
+    /**
+     * Filter, which Property to fetch.
+     */
+    where: PropertyWhereUniqueInput
+  }
+
+  /**
+   * Property findFirst
+   */
+  export type PropertyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Property
+     */
+    select?: PropertySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Property
+     */
+    omit?: PropertyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyInclude<ExtArgs> | null
+    /**
+     * Filter, which Property to fetch.
+     */
+    where?: PropertyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Properties to fetch.
+     */
+    orderBy?: PropertyOrderByWithRelationInput | PropertyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Properties.
+     */
+    cursor?: PropertyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Properties from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Properties.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Properties.
+     */
+    distinct?: PropertyScalarFieldEnum | PropertyScalarFieldEnum[]
+  }
+
+  /**
+   * Property findFirstOrThrow
+   */
+  export type PropertyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Property
+     */
+    select?: PropertySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Property
+     */
+    omit?: PropertyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyInclude<ExtArgs> | null
+    /**
+     * Filter, which Property to fetch.
+     */
+    where?: PropertyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Properties to fetch.
+     */
+    orderBy?: PropertyOrderByWithRelationInput | PropertyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Properties.
+     */
+    cursor?: PropertyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Properties from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Properties.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Properties.
+     */
+    distinct?: PropertyScalarFieldEnum | PropertyScalarFieldEnum[]
+  }
+
+  /**
+   * Property findMany
+   */
+  export type PropertyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Property
+     */
+    select?: PropertySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Property
+     */
+    omit?: PropertyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyInclude<ExtArgs> | null
+    /**
+     * Filter, which Properties to fetch.
+     */
+    where?: PropertyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Properties to fetch.
+     */
+    orderBy?: PropertyOrderByWithRelationInput | PropertyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Properties.
+     */
+    cursor?: PropertyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Properties from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Properties.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Properties.
+     */
+    distinct?: PropertyScalarFieldEnum | PropertyScalarFieldEnum[]
+  }
+
+  /**
+   * Property create
+   */
+  export type PropertyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Property
+     */
+    select?: PropertySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Property
+     */
+    omit?: PropertyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Property.
+     */
+    data: XOR<PropertyCreateInput, PropertyUncheckedCreateInput>
+  }
+
+  /**
+   * Property createMany
+   */
+  export type PropertyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Properties.
+     */
+    data: PropertyCreateManyInput | PropertyCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Property createManyAndReturn
+   */
+  export type PropertyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Property
+     */
+    select?: PropertySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Property
+     */
+    omit?: PropertyOmit<ExtArgs> | null
+    /**
+     * The data used to create many Properties.
+     */
+    data: PropertyCreateManyInput | PropertyCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Property update
+   */
+  export type PropertyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Property
+     */
+    select?: PropertySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Property
+     */
+    omit?: PropertyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Property.
+     */
+    data: XOR<PropertyUpdateInput, PropertyUncheckedUpdateInput>
+    /**
+     * Choose, which Property to update.
+     */
+    where: PropertyWhereUniqueInput
+  }
+
+  /**
+   * Property updateMany
+   */
+  export type PropertyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Properties.
+     */
+    data: XOR<PropertyUpdateManyMutationInput, PropertyUncheckedUpdateManyInput>
+    /**
+     * Filter which Properties to update
+     */
+    where?: PropertyWhereInput
+    /**
+     * Limit how many Properties to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Property updateManyAndReturn
+   */
+  export type PropertyUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Property
+     */
+    select?: PropertySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Property
+     */
+    omit?: PropertyOmit<ExtArgs> | null
+    /**
+     * The data used to update Properties.
+     */
+    data: XOR<PropertyUpdateManyMutationInput, PropertyUncheckedUpdateManyInput>
+    /**
+     * Filter which Properties to update
+     */
+    where?: PropertyWhereInput
+    /**
+     * Limit how many Properties to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Property upsert
+   */
+  export type PropertyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Property
+     */
+    select?: PropertySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Property
+     */
+    omit?: PropertyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Property to update in case it exists.
+     */
+    where: PropertyWhereUniqueInput
+    /**
+     * In case the Property found by the `where` argument doesn't exist, create a new Property with this data.
+     */
+    create: XOR<PropertyCreateInput, PropertyUncheckedCreateInput>
+    /**
+     * In case the Property was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PropertyUpdateInput, PropertyUncheckedUpdateInput>
+  }
+
+  /**
+   * Property delete
+   */
+  export type PropertyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Property
+     */
+    select?: PropertySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Property
+     */
+    omit?: PropertyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyInclude<ExtArgs> | null
+    /**
+     * Filter which Property to delete.
+     */
+    where: PropertyWhereUniqueInput
+  }
+
+  /**
+   * Property deleteMany
+   */
+  export type PropertyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Properties to delete
+     */
+    where?: PropertyWhereInput
+    /**
+     * Limit how many Properties to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Property without action
+   */
+  export type PropertyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Property
+     */
+    select?: PropertySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Property
+     */
+    omit?: PropertyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyInclude<ExtArgs> | null
   }
 
 
@@ -1977,6 +4785,48 @@ export namespace Prisma {
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+  export const PersonProfileScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    fullName: 'fullName',
+    phone: 'phone',
+    addressLine1: 'addressLine1',
+    suburb: 'suburb',
+    state: 'state',
+    postcode: 'postcode',
+    employmentStatus: 'employmentStatus',
+    monthlyIncome: 'monthlyIncome',
+    householdSize: 'householdSize',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PersonProfileScalarFieldEnum = (typeof PersonProfileScalarFieldEnum)[keyof typeof PersonProfileScalarFieldEnum]
+
+
+  export const PropertyScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    description: 'description',
+    listingType: 'listingType',
+    propertyType: 'propertyType',
+    price: 'price',
+    addressLine1: 'addressLine1',
+    suburb: 'suburb',
+    state: 'state',
+    postcode: 'postcode',
+    bedrooms: 'bedrooms',
+    bathrooms: 'bathrooms',
+    parkingSpaces: 'parkingSpaces',
+    isPublished: 'isPublished',
+    createdById: 'createdById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PropertyScalarFieldEnum = (typeof PropertyScalarFieldEnum)[keyof typeof PropertyScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -2058,6 +4908,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Decimal'
+   */
+  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal[]'
+   */
+  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -2068,6 +4932,48 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ListingType'
+   */
+  export type EnumListingTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ListingType'>
+    
+
+
+  /**
+   * Reference to a field of type 'ListingType[]'
+   */
+  export type ListEnumListingTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ListingType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'PropertyType'
+   */
+  export type EnumPropertyTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PropertyType'>
+    
+
+
+  /**
+   * Reference to a field of type 'PropertyType[]'
+   */
+  export type ListEnumPropertyTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PropertyType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
   /**
    * Deep Input Types
@@ -2088,6 +4994,8 @@ export namespace Prisma {
     isActive?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    properties?: PropertyListRelationFilter
+    profile?: XOR<PersonProfileNullableScalarRelationFilter, PersonProfileWhereInput> | null
   }
 
   export type UserOrderByWithRelationInput = {
@@ -2101,6 +5009,8 @@ export namespace Prisma {
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    properties?: PropertyOrderByRelationAggregateInput
+    profile?: PersonProfileOrderByWithRelationInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -2117,6 +5027,8 @@ export namespace Prisma {
     isActive?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    properties?: PropertyListRelationFilter
+    profile?: XOR<PersonProfileNullableScalarRelationFilter, PersonProfileWhereInput> | null
   }, "id" | "email" | "phone" | "googleId">
 
   export type UserOrderByWithAggregationInput = {
@@ -2151,6 +5063,220 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
 
+  export type PersonProfileWhereInput = {
+    AND?: PersonProfileWhereInput | PersonProfileWhereInput[]
+    OR?: PersonProfileWhereInput[]
+    NOT?: PersonProfileWhereInput | PersonProfileWhereInput[]
+    id?: StringFilter<"PersonProfile"> | string
+    userId?: StringFilter<"PersonProfile"> | string
+    fullName?: StringFilter<"PersonProfile"> | string
+    phone?: StringFilter<"PersonProfile"> | string
+    addressLine1?: StringFilter<"PersonProfile"> | string
+    suburb?: StringFilter<"PersonProfile"> | string
+    state?: StringFilter<"PersonProfile"> | string
+    postcode?: StringFilter<"PersonProfile"> | string
+    employmentStatus?: StringFilter<"PersonProfile"> | string
+    monthlyIncome?: DecimalFilter<"PersonProfile"> | Decimal | DecimalJsLike | number | string
+    householdSize?: IntFilter<"PersonProfile"> | number
+    createdAt?: DateTimeFilter<"PersonProfile"> | Date | string
+    updatedAt?: DateTimeFilter<"PersonProfile"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type PersonProfileOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    fullName?: SortOrder
+    phone?: SortOrder
+    addressLine1?: SortOrder
+    suburb?: SortOrder
+    state?: SortOrder
+    postcode?: SortOrder
+    employmentStatus?: SortOrder
+    monthlyIncome?: SortOrder
+    householdSize?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type PersonProfileWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId?: string
+    AND?: PersonProfileWhereInput | PersonProfileWhereInput[]
+    OR?: PersonProfileWhereInput[]
+    NOT?: PersonProfileWhereInput | PersonProfileWhereInput[]
+    fullName?: StringFilter<"PersonProfile"> | string
+    phone?: StringFilter<"PersonProfile"> | string
+    addressLine1?: StringFilter<"PersonProfile"> | string
+    suburb?: StringFilter<"PersonProfile"> | string
+    state?: StringFilter<"PersonProfile"> | string
+    postcode?: StringFilter<"PersonProfile"> | string
+    employmentStatus?: StringFilter<"PersonProfile"> | string
+    monthlyIncome?: DecimalFilter<"PersonProfile"> | Decimal | DecimalJsLike | number | string
+    householdSize?: IntFilter<"PersonProfile"> | number
+    createdAt?: DateTimeFilter<"PersonProfile"> | Date | string
+    updatedAt?: DateTimeFilter<"PersonProfile"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "userId">
+
+  export type PersonProfileOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    fullName?: SortOrder
+    phone?: SortOrder
+    addressLine1?: SortOrder
+    suburb?: SortOrder
+    state?: SortOrder
+    postcode?: SortOrder
+    employmentStatus?: SortOrder
+    monthlyIncome?: SortOrder
+    householdSize?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PersonProfileCountOrderByAggregateInput
+    _avg?: PersonProfileAvgOrderByAggregateInput
+    _max?: PersonProfileMaxOrderByAggregateInput
+    _min?: PersonProfileMinOrderByAggregateInput
+    _sum?: PersonProfileSumOrderByAggregateInput
+  }
+
+  export type PersonProfileScalarWhereWithAggregatesInput = {
+    AND?: PersonProfileScalarWhereWithAggregatesInput | PersonProfileScalarWhereWithAggregatesInput[]
+    OR?: PersonProfileScalarWhereWithAggregatesInput[]
+    NOT?: PersonProfileScalarWhereWithAggregatesInput | PersonProfileScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PersonProfile"> | string
+    userId?: StringWithAggregatesFilter<"PersonProfile"> | string
+    fullName?: StringWithAggregatesFilter<"PersonProfile"> | string
+    phone?: StringWithAggregatesFilter<"PersonProfile"> | string
+    addressLine1?: StringWithAggregatesFilter<"PersonProfile"> | string
+    suburb?: StringWithAggregatesFilter<"PersonProfile"> | string
+    state?: StringWithAggregatesFilter<"PersonProfile"> | string
+    postcode?: StringWithAggregatesFilter<"PersonProfile"> | string
+    employmentStatus?: StringWithAggregatesFilter<"PersonProfile"> | string
+    monthlyIncome?: DecimalWithAggregatesFilter<"PersonProfile"> | Decimal | DecimalJsLike | number | string
+    householdSize?: IntWithAggregatesFilter<"PersonProfile"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"PersonProfile"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"PersonProfile"> | Date | string
+  }
+
+  export type PropertyWhereInput = {
+    AND?: PropertyWhereInput | PropertyWhereInput[]
+    OR?: PropertyWhereInput[]
+    NOT?: PropertyWhereInput | PropertyWhereInput[]
+    id?: StringFilter<"Property"> | string
+    title?: StringFilter<"Property"> | string
+    description?: StringFilter<"Property"> | string
+    listingType?: EnumListingTypeFilter<"Property"> | $Enums.ListingType
+    propertyType?: EnumPropertyTypeFilter<"Property"> | $Enums.PropertyType
+    price?: DecimalFilter<"Property"> | Decimal | DecimalJsLike | number | string
+    addressLine1?: StringFilter<"Property"> | string
+    suburb?: StringFilter<"Property"> | string
+    state?: StringFilter<"Property"> | string
+    postcode?: StringFilter<"Property"> | string
+    bedrooms?: IntNullableFilter<"Property"> | number | null
+    bathrooms?: IntNullableFilter<"Property"> | number | null
+    parkingSpaces?: IntNullableFilter<"Property"> | number | null
+    isPublished?: BoolFilter<"Property"> | boolean
+    createdById?: StringFilter<"Property"> | string
+    createdAt?: DateTimeFilter<"Property"> | Date | string
+    updatedAt?: DateTimeFilter<"Property"> | Date | string
+    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type PropertyOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    listingType?: SortOrder
+    propertyType?: SortOrder
+    price?: SortOrder
+    addressLine1?: SortOrder
+    suburb?: SortOrder
+    state?: SortOrder
+    postcode?: SortOrder
+    bedrooms?: SortOrderInput | SortOrder
+    bathrooms?: SortOrderInput | SortOrder
+    parkingSpaces?: SortOrderInput | SortOrder
+    isPublished?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: UserOrderByWithRelationInput
+  }
+
+  export type PropertyWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PropertyWhereInput | PropertyWhereInput[]
+    OR?: PropertyWhereInput[]
+    NOT?: PropertyWhereInput | PropertyWhereInput[]
+    title?: StringFilter<"Property"> | string
+    description?: StringFilter<"Property"> | string
+    listingType?: EnumListingTypeFilter<"Property"> | $Enums.ListingType
+    propertyType?: EnumPropertyTypeFilter<"Property"> | $Enums.PropertyType
+    price?: DecimalFilter<"Property"> | Decimal | DecimalJsLike | number | string
+    addressLine1?: StringFilter<"Property"> | string
+    suburb?: StringFilter<"Property"> | string
+    state?: StringFilter<"Property"> | string
+    postcode?: StringFilter<"Property"> | string
+    bedrooms?: IntNullableFilter<"Property"> | number | null
+    bathrooms?: IntNullableFilter<"Property"> | number | null
+    parkingSpaces?: IntNullableFilter<"Property"> | number | null
+    isPublished?: BoolFilter<"Property"> | boolean
+    createdById?: StringFilter<"Property"> | string
+    createdAt?: DateTimeFilter<"Property"> | Date | string
+    updatedAt?: DateTimeFilter<"Property"> | Date | string
+    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type PropertyOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    listingType?: SortOrder
+    propertyType?: SortOrder
+    price?: SortOrder
+    addressLine1?: SortOrder
+    suburb?: SortOrder
+    state?: SortOrder
+    postcode?: SortOrder
+    bedrooms?: SortOrderInput | SortOrder
+    bathrooms?: SortOrderInput | SortOrder
+    parkingSpaces?: SortOrderInput | SortOrder
+    isPublished?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PropertyCountOrderByAggregateInput
+    _avg?: PropertyAvgOrderByAggregateInput
+    _max?: PropertyMaxOrderByAggregateInput
+    _min?: PropertyMinOrderByAggregateInput
+    _sum?: PropertySumOrderByAggregateInput
+  }
+
+  export type PropertyScalarWhereWithAggregatesInput = {
+    AND?: PropertyScalarWhereWithAggregatesInput | PropertyScalarWhereWithAggregatesInput[]
+    OR?: PropertyScalarWhereWithAggregatesInput[]
+    NOT?: PropertyScalarWhereWithAggregatesInput | PropertyScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Property"> | string
+    title?: StringWithAggregatesFilter<"Property"> | string
+    description?: StringWithAggregatesFilter<"Property"> | string
+    listingType?: EnumListingTypeWithAggregatesFilter<"Property"> | $Enums.ListingType
+    propertyType?: EnumPropertyTypeWithAggregatesFilter<"Property"> | $Enums.PropertyType
+    price?: DecimalWithAggregatesFilter<"Property"> | Decimal | DecimalJsLike | number | string
+    addressLine1?: StringWithAggregatesFilter<"Property"> | string
+    suburb?: StringWithAggregatesFilter<"Property"> | string
+    state?: StringWithAggregatesFilter<"Property"> | string
+    postcode?: StringWithAggregatesFilter<"Property"> | string
+    bedrooms?: IntNullableWithAggregatesFilter<"Property"> | number | null
+    bathrooms?: IntNullableWithAggregatesFilter<"Property"> | number | null
+    parkingSpaces?: IntNullableWithAggregatesFilter<"Property"> | number | null
+    isPublished?: BoolWithAggregatesFilter<"Property"> | boolean
+    createdById?: StringWithAggregatesFilter<"Property"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Property"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Property"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     email: string
@@ -2162,6 +5288,8 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    properties?: PropertyCreateNestedManyWithoutCreatedByInput
+    profile?: PersonProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -2175,6 +5303,8 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    properties?: PropertyUncheckedCreateNestedManyWithoutCreatedByInput
+    profile?: PersonProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -2188,6 +5318,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    properties?: PropertyUpdateManyWithoutCreatedByNestedInput
+    profile?: PersonProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -2201,6 +5333,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    properties?: PropertyUncheckedUpdateManyWithoutCreatedByNestedInput
+    profile?: PersonProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -2238,6 +5372,256 @@ export namespace Prisma {
     googleId?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PersonProfileCreateInput = {
+    id?: string
+    fullName: string
+    phone: string
+    addressLine1: string
+    suburb: string
+    state: string
+    postcode: string
+    employmentStatus: string
+    monthlyIncome: Decimal | DecimalJsLike | number | string
+    householdSize: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutProfileInput
+  }
+
+  export type PersonProfileUncheckedCreateInput = {
+    id?: string
+    userId: string
+    fullName: string
+    phone: string
+    addressLine1: string
+    suburb: string
+    state: string
+    postcode: string
+    employmentStatus: string
+    monthlyIncome: Decimal | DecimalJsLike | number | string
+    householdSize: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PersonProfileUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    addressLine1?: StringFieldUpdateOperationsInput | string
+    suburb?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    postcode?: StringFieldUpdateOperationsInput | string
+    employmentStatus?: StringFieldUpdateOperationsInput | string
+    monthlyIncome?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    householdSize?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutProfileNestedInput
+  }
+
+  export type PersonProfileUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    addressLine1?: StringFieldUpdateOperationsInput | string
+    suburb?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    postcode?: StringFieldUpdateOperationsInput | string
+    employmentStatus?: StringFieldUpdateOperationsInput | string
+    monthlyIncome?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    householdSize?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PersonProfileCreateManyInput = {
+    id?: string
+    userId: string
+    fullName: string
+    phone: string
+    addressLine1: string
+    suburb: string
+    state: string
+    postcode: string
+    employmentStatus: string
+    monthlyIncome: Decimal | DecimalJsLike | number | string
+    householdSize: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PersonProfileUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    addressLine1?: StringFieldUpdateOperationsInput | string
+    suburb?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    postcode?: StringFieldUpdateOperationsInput | string
+    employmentStatus?: StringFieldUpdateOperationsInput | string
+    monthlyIncome?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    householdSize?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PersonProfileUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    addressLine1?: StringFieldUpdateOperationsInput | string
+    suburb?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    postcode?: StringFieldUpdateOperationsInput | string
+    employmentStatus?: StringFieldUpdateOperationsInput | string
+    monthlyIncome?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    householdSize?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PropertyCreateInput = {
+    id?: string
+    title: string
+    description: string
+    listingType: $Enums.ListingType
+    propertyType: $Enums.PropertyType
+    price: Decimal | DecimalJsLike | number | string
+    addressLine1: string
+    suburb: string
+    state: string
+    postcode: string
+    bedrooms?: number | null
+    bathrooms?: number | null
+    parkingSpaces?: number | null
+    isPublished?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: UserCreateNestedOneWithoutPropertiesInput
+  }
+
+  export type PropertyUncheckedCreateInput = {
+    id?: string
+    title: string
+    description: string
+    listingType: $Enums.ListingType
+    propertyType: $Enums.PropertyType
+    price: Decimal | DecimalJsLike | number | string
+    addressLine1: string
+    suburb: string
+    state: string
+    postcode: string
+    bedrooms?: number | null
+    bathrooms?: number | null
+    parkingSpaces?: number | null
+    isPublished?: boolean
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PropertyUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    listingType?: EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+    propertyType?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    addressLine1?: StringFieldUpdateOperationsInput | string
+    suburb?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    postcode?: StringFieldUpdateOperationsInput | string
+    bedrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneRequiredWithoutPropertiesNestedInput
+  }
+
+  export type PropertyUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    listingType?: EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+    propertyType?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    addressLine1?: StringFieldUpdateOperationsInput | string
+    suburb?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    postcode?: StringFieldUpdateOperationsInput | string
+    bedrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PropertyCreateManyInput = {
+    id?: string
+    title: string
+    description: string
+    listingType: $Enums.ListingType
+    propertyType: $Enums.PropertyType
+    price: Decimal | DecimalJsLike | number | string
+    addressLine1: string
+    suburb: string
+    state: string
+    postcode: string
+    bedrooms?: number | null
+    bathrooms?: number | null
+    parkingSpaces?: number | null
+    isPublished?: boolean
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PropertyUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    listingType?: EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+    propertyType?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    addressLine1?: StringFieldUpdateOperationsInput | string
+    suburb?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    postcode?: StringFieldUpdateOperationsInput | string
+    bedrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PropertyUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    listingType?: EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+    propertyType?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    addressLine1?: StringFieldUpdateOperationsInput | string
+    suburb?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    postcode?: StringFieldUpdateOperationsInput | string
+    bedrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -2295,9 +5679,24 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type PropertyListRelationFilter = {
+    every?: PropertyWhereInput
+    some?: PropertyWhereInput
+    none?: PropertyWhereInput
+  }
+
+  export type PersonProfileNullableScalarRelationFilter = {
+    is?: PersonProfileWhereInput | null
+    isNot?: PersonProfileWhereInput | null
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
+  }
+
+  export type PropertyOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type UserCountOrderByAggregateInput = {
@@ -2407,6 +5806,284 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type DecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type PersonProfileCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    fullName?: SortOrder
+    phone?: SortOrder
+    addressLine1?: SortOrder
+    suburb?: SortOrder
+    state?: SortOrder
+    postcode?: SortOrder
+    employmentStatus?: SortOrder
+    monthlyIncome?: SortOrder
+    householdSize?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PersonProfileAvgOrderByAggregateInput = {
+    monthlyIncome?: SortOrder
+    householdSize?: SortOrder
+  }
+
+  export type PersonProfileMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    fullName?: SortOrder
+    phone?: SortOrder
+    addressLine1?: SortOrder
+    suburb?: SortOrder
+    state?: SortOrder
+    postcode?: SortOrder
+    employmentStatus?: SortOrder
+    monthlyIncome?: SortOrder
+    householdSize?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PersonProfileMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    fullName?: SortOrder
+    phone?: SortOrder
+    addressLine1?: SortOrder
+    suburb?: SortOrder
+    state?: SortOrder
+    postcode?: SortOrder
+    employmentStatus?: SortOrder
+    monthlyIncome?: SortOrder
+    householdSize?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PersonProfileSumOrderByAggregateInput = {
+    monthlyIncome?: SortOrder
+    householdSize?: SortOrder
+  }
+
+  export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type EnumListingTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.ListingType | EnumListingTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ListingType[] | ListEnumListingTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ListingType[] | ListEnumListingTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumListingTypeFilter<$PrismaModel> | $Enums.ListingType
+  }
+
+  export type EnumPropertyTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.PropertyType | EnumPropertyTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.PropertyType[] | ListEnumPropertyTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PropertyType[] | ListEnumPropertyTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPropertyTypeFilter<$PrismaModel> | $Enums.PropertyType
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type PropertyCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    listingType?: SortOrder
+    propertyType?: SortOrder
+    price?: SortOrder
+    addressLine1?: SortOrder
+    suburb?: SortOrder
+    state?: SortOrder
+    postcode?: SortOrder
+    bedrooms?: SortOrder
+    bathrooms?: SortOrder
+    parkingSpaces?: SortOrder
+    isPublished?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PropertyAvgOrderByAggregateInput = {
+    price?: SortOrder
+    bedrooms?: SortOrder
+    bathrooms?: SortOrder
+    parkingSpaces?: SortOrder
+  }
+
+  export type PropertyMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    listingType?: SortOrder
+    propertyType?: SortOrder
+    price?: SortOrder
+    addressLine1?: SortOrder
+    suburb?: SortOrder
+    state?: SortOrder
+    postcode?: SortOrder
+    bedrooms?: SortOrder
+    bathrooms?: SortOrder
+    parkingSpaces?: SortOrder
+    isPublished?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PropertyMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    listingType?: SortOrder
+    propertyType?: SortOrder
+    price?: SortOrder
+    addressLine1?: SortOrder
+    suburb?: SortOrder
+    state?: SortOrder
+    postcode?: SortOrder
+    bedrooms?: SortOrder
+    bathrooms?: SortOrder
+    parkingSpaces?: SortOrder
+    isPublished?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PropertySumOrderByAggregateInput = {
+    price?: SortOrder
+    bedrooms?: SortOrder
+    bathrooms?: SortOrder
+    parkingSpaces?: SortOrder
+  }
+
+  export type EnumListingTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ListingType | EnumListingTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ListingType[] | ListEnumListingTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ListingType[] | ListEnumListingTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumListingTypeWithAggregatesFilter<$PrismaModel> | $Enums.ListingType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumListingTypeFilter<$PrismaModel>
+    _max?: NestedEnumListingTypeFilter<$PrismaModel>
+  }
+
+  export type EnumPropertyTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PropertyType | EnumPropertyTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.PropertyType[] | ListEnumPropertyTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PropertyType[] | ListEnumPropertyTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPropertyTypeWithAggregatesFilter<$PrismaModel> | $Enums.PropertyType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPropertyTypeFilter<$PrismaModel>
+    _max?: NestedEnumPropertyTypeFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type PropertyCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<PropertyCreateWithoutCreatedByInput, PropertyUncheckedCreateWithoutCreatedByInput> | PropertyCreateWithoutCreatedByInput[] | PropertyUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: PropertyCreateOrConnectWithoutCreatedByInput | PropertyCreateOrConnectWithoutCreatedByInput[]
+    createMany?: PropertyCreateManyCreatedByInputEnvelope
+    connect?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+  }
+
+  export type PersonProfileCreateNestedOneWithoutUserInput = {
+    create?: XOR<PersonProfileCreateWithoutUserInput, PersonProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: PersonProfileCreateOrConnectWithoutUserInput
+    connect?: PersonProfileWhereUniqueInput
+  }
+
+  export type PropertyUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<PropertyCreateWithoutCreatedByInput, PropertyUncheckedCreateWithoutCreatedByInput> | PropertyCreateWithoutCreatedByInput[] | PropertyUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: PropertyCreateOrConnectWithoutCreatedByInput | PropertyCreateOrConnectWithoutCreatedByInput[]
+    createMany?: PropertyCreateManyCreatedByInputEnvelope
+    connect?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+  }
+
+  export type PersonProfileUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<PersonProfileCreateWithoutUserInput, PersonProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: PersonProfileCreateOrConnectWithoutUserInput
+    connect?: PersonProfileWhereUniqueInput
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -2425,6 +6102,114 @@ export namespace Prisma {
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type PropertyUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<PropertyCreateWithoutCreatedByInput, PropertyUncheckedCreateWithoutCreatedByInput> | PropertyCreateWithoutCreatedByInput[] | PropertyUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: PropertyCreateOrConnectWithoutCreatedByInput | PropertyCreateOrConnectWithoutCreatedByInput[]
+    upsert?: PropertyUpsertWithWhereUniqueWithoutCreatedByInput | PropertyUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: PropertyCreateManyCreatedByInputEnvelope
+    set?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+    disconnect?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+    delete?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+    connect?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+    update?: PropertyUpdateWithWhereUniqueWithoutCreatedByInput | PropertyUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: PropertyUpdateManyWithWhereWithoutCreatedByInput | PropertyUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: PropertyScalarWhereInput | PropertyScalarWhereInput[]
+  }
+
+  export type PersonProfileUpdateOneWithoutUserNestedInput = {
+    create?: XOR<PersonProfileCreateWithoutUserInput, PersonProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: PersonProfileCreateOrConnectWithoutUserInput
+    upsert?: PersonProfileUpsertWithoutUserInput
+    disconnect?: PersonProfileWhereInput | boolean
+    delete?: PersonProfileWhereInput | boolean
+    connect?: PersonProfileWhereUniqueInput
+    update?: XOR<XOR<PersonProfileUpdateToOneWithWhereWithoutUserInput, PersonProfileUpdateWithoutUserInput>, PersonProfileUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PropertyUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<PropertyCreateWithoutCreatedByInput, PropertyUncheckedCreateWithoutCreatedByInput> | PropertyCreateWithoutCreatedByInput[] | PropertyUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: PropertyCreateOrConnectWithoutCreatedByInput | PropertyCreateOrConnectWithoutCreatedByInput[]
+    upsert?: PropertyUpsertWithWhereUniqueWithoutCreatedByInput | PropertyUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: PropertyCreateManyCreatedByInputEnvelope
+    set?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+    disconnect?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+    delete?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+    connect?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+    update?: PropertyUpdateWithWhereUniqueWithoutCreatedByInput | PropertyUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: PropertyUpdateManyWithWhereWithoutCreatedByInput | PropertyUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: PropertyScalarWhereInput | PropertyScalarWhereInput[]
+  }
+
+  export type PersonProfileUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<PersonProfileCreateWithoutUserInput, PersonProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: PersonProfileCreateOrConnectWithoutUserInput
+    upsert?: PersonProfileUpsertWithoutUserInput
+    disconnect?: PersonProfileWhereInput | boolean
+    delete?: PersonProfileWhereInput | boolean
+    connect?: PersonProfileWhereUniqueInput
+    update?: XOR<XOR<PersonProfileUpdateToOneWithWhereWithoutUserInput, PersonProfileUpdateWithoutUserInput>, PersonProfileUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserCreateNestedOneWithoutProfileInput = {
+    create?: XOR<UserCreateWithoutProfileInput, UserUncheckedCreateWithoutProfileInput>
+    connectOrCreate?: UserCreateOrConnectWithoutProfileInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type DecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type UserUpdateOneRequiredWithoutProfileNestedInput = {
+    create?: XOR<UserCreateWithoutProfileInput, UserUncheckedCreateWithoutProfileInput>
+    connectOrCreate?: UserCreateOrConnectWithoutProfileInput
+    upsert?: UserUpsertWithoutProfileInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutProfileInput, UserUpdateWithoutProfileInput>, UserUncheckedUpdateWithoutProfileInput>
+  }
+
+  export type UserCreateNestedOneWithoutPropertiesInput = {
+    create?: XOR<UserCreateWithoutPropertiesInput, UserUncheckedCreateWithoutPropertiesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPropertiesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumListingTypeFieldUpdateOperationsInput = {
+    set?: $Enums.ListingType
+  }
+
+  export type EnumPropertyTypeFieldUpdateOperationsInput = {
+    set?: $Enums.PropertyType
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type UserUpdateOneRequiredWithoutPropertiesNestedInput = {
+    create?: XOR<UserCreateWithoutPropertiesInput, UserUncheckedCreateWithoutPropertiesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPropertiesInput
+    upsert?: UserUpsertWithoutPropertiesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPropertiesInput, UserUpdateWithoutPropertiesInput>, UserUncheckedUpdateWithoutPropertiesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -2564,6 +6349,504 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedDecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
+  }
+
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedEnumListingTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.ListingType | EnumListingTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ListingType[] | ListEnumListingTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ListingType[] | ListEnumListingTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumListingTypeFilter<$PrismaModel> | $Enums.ListingType
+  }
+
+  export type NestedEnumPropertyTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.PropertyType | EnumPropertyTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.PropertyType[] | ListEnumPropertyTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PropertyType[] | ListEnumPropertyTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPropertyTypeFilter<$PrismaModel> | $Enums.PropertyType
+  }
+
+  export type NestedEnumListingTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ListingType | EnumListingTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ListingType[] | ListEnumListingTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ListingType[] | ListEnumListingTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumListingTypeWithAggregatesFilter<$PrismaModel> | $Enums.ListingType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumListingTypeFilter<$PrismaModel>
+    _max?: NestedEnumListingTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumPropertyTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PropertyType | EnumPropertyTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.PropertyType[] | ListEnumPropertyTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PropertyType[] | ListEnumPropertyTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPropertyTypeWithAggregatesFilter<$PrismaModel> | $Enums.PropertyType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPropertyTypeFilter<$PrismaModel>
+    _max?: NestedEnumPropertyTypeFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type PropertyCreateWithoutCreatedByInput = {
+    id?: string
+    title: string
+    description: string
+    listingType: $Enums.ListingType
+    propertyType: $Enums.PropertyType
+    price: Decimal | DecimalJsLike | number | string
+    addressLine1: string
+    suburb: string
+    state: string
+    postcode: string
+    bedrooms?: number | null
+    bathrooms?: number | null
+    parkingSpaces?: number | null
+    isPublished?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PropertyUncheckedCreateWithoutCreatedByInput = {
+    id?: string
+    title: string
+    description: string
+    listingType: $Enums.ListingType
+    propertyType: $Enums.PropertyType
+    price: Decimal | DecimalJsLike | number | string
+    addressLine1: string
+    suburb: string
+    state: string
+    postcode: string
+    bedrooms?: number | null
+    bathrooms?: number | null
+    parkingSpaces?: number | null
+    isPublished?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PropertyCreateOrConnectWithoutCreatedByInput = {
+    where: PropertyWhereUniqueInput
+    create: XOR<PropertyCreateWithoutCreatedByInput, PropertyUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type PropertyCreateManyCreatedByInputEnvelope = {
+    data: PropertyCreateManyCreatedByInput | PropertyCreateManyCreatedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PersonProfileCreateWithoutUserInput = {
+    id?: string
+    fullName: string
+    phone: string
+    addressLine1: string
+    suburb: string
+    state: string
+    postcode: string
+    employmentStatus: string
+    monthlyIncome: Decimal | DecimalJsLike | number | string
+    householdSize: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PersonProfileUncheckedCreateWithoutUserInput = {
+    id?: string
+    fullName: string
+    phone: string
+    addressLine1: string
+    suburb: string
+    state: string
+    postcode: string
+    employmentStatus: string
+    monthlyIncome: Decimal | DecimalJsLike | number | string
+    householdSize: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PersonProfileCreateOrConnectWithoutUserInput = {
+    where: PersonProfileWhereUniqueInput
+    create: XOR<PersonProfileCreateWithoutUserInput, PersonProfileUncheckedCreateWithoutUserInput>
+  }
+
+  export type PropertyUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: PropertyWhereUniqueInput
+    update: XOR<PropertyUpdateWithoutCreatedByInput, PropertyUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<PropertyCreateWithoutCreatedByInput, PropertyUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type PropertyUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: PropertyWhereUniqueInput
+    data: XOR<PropertyUpdateWithoutCreatedByInput, PropertyUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type PropertyUpdateManyWithWhereWithoutCreatedByInput = {
+    where: PropertyScalarWhereInput
+    data: XOR<PropertyUpdateManyMutationInput, PropertyUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
+  export type PropertyScalarWhereInput = {
+    AND?: PropertyScalarWhereInput | PropertyScalarWhereInput[]
+    OR?: PropertyScalarWhereInput[]
+    NOT?: PropertyScalarWhereInput | PropertyScalarWhereInput[]
+    id?: StringFilter<"Property"> | string
+    title?: StringFilter<"Property"> | string
+    description?: StringFilter<"Property"> | string
+    listingType?: EnumListingTypeFilter<"Property"> | $Enums.ListingType
+    propertyType?: EnumPropertyTypeFilter<"Property"> | $Enums.PropertyType
+    price?: DecimalFilter<"Property"> | Decimal | DecimalJsLike | number | string
+    addressLine1?: StringFilter<"Property"> | string
+    suburb?: StringFilter<"Property"> | string
+    state?: StringFilter<"Property"> | string
+    postcode?: StringFilter<"Property"> | string
+    bedrooms?: IntNullableFilter<"Property"> | number | null
+    bathrooms?: IntNullableFilter<"Property"> | number | null
+    parkingSpaces?: IntNullableFilter<"Property"> | number | null
+    isPublished?: BoolFilter<"Property"> | boolean
+    createdById?: StringFilter<"Property"> | string
+    createdAt?: DateTimeFilter<"Property"> | Date | string
+    updatedAt?: DateTimeFilter<"Property"> | Date | string
+  }
+
+  export type PersonProfileUpsertWithoutUserInput = {
+    update: XOR<PersonProfileUpdateWithoutUserInput, PersonProfileUncheckedUpdateWithoutUserInput>
+    create: XOR<PersonProfileCreateWithoutUserInput, PersonProfileUncheckedCreateWithoutUserInput>
+    where?: PersonProfileWhereInput
+  }
+
+  export type PersonProfileUpdateToOneWithWhereWithoutUserInput = {
+    where?: PersonProfileWhereInput
+    data: XOR<PersonProfileUpdateWithoutUserInput, PersonProfileUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PersonProfileUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    addressLine1?: StringFieldUpdateOperationsInput | string
+    suburb?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    postcode?: StringFieldUpdateOperationsInput | string
+    employmentStatus?: StringFieldUpdateOperationsInput | string
+    monthlyIncome?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    householdSize?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PersonProfileUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    addressLine1?: StringFieldUpdateOperationsInput | string
+    suburb?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    postcode?: StringFieldUpdateOperationsInput | string
+    employmentStatus?: StringFieldUpdateOperationsInput | string
+    monthlyIncome?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    householdSize?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserCreateWithoutProfileInput = {
+    id?: string
+    email: string
+    fullName: string
+    passwordHash?: string | null
+    phone?: string | null
+    googleId?: string | null
+    role?: $Enums.UserRole
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    properties?: PropertyCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserUncheckedCreateWithoutProfileInput = {
+    id?: string
+    email: string
+    fullName: string
+    passwordHash?: string | null
+    phone?: string | null
+    googleId?: string | null
+    role?: $Enums.UserRole
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    properties?: PropertyUncheckedCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserCreateOrConnectWithoutProfileInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutProfileInput, UserUncheckedCreateWithoutProfileInput>
+  }
+
+  export type UserUpsertWithoutProfileInput = {
+    update: XOR<UserUpdateWithoutProfileInput, UserUncheckedUpdateWithoutProfileInput>
+    create: XOR<UserCreateWithoutProfileInput, UserUncheckedCreateWithoutProfileInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutProfileInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutProfileInput, UserUncheckedUpdateWithoutProfileInput>
+  }
+
+  export type UserUpdateWithoutProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    properties?: PropertyUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    properties?: PropertyUncheckedUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserCreateWithoutPropertiesInput = {
+    id?: string
+    email: string
+    fullName: string
+    passwordHash?: string | null
+    phone?: string | null
+    googleId?: string | null
+    role?: $Enums.UserRole
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    profile?: PersonProfileCreateNestedOneWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutPropertiesInput = {
+    id?: string
+    email: string
+    fullName: string
+    passwordHash?: string | null
+    phone?: string | null
+    googleId?: string | null
+    role?: $Enums.UserRole
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    profile?: PersonProfileUncheckedCreateNestedOneWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutPropertiesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPropertiesInput, UserUncheckedCreateWithoutPropertiesInput>
+  }
+
+  export type UserUpsertWithoutPropertiesInput = {
+    update: XOR<UserUpdateWithoutPropertiesInput, UserUncheckedUpdateWithoutPropertiesInput>
+    create: XOR<UserCreateWithoutPropertiesInput, UserUncheckedCreateWithoutPropertiesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPropertiesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPropertiesInput, UserUncheckedUpdateWithoutPropertiesInput>
+  }
+
+  export type UserUpdateWithoutPropertiesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: PersonProfileUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPropertiesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: PersonProfileUncheckedUpdateOneWithoutUserNestedInput
+  }
+
+  export type PropertyCreateManyCreatedByInput = {
+    id?: string
+    title: string
+    description: string
+    listingType: $Enums.ListingType
+    propertyType: $Enums.PropertyType
+    price: Decimal | DecimalJsLike | number | string
+    addressLine1: string
+    suburb: string
+    state: string
+    postcode: string
+    bedrooms?: number | null
+    bathrooms?: number | null
+    parkingSpaces?: number | null
+    isPublished?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PropertyUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    listingType?: EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+    propertyType?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    addressLine1?: StringFieldUpdateOperationsInput | string
+    suburb?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    postcode?: StringFieldUpdateOperationsInput | string
+    bedrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PropertyUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    listingType?: EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+    propertyType?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    addressLine1?: StringFieldUpdateOperationsInput | string
+    suburb?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    postcode?: StringFieldUpdateOperationsInput | string
+    bedrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PropertyUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    listingType?: EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+    propertyType?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    addressLine1?: StringFieldUpdateOperationsInput | string
+    suburb?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    postcode?: StringFieldUpdateOperationsInput | string
+    bedrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

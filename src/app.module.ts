@@ -7,6 +7,8 @@ import { PrismaModule } from './database/prisma.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { HealthModule } from './modules/health/health.module';
 import { UsersModule } from './modules/users/users.module';
+import { PropertiesModule } from './modules/properties/properties.module';
+import { MeModule } from './modules/me/me.module';
 
 @Module({
   imports: [
@@ -27,6 +29,8 @@ import { UsersModule } from './modules/users/users.module';
     UsersModule,
     AuthModule,
     HealthModule,
+    PropertiesModule,
+    MeModule,
   ],
   controllers: [],
   providers: [],
