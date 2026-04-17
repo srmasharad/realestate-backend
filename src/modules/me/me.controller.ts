@@ -1,4 +1,6 @@
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
+import { VerifiedEmailGuard } from 'src/common/guards/verified-email.guard';
 
 import { Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -25,8 +27,15 @@ export class MeController {
   }
 
   @Patch('profile')
+  @UseGuards(VerifiedEmailGuard)
   @ApiOperation({ summary: 'Create or update current profile' })
   upsertMyProfile(@CurrentUser() currentUser: AuthenticatedUser, @Body() dto: UpsertMyProfileDto) {
     return this.meService.upsertMyProfile(currentUser, dto);
+  }
+
+  @Get('applications')
+  @ApiOperation({ summary: 'Get current user applications' })
+  getMyApplications(@CurrentUser() currentUser: AuthenticatedUser, @Body() query: PaginationQueryDto) {
+    return this.meService.getMyApplications(currentUser, query);
   }
 }

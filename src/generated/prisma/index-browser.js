@@ -129,6 +129,18 @@ exports.Prisma.UserScalarFieldEnum = {
   googleId: 'googleId',
   role: 'role',
   isActive: 'isActive',
+  isEmailVerified: 'isEmailVerified',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserMediaScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  mediaType: 'mediaType',
+  url: 'url',
+  publicId: 'publicId',
+  isPrimary: 'isPrimary',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -169,6 +181,25 @@ exports.Prisma.PropertyScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ApplicationScalarFieldEnum = {
+  id: 'id',
+  propertyId: 'propertyId',
+  applicantId: 'applicantId',
+  status: 'status',
+  message: 'message',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.EmailVerificationTokenScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  token: 'token',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -189,6 +220,10 @@ exports.UserRole = exports.$Enums.UserRole = {
   ADMIN: 'ADMIN'
 };
 
+exports.UserMediaType = exports.$Enums.UserMediaType = {
+  PROFILE_IMAGE: 'PROFILE_IMAGE'
+};
+
 exports.ListingType = exports.$Enums.ListingType = {
   RENT: 'RENT',
   SALE: 'SALE'
@@ -203,10 +238,19 @@ exports.PropertyType = exports.$Enums.PropertyType = {
   LAND: 'LAND'
 };
 
+exports.ApplicationStatus = exports.$Enums.ApplicationStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
+  UserMedia: 'UserMedia',
   PersonProfile: 'PersonProfile',
-  Property: 'Property'
+  Property: 'Property',
+  Application: 'Application',
+  EmailVerificationToken: 'EmailVerificationToken'
 };
 
 /**

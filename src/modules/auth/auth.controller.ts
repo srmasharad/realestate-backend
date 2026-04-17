@@ -6,6 +6,8 @@ import { ApiBadRequestResponse, ApiBearerAuth, ApiOperation, ApiTags, ApiUnautho
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { ResendVerificationDto } from './dto/resend-verification.dto';
+import { VerifyEmailDto } from './dto/verify-email.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { type AuthenticatedUser } from './types/authenticated-user.type';
 
@@ -39,5 +41,17 @@ export class AuthController {
   @ApiOperation({ summary: 'Get current authenticated user' })
   me(@CurrentUser() user: AuthenticatedUser) {
     return user;
+  }
+
+  @Post('verify-email')
+  @ApiOperation({ summary: 'Verify email using verification token' })
+  verifyEmail(@Body() body: VerifyEmailDto) {
+    return this.authService.verifyEmail(body.token);
+  }
+
+  @Post('resend-verification')
+  @ApiOperation({ summary: 'Resend email verification token' })
+  resendVerification(@Body() body: ResendVerificationDto) {
+    return this.authService.resendVerification(body.email);
   }
 }

@@ -33,20 +33,47 @@ enum PropertyType {
   LAND
 }
 
-model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
-  fullName     String
-  passwordHash String?
-  phone        String?  @unique
-  googleId     String?  @unique
-  role         UserRole @default(USER)
-  isActive     Boolean  @default(true)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
 
-  properties Property[]
-  profile    PersonProfile?
+enum UserMediaType {
+  PROFILE_IMAGE
+}
+
+model User {
+  id              String   @id @default(uuid())
+  email           String   @unique
+  fullName        String
+  passwordHash    String?
+  phone           String?  @unique
+  googleId        String?  @unique
+  role            UserRole @default(USER)
+  isActive        Boolean  @default(true)
+  isEmailVerified Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  properties              Property[]
+  profile                 PersonProfile?
+  applications            Application[]
+  emailVerificationTokens EmailVerificationToken[]
+  media                   UserMedia[]
+}
+
+model UserMedia {
+  id        String        @id @default(uuid())
+  userId    String
+  mediaType UserMediaType
+  url       String
+  publicId  String
+  isPrimary Boolean       @default(false)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model PersonProfile {
@@ -86,5 +113,32 @@ model Property {
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 
-  createdBy User @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdBy   User          @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  application Application[]
+}
+
+model Application {
+  id          String            @id @default(uuid())
+  propertyId  String
+  applicantId String
+  status      ApplicationStatus @default(PENDING)
+  message     String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  property  Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  applicant User     @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+
+  @@unique([propertyId, applicantId])
+}
+
+model EmailVerificationToken {
+  id        String    @id @default(uuid())
+  userId    String
+  token     String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

@@ -4,11 +4,13 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
 import { PrismaModule } from './database/prisma.module';
+import { ApplicationsModule } from './modules/applications/applications.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { HealthModule } from './modules/health/health.module';
-import { UsersModule } from './modules/users/users.module';
-import { PropertiesModule } from './modules/properties/properties.module';
 import { MeModule } from './modules/me/me.module';
+import { PropertiesModule } from './modules/properties/properties.module';
+import { UsersModule } from './modules/users/users.module';
+import { MailModule } from './common/mail/mail.module';
 
 @Module({
   imports: [
@@ -23,6 +25,11 @@ import { MeModule } from './modules/me/me.module';
         CORS_ORIGINS: Joi.string().required(),
         JWT_ACCESS_SECRET: Joi.string().required(),
         JWT_ACCESS_EXPIRES_IN: Joi.string().default('900'),
+        RESEND_API_KEY: Joi.string().required(),
+        MAIL_FROM: Joi.string().required(),
+        MAIL_DEV_TO: Joi.string().required(),
+        APP_BASE_URL: Joi.string().required(),
+        FRONTEND_URL: Joi.string().required(),
       }),
     }),
     PrismaModule,
@@ -31,6 +38,8 @@ import { MeModule } from './modules/me/me.module';
     HealthModule,
     PropertiesModule,
     MeModule,
+    ApplicationsModule,
+    MailModule,
   ],
   controllers: [],
   providers: [],

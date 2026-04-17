@@ -1,3 +1,5 @@
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
+import { PaginatedResponse } from 'src/common/types/paginated-response.type';
 import { PrismaService } from 'src/database/prisma.service';
 import { PersonProfile } from 'src/generated/prisma';
 
@@ -106,5 +108,80 @@ export class MeService {
     });
 
     return profile;
+  }
+
+  async getMyApplications(
+    currentUser: AuthenticatedUser,
+    query: PaginationQueryDto,
+  ): Promise<
+    PaginatedResponse<{
+      id: string;
+      status: string;
+      message: string | null;
+      createdAt: Date;
+      property: {
+        id: string;
+        title: string;
+        listingType: string;
+        propertyType: string;
+        price: unknown;
+        suburb: string;
+        state: string;
+        postcode: string;
+        isPublished: boolean;
+      };
+    }>
+  > {
+    const page = query.page ?? 1;
+    const limit = query.limit ?? 10;
+    const sortBy = query.sortBy ?? 'createdAt';
+    const sortOrder = query.sortOrder ?? 'desc';
+
+    const skip = (page - 1) * limit;
+
+    const where = {
+      applicantId: currentUser.id,
+    };
+
+    const [applications, total] = await this.prisma.$transaction([
+      this.prisma.application.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: {
+          [sortBy]: sortOrder,
+        },
+        select: {
+          id: true,
+          status: true,
+          message: true,
+          createdAt: true,
+          property: {
+            select: {
+              id: true,
+              title: true,
+              listingType: true,
+              propertyType: true,
+              price: true,
+              suburb: true,
+              state: true,
+              postcode: true,
+              isPublished: true,
+            },
+          },
+        },
+      }),
+      this.prisma.application.count({ where }),
+    ]);
+
+    return {
+      items: applications,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 }
