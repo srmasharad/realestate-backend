@@ -81,7 +81,11 @@ export class AuthService {
 
     const verification = await this.createEmailVerificationToken(user.id);
 
-    await this.mailService.sendVerificationEmail(user.email, verification.token);
+    try {
+      await this.mailService.sendVerificationEmail(user.email, verification.token);
+    } catch (error) {
+      console.error(`Failed to send verification email: ${error}`);
+    }
 
     return {
       message: 'User registered successfully. Please verify your email.',
