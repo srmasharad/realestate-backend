@@ -40,4 +40,44 @@ export class MailService {
       this.logger.log(`DEV verification link: ${verifyUrl}`);
     }
   }
+
+  async sendApplicationStatusEmail(
+    to: string,
+    fullName: string,
+    propertyTitle: string,
+    status: 'APPROVED' | 'REJECTED',
+  ) {
+    const subject =
+      status === 'APPROVED'
+        ? 'Your property application has been approved'
+        : 'Your property application has been rejected';
+
+    const html =
+      status === 'APPROVED'
+        ? `
+        <h2>Application Approved</h2>
+        <p>Hello ${fullName},</p>
+        <p>Your application for <strong>${propertyTitle}</strong> has been approved.</p>
+        <p>Our team will contact you with the next steps.</p>
+      `
+        : `
+        <h2>Application Update</h2>
+        <p>Hello ${fullName},</p>
+        <p>Your application for <strong>${propertyTitle}</strong> has not been successful at this stage.</p>
+        <p>Thank you for your interest.</p>
+      `;
+
+    const recipient = process.env.NODE_ENV === 'development' ? (process.env.MAIL_DEV_TO ?? 'delivered@resend.dev') : to;
+
+    const { error } = await this.resend.emails.send({
+      from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
+      to: [recipient],
+      subject,
+      html,
+    });
+
+    if (error) {
+      throw new InternalServerErrorException('Failed to send application status email');
+    }
+  }
 }

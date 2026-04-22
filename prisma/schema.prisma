@@ -43,6 +43,15 @@ enum UserMediaType {
   PROFILE_IMAGE
 }
 
+enum PropertyMediaType {
+  IMAGE
+}
+
+enum MediaVisibility {
+  PUBLIC
+  PROTECTED
+}
+
 model User {
   id              String   @id @default(uuid())
   email           String   @unique
@@ -64,14 +73,15 @@ model User {
 }
 
 model UserMedia {
-  id        String        @id @default(uuid())
-  userId    String
-  mediaType UserMediaType
-  url       String
-  publicId  String
-  isPrimary Boolean       @default(false)
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
+  id         String          @id @default(uuid())
+  userId     String
+  mediaType  UserMediaType
+  visibility MediaVisibility
+  url        String
+  publicId   String
+  isPrimary  Boolean         @default(false)
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -113,8 +123,9 @@ model Property {
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 
-  createdBy   User          @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdBy   User            @relation(fields: [createdById], references: [id], onDelete: Cascade)
   application Application[]
+  media       PropertyMedia[]
 }
 
 model Application {
@@ -141,4 +152,19 @@ model EmailVerificationToken {
   createdAt DateTime  @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PropertyMedia {
+  id         String            @id @default(uuid())
+  propertyId String
+  mediaType  PropertyMediaType
+  visibility MediaVisibility
+  url        String
+  publicId   String
+  isPrimary  Boolean           @default(false)
+  sortOrder  Int               @default(0)
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 }

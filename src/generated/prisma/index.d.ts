@@ -43,6 +43,11 @@ export type Application = $Result.DefaultSelection<Prisma.$ApplicationPayload>
  * 
  */
 export type EmailVerificationToken = $Result.DefaultSelection<Prisma.$EmailVerificationTokenPayload>
+/**
+ * Model PropertyMedia
+ * 
+ */
+export type PropertyMedia = $Result.DefaultSelection<Prisma.$PropertyMediaPayload>
 
 /**
  * Enums
@@ -92,6 +97,21 @@ export const UserMediaType: {
 
 export type UserMediaType = (typeof UserMediaType)[keyof typeof UserMediaType]
 
+
+export const PropertyMediaType: {
+  IMAGE: 'IMAGE'
+};
+
+export type PropertyMediaType = (typeof PropertyMediaType)[keyof typeof PropertyMediaType]
+
+
+export const MediaVisibility: {
+  PUBLIC: 'PUBLIC',
+  PROTECTED: 'PROTECTED'
+};
+
+export type MediaVisibility = (typeof MediaVisibility)[keyof typeof MediaVisibility]
+
 }
 
 export type UserRole = $Enums.UserRole
@@ -113,6 +133,14 @@ export const ApplicationStatus: typeof $Enums.ApplicationStatus
 export type UserMediaType = $Enums.UserMediaType
 
 export const UserMediaType: typeof $Enums.UserMediaType
+
+export type PropertyMediaType = $Enums.PropertyMediaType
+
+export const PropertyMediaType: typeof $Enums.PropertyMediaType
+
+export type MediaVisibility = $Enums.MediaVisibility
+
+export const MediaVisibility: typeof $Enums.MediaVisibility
 
 /**
  * ##  Prisma Client ʲˢ
@@ -294,6 +322,16 @@ export class PrismaClient<
     * ```
     */
   get emailVerificationToken(): Prisma.EmailVerificationTokenDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.propertyMedia`: Exposes CRUD operations for the **PropertyMedia** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PropertyMedias
+    * const propertyMedias = await prisma.propertyMedia.findMany()
+    * ```
+    */
+  get propertyMedia(): Prisma.PropertyMediaDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -733,7 +771,8 @@ export namespace Prisma {
     PersonProfile: 'PersonProfile',
     Property: 'Property',
     Application: 'Application',
-    EmailVerificationToken: 'EmailVerificationToken'
+    EmailVerificationToken: 'EmailVerificationToken',
+    PropertyMedia: 'PropertyMedia'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -749,7 +788,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "userMedia" | "personProfile" | "property" | "application" | "emailVerificationToken"
+      modelProps: "user" | "userMedia" | "personProfile" | "property" | "application" | "emailVerificationToken" | "propertyMedia"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1197,6 +1236,80 @@ export namespace Prisma {
           }
         }
       }
+      PropertyMedia: {
+        payload: Prisma.$PropertyMediaPayload<ExtArgs>
+        fields: Prisma.PropertyMediaFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PropertyMediaFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PropertyMediaPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PropertyMediaFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PropertyMediaPayload>
+          }
+          findFirst: {
+            args: Prisma.PropertyMediaFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PropertyMediaPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PropertyMediaFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PropertyMediaPayload>
+          }
+          findMany: {
+            args: Prisma.PropertyMediaFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PropertyMediaPayload>[]
+          }
+          create: {
+            args: Prisma.PropertyMediaCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PropertyMediaPayload>
+          }
+          createMany: {
+            args: Prisma.PropertyMediaCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PropertyMediaCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PropertyMediaPayload>[]
+          }
+          delete: {
+            args: Prisma.PropertyMediaDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PropertyMediaPayload>
+          }
+          update: {
+            args: Prisma.PropertyMediaUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PropertyMediaPayload>
+          }
+          deleteMany: {
+            args: Prisma.PropertyMediaDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PropertyMediaUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PropertyMediaUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PropertyMediaPayload>[]
+          }
+          upsert: {
+            args: Prisma.PropertyMediaUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PropertyMediaPayload>
+          }
+          aggregate: {
+            args: Prisma.PropertyMediaAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePropertyMedia>
+          }
+          groupBy: {
+            args: Prisma.PropertyMediaGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PropertyMediaGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PropertyMediaCountArgs<ExtArgs>
+            result: $Utils.Optional<PropertyMediaCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1311,6 +1424,7 @@ export namespace Prisma {
     property?: PropertyOmit
     application?: ApplicationOmit
     emailVerificationToken?: EmailVerificationTokenOmit
+    propertyMedia?: PropertyMediaOmit
   }
 
   /* Types for Logging */
@@ -1450,10 +1564,12 @@ export namespace Prisma {
 
   export type PropertyCountOutputType = {
     application: number
+    media: number
   }
 
   export type PropertyCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     application?: boolean | PropertyCountOutputTypeCountApplicationArgs
+    media?: boolean | PropertyCountOutputTypeCountMediaArgs
   }
 
   // Custom InputTypes
@@ -1472,6 +1588,13 @@ export namespace Prisma {
    */
   export type PropertyCountOutputTypeCountApplicationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ApplicationWhereInput
+  }
+
+  /**
+   * PropertyCountOutputType without action
+   */
+  export type PropertyCountOutputTypeCountMediaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PropertyMediaWhereInput
   }
 
 
@@ -2753,6 +2876,7 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     mediaType: $Enums.UserMediaType | null
+    visibility: $Enums.MediaVisibility | null
     url: string | null
     publicId: string | null
     isPrimary: boolean | null
@@ -2764,6 +2888,7 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     mediaType: $Enums.UserMediaType | null
+    visibility: $Enums.MediaVisibility | null
     url: string | null
     publicId: string | null
     isPrimary: boolean | null
@@ -2775,6 +2900,7 @@ export namespace Prisma {
     id: number
     userId: number
     mediaType: number
+    visibility: number
     url: number
     publicId: number
     isPrimary: number
@@ -2788,6 +2914,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     mediaType?: true
+    visibility?: true
     url?: true
     publicId?: true
     isPrimary?: true
@@ -2799,6 +2926,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     mediaType?: true
+    visibility?: true
     url?: true
     publicId?: true
     isPrimary?: true
@@ -2810,6 +2938,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     mediaType?: true
+    visibility?: true
     url?: true
     publicId?: true
     isPrimary?: true
@@ -2894,6 +3023,7 @@ export namespace Prisma {
     id: string
     userId: string
     mediaType: $Enums.UserMediaType
+    visibility: $Enums.MediaVisibility
     url: string
     publicId: string
     isPrimary: boolean
@@ -2922,6 +3052,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     mediaType?: boolean
+    visibility?: boolean
     url?: boolean
     publicId?: boolean
     isPrimary?: boolean
@@ -2934,6 +3065,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     mediaType?: boolean
+    visibility?: boolean
     url?: boolean
     publicId?: boolean
     isPrimary?: boolean
@@ -2946,6 +3078,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     mediaType?: boolean
+    visibility?: boolean
     url?: boolean
     publicId?: boolean
     isPrimary?: boolean
@@ -2958,6 +3091,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     mediaType?: boolean
+    visibility?: boolean
     url?: boolean
     publicId?: boolean
     isPrimary?: boolean
@@ -2965,7 +3099,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type UserMediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "mediaType" | "url" | "publicId" | "isPrimary" | "createdAt" | "updatedAt", ExtArgs["result"]["userMedia"]>
+  export type UserMediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "mediaType" | "visibility" | "url" | "publicId" | "isPrimary" | "createdAt" | "updatedAt", ExtArgs["result"]["userMedia"]>
   export type UserMediaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -2985,6 +3119,7 @@ export namespace Prisma {
       id: string
       userId: string
       mediaType: $Enums.UserMediaType
+      visibility: $Enums.MediaVisibility
       url: string
       publicId: string
       isPrimary: boolean
@@ -3417,6 +3552,7 @@ export namespace Prisma {
     readonly id: FieldRef<"UserMedia", 'String'>
     readonly userId: FieldRef<"UserMedia", 'String'>
     readonly mediaType: FieldRef<"UserMedia", 'UserMediaType'>
+    readonly visibility: FieldRef<"UserMedia", 'MediaVisibility'>
     readonly url: FieldRef<"UserMedia", 'String'>
     readonly publicId: FieldRef<"UserMedia", 'String'>
     readonly isPrimary: FieldRef<"UserMedia", 'Boolean'>
@@ -5354,6 +5490,7 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     application?: boolean | Property$applicationArgs<ExtArgs>
+    media?: boolean | Property$mediaArgs<ExtArgs>
     _count?: boolean | PropertyCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["property"]>
 
@@ -5423,6 +5560,7 @@ export namespace Prisma {
   export type PropertyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     application?: boolean | Property$applicationArgs<ExtArgs>
+    media?: boolean | Property$mediaArgs<ExtArgs>
     _count?: boolean | PropertyCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PropertyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5437,6 +5575,7 @@ export namespace Prisma {
     objects: {
       createdBy: Prisma.$UserPayload<ExtArgs>
       application: Prisma.$ApplicationPayload<ExtArgs>[]
+      media: Prisma.$PropertyMediaPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5852,6 +5991,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     application<T extends Property$applicationArgs<ExtArgs> = {}>(args?: Subset<T, Property$applicationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    media<T extends Property$mediaArgs<ExtArgs> = {}>(args?: Subset<T, Property$mediaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyMediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6320,6 +6460,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ApplicationScalarFieldEnum | ApplicationScalarFieldEnum[]
+  }
+
+  /**
+   * Property.media
+   */
+  export type Property$mediaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PropertyMedia
+     */
+    select?: PropertyMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PropertyMedia
+     */
+    omit?: PropertyMediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyMediaInclude<ExtArgs> | null
+    where?: PropertyMediaWhereInput
+    orderBy?: PropertyMediaOrderByWithRelationInput | PropertyMediaOrderByWithRelationInput[]
+    cursor?: PropertyMediaWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PropertyMediaScalarFieldEnum | PropertyMediaScalarFieldEnum[]
   }
 
   /**
@@ -8515,6 +8679,1168 @@ export namespace Prisma {
 
 
   /**
+   * Model PropertyMedia
+   */
+
+  export type AggregatePropertyMedia = {
+    _count: PropertyMediaCountAggregateOutputType | null
+    _avg: PropertyMediaAvgAggregateOutputType | null
+    _sum: PropertyMediaSumAggregateOutputType | null
+    _min: PropertyMediaMinAggregateOutputType | null
+    _max: PropertyMediaMaxAggregateOutputType | null
+  }
+
+  export type PropertyMediaAvgAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type PropertyMediaSumAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type PropertyMediaMinAggregateOutputType = {
+    id: string | null
+    propertyId: string | null
+    mediaType: $Enums.PropertyMediaType | null
+    visibility: $Enums.MediaVisibility | null
+    url: string | null
+    publicId: string | null
+    isPrimary: boolean | null
+    sortOrder: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PropertyMediaMaxAggregateOutputType = {
+    id: string | null
+    propertyId: string | null
+    mediaType: $Enums.PropertyMediaType | null
+    visibility: $Enums.MediaVisibility | null
+    url: string | null
+    publicId: string | null
+    isPrimary: boolean | null
+    sortOrder: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PropertyMediaCountAggregateOutputType = {
+    id: number
+    propertyId: number
+    mediaType: number
+    visibility: number
+    url: number
+    publicId: number
+    isPrimary: number
+    sortOrder: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PropertyMediaAvgAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type PropertyMediaSumAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type PropertyMediaMinAggregateInputType = {
+    id?: true
+    propertyId?: true
+    mediaType?: true
+    visibility?: true
+    url?: true
+    publicId?: true
+    isPrimary?: true
+    sortOrder?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PropertyMediaMaxAggregateInputType = {
+    id?: true
+    propertyId?: true
+    mediaType?: true
+    visibility?: true
+    url?: true
+    publicId?: true
+    isPrimary?: true
+    sortOrder?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PropertyMediaCountAggregateInputType = {
+    id?: true
+    propertyId?: true
+    mediaType?: true
+    visibility?: true
+    url?: true
+    publicId?: true
+    isPrimary?: true
+    sortOrder?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PropertyMediaAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PropertyMedia to aggregate.
+     */
+    where?: PropertyMediaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PropertyMedias to fetch.
+     */
+    orderBy?: PropertyMediaOrderByWithRelationInput | PropertyMediaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PropertyMediaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PropertyMedias from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PropertyMedias.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PropertyMedias
+    **/
+    _count?: true | PropertyMediaCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PropertyMediaAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PropertyMediaSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PropertyMediaMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PropertyMediaMaxAggregateInputType
+  }
+
+  export type GetPropertyMediaAggregateType<T extends PropertyMediaAggregateArgs> = {
+        [P in keyof T & keyof AggregatePropertyMedia]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePropertyMedia[P]>
+      : GetScalarType<T[P], AggregatePropertyMedia[P]>
+  }
+
+
+
+
+  export type PropertyMediaGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PropertyMediaWhereInput
+    orderBy?: PropertyMediaOrderByWithAggregationInput | PropertyMediaOrderByWithAggregationInput[]
+    by: PropertyMediaScalarFieldEnum[] | PropertyMediaScalarFieldEnum
+    having?: PropertyMediaScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PropertyMediaCountAggregateInputType | true
+    _avg?: PropertyMediaAvgAggregateInputType
+    _sum?: PropertyMediaSumAggregateInputType
+    _min?: PropertyMediaMinAggregateInputType
+    _max?: PropertyMediaMaxAggregateInputType
+  }
+
+  export type PropertyMediaGroupByOutputType = {
+    id: string
+    propertyId: string
+    mediaType: $Enums.PropertyMediaType
+    visibility: $Enums.MediaVisibility
+    url: string
+    publicId: string
+    isPrimary: boolean
+    sortOrder: number
+    createdAt: Date
+    updatedAt: Date
+    _count: PropertyMediaCountAggregateOutputType | null
+    _avg: PropertyMediaAvgAggregateOutputType | null
+    _sum: PropertyMediaSumAggregateOutputType | null
+    _min: PropertyMediaMinAggregateOutputType | null
+    _max: PropertyMediaMaxAggregateOutputType | null
+  }
+
+  type GetPropertyMediaGroupByPayload<T extends PropertyMediaGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PropertyMediaGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PropertyMediaGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PropertyMediaGroupByOutputType[P]>
+            : GetScalarType<T[P], PropertyMediaGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PropertyMediaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    propertyId?: boolean
+    mediaType?: boolean
+    visibility?: boolean
+    url?: boolean
+    publicId?: boolean
+    isPrimary?: boolean
+    sortOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    property?: boolean | PropertyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["propertyMedia"]>
+
+  export type PropertyMediaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    propertyId?: boolean
+    mediaType?: boolean
+    visibility?: boolean
+    url?: boolean
+    publicId?: boolean
+    isPrimary?: boolean
+    sortOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    property?: boolean | PropertyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["propertyMedia"]>
+
+  export type PropertyMediaSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    propertyId?: boolean
+    mediaType?: boolean
+    visibility?: boolean
+    url?: boolean
+    publicId?: boolean
+    isPrimary?: boolean
+    sortOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    property?: boolean | PropertyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["propertyMedia"]>
+
+  export type PropertyMediaSelectScalar = {
+    id?: boolean
+    propertyId?: boolean
+    mediaType?: boolean
+    visibility?: boolean
+    url?: boolean
+    publicId?: boolean
+    isPrimary?: boolean
+    sortOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PropertyMediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "propertyId" | "mediaType" | "visibility" | "url" | "publicId" | "isPrimary" | "sortOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["propertyMedia"]>
+  export type PropertyMediaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    property?: boolean | PropertyDefaultArgs<ExtArgs>
+  }
+  export type PropertyMediaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    property?: boolean | PropertyDefaultArgs<ExtArgs>
+  }
+  export type PropertyMediaIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    property?: boolean | PropertyDefaultArgs<ExtArgs>
+  }
+
+  export type $PropertyMediaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PropertyMedia"
+    objects: {
+      property: Prisma.$PropertyPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      propertyId: string
+      mediaType: $Enums.PropertyMediaType
+      visibility: $Enums.MediaVisibility
+      url: string
+      publicId: string
+      isPrimary: boolean
+      sortOrder: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["propertyMedia"]>
+    composites: {}
+  }
+
+  type PropertyMediaGetPayload<S extends boolean | null | undefined | PropertyMediaDefaultArgs> = $Result.GetResult<Prisma.$PropertyMediaPayload, S>
+
+  type PropertyMediaCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PropertyMediaFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PropertyMediaCountAggregateInputType | true
+    }
+
+  export interface PropertyMediaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PropertyMedia'], meta: { name: 'PropertyMedia' } }
+    /**
+     * Find zero or one PropertyMedia that matches the filter.
+     * @param {PropertyMediaFindUniqueArgs} args - Arguments to find a PropertyMedia
+     * @example
+     * // Get one PropertyMedia
+     * const propertyMedia = await prisma.propertyMedia.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PropertyMediaFindUniqueArgs>(args: SelectSubset<T, PropertyMediaFindUniqueArgs<ExtArgs>>): Prisma__PropertyMediaClient<$Result.GetResult<Prisma.$PropertyMediaPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PropertyMedia that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PropertyMediaFindUniqueOrThrowArgs} args - Arguments to find a PropertyMedia
+     * @example
+     * // Get one PropertyMedia
+     * const propertyMedia = await prisma.propertyMedia.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PropertyMediaFindUniqueOrThrowArgs>(args: SelectSubset<T, PropertyMediaFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PropertyMediaClient<$Result.GetResult<Prisma.$PropertyMediaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PropertyMedia that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PropertyMediaFindFirstArgs} args - Arguments to find a PropertyMedia
+     * @example
+     * // Get one PropertyMedia
+     * const propertyMedia = await prisma.propertyMedia.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PropertyMediaFindFirstArgs>(args?: SelectSubset<T, PropertyMediaFindFirstArgs<ExtArgs>>): Prisma__PropertyMediaClient<$Result.GetResult<Prisma.$PropertyMediaPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PropertyMedia that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PropertyMediaFindFirstOrThrowArgs} args - Arguments to find a PropertyMedia
+     * @example
+     * // Get one PropertyMedia
+     * const propertyMedia = await prisma.propertyMedia.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PropertyMediaFindFirstOrThrowArgs>(args?: SelectSubset<T, PropertyMediaFindFirstOrThrowArgs<ExtArgs>>): Prisma__PropertyMediaClient<$Result.GetResult<Prisma.$PropertyMediaPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PropertyMedias that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PropertyMediaFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PropertyMedias
+     * const propertyMedias = await prisma.propertyMedia.findMany()
+     * 
+     * // Get first 10 PropertyMedias
+     * const propertyMedias = await prisma.propertyMedia.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const propertyMediaWithIdOnly = await prisma.propertyMedia.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PropertyMediaFindManyArgs>(args?: SelectSubset<T, PropertyMediaFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyMediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PropertyMedia.
+     * @param {PropertyMediaCreateArgs} args - Arguments to create a PropertyMedia.
+     * @example
+     * // Create one PropertyMedia
+     * const PropertyMedia = await prisma.propertyMedia.create({
+     *   data: {
+     *     // ... data to create a PropertyMedia
+     *   }
+     * })
+     * 
+     */
+    create<T extends PropertyMediaCreateArgs>(args: SelectSubset<T, PropertyMediaCreateArgs<ExtArgs>>): Prisma__PropertyMediaClient<$Result.GetResult<Prisma.$PropertyMediaPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PropertyMedias.
+     * @param {PropertyMediaCreateManyArgs} args - Arguments to create many PropertyMedias.
+     * @example
+     * // Create many PropertyMedias
+     * const propertyMedia = await prisma.propertyMedia.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PropertyMediaCreateManyArgs>(args?: SelectSubset<T, PropertyMediaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PropertyMedias and returns the data saved in the database.
+     * @param {PropertyMediaCreateManyAndReturnArgs} args - Arguments to create many PropertyMedias.
+     * @example
+     * // Create many PropertyMedias
+     * const propertyMedia = await prisma.propertyMedia.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PropertyMedias and only return the `id`
+     * const propertyMediaWithIdOnly = await prisma.propertyMedia.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PropertyMediaCreateManyAndReturnArgs>(args?: SelectSubset<T, PropertyMediaCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyMediaPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PropertyMedia.
+     * @param {PropertyMediaDeleteArgs} args - Arguments to delete one PropertyMedia.
+     * @example
+     * // Delete one PropertyMedia
+     * const PropertyMedia = await prisma.propertyMedia.delete({
+     *   where: {
+     *     // ... filter to delete one PropertyMedia
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PropertyMediaDeleteArgs>(args: SelectSubset<T, PropertyMediaDeleteArgs<ExtArgs>>): Prisma__PropertyMediaClient<$Result.GetResult<Prisma.$PropertyMediaPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PropertyMedia.
+     * @param {PropertyMediaUpdateArgs} args - Arguments to update one PropertyMedia.
+     * @example
+     * // Update one PropertyMedia
+     * const propertyMedia = await prisma.propertyMedia.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PropertyMediaUpdateArgs>(args: SelectSubset<T, PropertyMediaUpdateArgs<ExtArgs>>): Prisma__PropertyMediaClient<$Result.GetResult<Prisma.$PropertyMediaPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PropertyMedias.
+     * @param {PropertyMediaDeleteManyArgs} args - Arguments to filter PropertyMedias to delete.
+     * @example
+     * // Delete a few PropertyMedias
+     * const { count } = await prisma.propertyMedia.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PropertyMediaDeleteManyArgs>(args?: SelectSubset<T, PropertyMediaDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PropertyMedias.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PropertyMediaUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PropertyMedias
+     * const propertyMedia = await prisma.propertyMedia.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PropertyMediaUpdateManyArgs>(args: SelectSubset<T, PropertyMediaUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PropertyMedias and returns the data updated in the database.
+     * @param {PropertyMediaUpdateManyAndReturnArgs} args - Arguments to update many PropertyMedias.
+     * @example
+     * // Update many PropertyMedias
+     * const propertyMedia = await prisma.propertyMedia.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PropertyMedias and only return the `id`
+     * const propertyMediaWithIdOnly = await prisma.propertyMedia.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PropertyMediaUpdateManyAndReturnArgs>(args: SelectSubset<T, PropertyMediaUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyMediaPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PropertyMedia.
+     * @param {PropertyMediaUpsertArgs} args - Arguments to update or create a PropertyMedia.
+     * @example
+     * // Update or create a PropertyMedia
+     * const propertyMedia = await prisma.propertyMedia.upsert({
+     *   create: {
+     *     // ... data to create a PropertyMedia
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PropertyMedia we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PropertyMediaUpsertArgs>(args: SelectSubset<T, PropertyMediaUpsertArgs<ExtArgs>>): Prisma__PropertyMediaClient<$Result.GetResult<Prisma.$PropertyMediaPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PropertyMedias.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PropertyMediaCountArgs} args - Arguments to filter PropertyMedias to count.
+     * @example
+     * // Count the number of PropertyMedias
+     * const count = await prisma.propertyMedia.count({
+     *   where: {
+     *     // ... the filter for the PropertyMedias we want to count
+     *   }
+     * })
+    **/
+    count<T extends PropertyMediaCountArgs>(
+      args?: Subset<T, PropertyMediaCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PropertyMediaCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PropertyMedia.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PropertyMediaAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PropertyMediaAggregateArgs>(args: Subset<T, PropertyMediaAggregateArgs>): Prisma.PrismaPromise<GetPropertyMediaAggregateType<T>>
+
+    /**
+     * Group by PropertyMedia.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PropertyMediaGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PropertyMediaGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PropertyMediaGroupByArgs['orderBy'] }
+        : { orderBy?: PropertyMediaGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PropertyMediaGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPropertyMediaGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PropertyMedia model
+   */
+  readonly fields: PropertyMediaFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PropertyMedia.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PropertyMediaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    property<T extends PropertyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PropertyDefaultArgs<ExtArgs>>): Prisma__PropertyClient<$Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PropertyMedia model
+   */
+  interface PropertyMediaFieldRefs {
+    readonly id: FieldRef<"PropertyMedia", 'String'>
+    readonly propertyId: FieldRef<"PropertyMedia", 'String'>
+    readonly mediaType: FieldRef<"PropertyMedia", 'PropertyMediaType'>
+    readonly visibility: FieldRef<"PropertyMedia", 'MediaVisibility'>
+    readonly url: FieldRef<"PropertyMedia", 'String'>
+    readonly publicId: FieldRef<"PropertyMedia", 'String'>
+    readonly isPrimary: FieldRef<"PropertyMedia", 'Boolean'>
+    readonly sortOrder: FieldRef<"PropertyMedia", 'Int'>
+    readonly createdAt: FieldRef<"PropertyMedia", 'DateTime'>
+    readonly updatedAt: FieldRef<"PropertyMedia", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PropertyMedia findUnique
+   */
+  export type PropertyMediaFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PropertyMedia
+     */
+    select?: PropertyMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PropertyMedia
+     */
+    omit?: PropertyMediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyMediaInclude<ExtArgs> | null
+    /**
+     * Filter, which PropertyMedia to fetch.
+     */
+    where: PropertyMediaWhereUniqueInput
+  }
+
+  /**
+   * PropertyMedia findUniqueOrThrow
+   */
+  export type PropertyMediaFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PropertyMedia
+     */
+    select?: PropertyMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PropertyMedia
+     */
+    omit?: PropertyMediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyMediaInclude<ExtArgs> | null
+    /**
+     * Filter, which PropertyMedia to fetch.
+     */
+    where: PropertyMediaWhereUniqueInput
+  }
+
+  /**
+   * PropertyMedia findFirst
+   */
+  export type PropertyMediaFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PropertyMedia
+     */
+    select?: PropertyMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PropertyMedia
+     */
+    omit?: PropertyMediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyMediaInclude<ExtArgs> | null
+    /**
+     * Filter, which PropertyMedia to fetch.
+     */
+    where?: PropertyMediaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PropertyMedias to fetch.
+     */
+    orderBy?: PropertyMediaOrderByWithRelationInput | PropertyMediaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PropertyMedias.
+     */
+    cursor?: PropertyMediaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PropertyMedias from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PropertyMedias.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PropertyMedias.
+     */
+    distinct?: PropertyMediaScalarFieldEnum | PropertyMediaScalarFieldEnum[]
+  }
+
+  /**
+   * PropertyMedia findFirstOrThrow
+   */
+  export type PropertyMediaFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PropertyMedia
+     */
+    select?: PropertyMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PropertyMedia
+     */
+    omit?: PropertyMediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyMediaInclude<ExtArgs> | null
+    /**
+     * Filter, which PropertyMedia to fetch.
+     */
+    where?: PropertyMediaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PropertyMedias to fetch.
+     */
+    orderBy?: PropertyMediaOrderByWithRelationInput | PropertyMediaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PropertyMedias.
+     */
+    cursor?: PropertyMediaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PropertyMedias from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PropertyMedias.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PropertyMedias.
+     */
+    distinct?: PropertyMediaScalarFieldEnum | PropertyMediaScalarFieldEnum[]
+  }
+
+  /**
+   * PropertyMedia findMany
+   */
+  export type PropertyMediaFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PropertyMedia
+     */
+    select?: PropertyMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PropertyMedia
+     */
+    omit?: PropertyMediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyMediaInclude<ExtArgs> | null
+    /**
+     * Filter, which PropertyMedias to fetch.
+     */
+    where?: PropertyMediaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PropertyMedias to fetch.
+     */
+    orderBy?: PropertyMediaOrderByWithRelationInput | PropertyMediaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PropertyMedias.
+     */
+    cursor?: PropertyMediaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PropertyMedias from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PropertyMedias.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PropertyMedias.
+     */
+    distinct?: PropertyMediaScalarFieldEnum | PropertyMediaScalarFieldEnum[]
+  }
+
+  /**
+   * PropertyMedia create
+   */
+  export type PropertyMediaCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PropertyMedia
+     */
+    select?: PropertyMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PropertyMedia
+     */
+    omit?: PropertyMediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyMediaInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PropertyMedia.
+     */
+    data: XOR<PropertyMediaCreateInput, PropertyMediaUncheckedCreateInput>
+  }
+
+  /**
+   * PropertyMedia createMany
+   */
+  export type PropertyMediaCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PropertyMedias.
+     */
+    data: PropertyMediaCreateManyInput | PropertyMediaCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PropertyMedia createManyAndReturn
+   */
+  export type PropertyMediaCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PropertyMedia
+     */
+    select?: PropertyMediaSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PropertyMedia
+     */
+    omit?: PropertyMediaOmit<ExtArgs> | null
+    /**
+     * The data used to create many PropertyMedias.
+     */
+    data: PropertyMediaCreateManyInput | PropertyMediaCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyMediaIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PropertyMedia update
+   */
+  export type PropertyMediaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PropertyMedia
+     */
+    select?: PropertyMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PropertyMedia
+     */
+    omit?: PropertyMediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyMediaInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PropertyMedia.
+     */
+    data: XOR<PropertyMediaUpdateInput, PropertyMediaUncheckedUpdateInput>
+    /**
+     * Choose, which PropertyMedia to update.
+     */
+    where: PropertyMediaWhereUniqueInput
+  }
+
+  /**
+   * PropertyMedia updateMany
+   */
+  export type PropertyMediaUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PropertyMedias.
+     */
+    data: XOR<PropertyMediaUpdateManyMutationInput, PropertyMediaUncheckedUpdateManyInput>
+    /**
+     * Filter which PropertyMedias to update
+     */
+    where?: PropertyMediaWhereInput
+    /**
+     * Limit how many PropertyMedias to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PropertyMedia updateManyAndReturn
+   */
+  export type PropertyMediaUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PropertyMedia
+     */
+    select?: PropertyMediaSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PropertyMedia
+     */
+    omit?: PropertyMediaOmit<ExtArgs> | null
+    /**
+     * The data used to update PropertyMedias.
+     */
+    data: XOR<PropertyMediaUpdateManyMutationInput, PropertyMediaUncheckedUpdateManyInput>
+    /**
+     * Filter which PropertyMedias to update
+     */
+    where?: PropertyMediaWhereInput
+    /**
+     * Limit how many PropertyMedias to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyMediaIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PropertyMedia upsert
+   */
+  export type PropertyMediaUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PropertyMedia
+     */
+    select?: PropertyMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PropertyMedia
+     */
+    omit?: PropertyMediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyMediaInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PropertyMedia to update in case it exists.
+     */
+    where: PropertyMediaWhereUniqueInput
+    /**
+     * In case the PropertyMedia found by the `where` argument doesn't exist, create a new PropertyMedia with this data.
+     */
+    create: XOR<PropertyMediaCreateInput, PropertyMediaUncheckedCreateInput>
+    /**
+     * In case the PropertyMedia was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PropertyMediaUpdateInput, PropertyMediaUncheckedUpdateInput>
+  }
+
+  /**
+   * PropertyMedia delete
+   */
+  export type PropertyMediaDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PropertyMedia
+     */
+    select?: PropertyMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PropertyMedia
+     */
+    omit?: PropertyMediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyMediaInclude<ExtArgs> | null
+    /**
+     * Filter which PropertyMedia to delete.
+     */
+    where: PropertyMediaWhereUniqueInput
+  }
+
+  /**
+   * PropertyMedia deleteMany
+   */
+  export type PropertyMediaDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PropertyMedias to delete
+     */
+    where?: PropertyMediaWhereInput
+    /**
+     * Limit how many PropertyMedias to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PropertyMedia without action
+   */
+  export type PropertyMediaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PropertyMedia
+     */
+    select?: PropertyMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PropertyMedia
+     */
+    omit?: PropertyMediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyMediaInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -8549,6 +9875,7 @@ export namespace Prisma {
     id: 'id',
     userId: 'userId',
     mediaType: 'mediaType',
+    visibility: 'visibility',
     url: 'url',
     publicId: 'publicId',
     isPrimary: 'isPrimary',
@@ -8624,6 +9951,22 @@ export namespace Prisma {
   };
 
   export type EmailVerificationTokenScalarFieldEnum = (typeof EmailVerificationTokenScalarFieldEnum)[keyof typeof EmailVerificationTokenScalarFieldEnum]
+
+
+  export const PropertyMediaScalarFieldEnum: {
+    id: 'id',
+    propertyId: 'propertyId',
+    mediaType: 'mediaType',
+    visibility: 'visibility',
+    url: 'url',
+    publicId: 'publicId',
+    isPrimary: 'isPrimary',
+    sortOrder: 'sortOrder',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PropertyMediaScalarFieldEnum = (typeof PropertyMediaScalarFieldEnum)[keyof typeof PropertyMediaScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -8719,6 +10062,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'MediaVisibility'
+   */
+  export type EnumMediaVisibilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MediaVisibility'>
+    
+
+
+  /**
+   * Reference to a field of type 'MediaVisibility[]'
+   */
+  export type ListEnumMediaVisibilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MediaVisibility[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Decimal'
    */
   export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
@@ -8785,6 +10142,20 @@ export namespace Prisma {
    * Reference to a field of type 'ApplicationStatus[]'
    */
   export type ListEnumApplicationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ApplicationStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'PropertyMediaType'
+   */
+  export type EnumPropertyMediaTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PropertyMediaType'>
+    
+
+
+  /**
+   * Reference to a field of type 'PropertyMediaType[]'
+   */
+  export type ListEnumPropertyMediaTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PropertyMediaType[]'>
     
 
 
@@ -8909,6 +10280,7 @@ export namespace Prisma {
     id?: StringFilter<"UserMedia"> | string
     userId?: StringFilter<"UserMedia"> | string
     mediaType?: EnumUserMediaTypeFilter<"UserMedia"> | $Enums.UserMediaType
+    visibility?: EnumMediaVisibilityFilter<"UserMedia"> | $Enums.MediaVisibility
     url?: StringFilter<"UserMedia"> | string
     publicId?: StringFilter<"UserMedia"> | string
     isPrimary?: BoolFilter<"UserMedia"> | boolean
@@ -8921,6 +10293,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     mediaType?: SortOrder
+    visibility?: SortOrder
     url?: SortOrder
     publicId?: SortOrder
     isPrimary?: SortOrder
@@ -8936,6 +10309,7 @@ export namespace Prisma {
     NOT?: UserMediaWhereInput | UserMediaWhereInput[]
     userId?: StringFilter<"UserMedia"> | string
     mediaType?: EnumUserMediaTypeFilter<"UserMedia"> | $Enums.UserMediaType
+    visibility?: EnumMediaVisibilityFilter<"UserMedia"> | $Enums.MediaVisibility
     url?: StringFilter<"UserMedia"> | string
     publicId?: StringFilter<"UserMedia"> | string
     isPrimary?: BoolFilter<"UserMedia"> | boolean
@@ -8948,6 +10322,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     mediaType?: SortOrder
+    visibility?: SortOrder
     url?: SortOrder
     publicId?: SortOrder
     isPrimary?: SortOrder
@@ -8965,6 +10340,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"UserMedia"> | string
     userId?: StringWithAggregatesFilter<"UserMedia"> | string
     mediaType?: EnumUserMediaTypeWithAggregatesFilter<"UserMedia"> | $Enums.UserMediaType
+    visibility?: EnumMediaVisibilityWithAggregatesFilter<"UserMedia"> | $Enums.MediaVisibility
     url?: StringWithAggregatesFilter<"UserMedia"> | string
     publicId?: StringWithAggregatesFilter<"UserMedia"> | string
     isPrimary?: BoolWithAggregatesFilter<"UserMedia"> | boolean
@@ -9092,6 +10468,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Property"> | Date | string
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
     application?: ApplicationListRelationFilter
+    media?: PropertyMediaListRelationFilter
   }
 
   export type PropertyOrderByWithRelationInput = {
@@ -9114,6 +10491,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: UserOrderByWithRelationInput
     application?: ApplicationOrderByRelationAggregateInput
+    media?: PropertyMediaOrderByRelationAggregateInput
   }
 
   export type PropertyWhereUniqueInput = Prisma.AtLeast<{
@@ -9139,6 +10517,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Property"> | Date | string
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
     application?: ApplicationListRelationFilter
+    media?: PropertyMediaListRelationFilter
   }, "id">
 
   export type PropertyOrderByWithAggregationInput = {
@@ -9318,6 +10697,88 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"EmailVerificationToken"> | Date | string
   }
 
+  export type PropertyMediaWhereInput = {
+    AND?: PropertyMediaWhereInput | PropertyMediaWhereInput[]
+    OR?: PropertyMediaWhereInput[]
+    NOT?: PropertyMediaWhereInput | PropertyMediaWhereInput[]
+    id?: StringFilter<"PropertyMedia"> | string
+    propertyId?: StringFilter<"PropertyMedia"> | string
+    mediaType?: EnumPropertyMediaTypeFilter<"PropertyMedia"> | $Enums.PropertyMediaType
+    visibility?: EnumMediaVisibilityFilter<"PropertyMedia"> | $Enums.MediaVisibility
+    url?: StringFilter<"PropertyMedia"> | string
+    publicId?: StringFilter<"PropertyMedia"> | string
+    isPrimary?: BoolFilter<"PropertyMedia"> | boolean
+    sortOrder?: IntFilter<"PropertyMedia"> | number
+    createdAt?: DateTimeFilter<"PropertyMedia"> | Date | string
+    updatedAt?: DateTimeFilter<"PropertyMedia"> | Date | string
+    property?: XOR<PropertyScalarRelationFilter, PropertyWhereInput>
+  }
+
+  export type PropertyMediaOrderByWithRelationInput = {
+    id?: SortOrder
+    propertyId?: SortOrder
+    mediaType?: SortOrder
+    visibility?: SortOrder
+    url?: SortOrder
+    publicId?: SortOrder
+    isPrimary?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    property?: PropertyOrderByWithRelationInput
+  }
+
+  export type PropertyMediaWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PropertyMediaWhereInput | PropertyMediaWhereInput[]
+    OR?: PropertyMediaWhereInput[]
+    NOT?: PropertyMediaWhereInput | PropertyMediaWhereInput[]
+    propertyId?: StringFilter<"PropertyMedia"> | string
+    mediaType?: EnumPropertyMediaTypeFilter<"PropertyMedia"> | $Enums.PropertyMediaType
+    visibility?: EnumMediaVisibilityFilter<"PropertyMedia"> | $Enums.MediaVisibility
+    url?: StringFilter<"PropertyMedia"> | string
+    publicId?: StringFilter<"PropertyMedia"> | string
+    isPrimary?: BoolFilter<"PropertyMedia"> | boolean
+    sortOrder?: IntFilter<"PropertyMedia"> | number
+    createdAt?: DateTimeFilter<"PropertyMedia"> | Date | string
+    updatedAt?: DateTimeFilter<"PropertyMedia"> | Date | string
+    property?: XOR<PropertyScalarRelationFilter, PropertyWhereInput>
+  }, "id">
+
+  export type PropertyMediaOrderByWithAggregationInput = {
+    id?: SortOrder
+    propertyId?: SortOrder
+    mediaType?: SortOrder
+    visibility?: SortOrder
+    url?: SortOrder
+    publicId?: SortOrder
+    isPrimary?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PropertyMediaCountOrderByAggregateInput
+    _avg?: PropertyMediaAvgOrderByAggregateInput
+    _max?: PropertyMediaMaxOrderByAggregateInput
+    _min?: PropertyMediaMinOrderByAggregateInput
+    _sum?: PropertyMediaSumOrderByAggregateInput
+  }
+
+  export type PropertyMediaScalarWhereWithAggregatesInput = {
+    AND?: PropertyMediaScalarWhereWithAggregatesInput | PropertyMediaScalarWhereWithAggregatesInput[]
+    OR?: PropertyMediaScalarWhereWithAggregatesInput[]
+    NOT?: PropertyMediaScalarWhereWithAggregatesInput | PropertyMediaScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PropertyMedia"> | string
+    propertyId?: StringWithAggregatesFilter<"PropertyMedia"> | string
+    mediaType?: EnumPropertyMediaTypeWithAggregatesFilter<"PropertyMedia"> | $Enums.PropertyMediaType
+    visibility?: EnumMediaVisibilityWithAggregatesFilter<"PropertyMedia"> | $Enums.MediaVisibility
+    url?: StringWithAggregatesFilter<"PropertyMedia"> | string
+    publicId?: StringWithAggregatesFilter<"PropertyMedia"> | string
+    isPrimary?: BoolWithAggregatesFilter<"PropertyMedia"> | boolean
+    sortOrder?: IntWithAggregatesFilter<"PropertyMedia"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"PropertyMedia"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"PropertyMedia"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     email: string
@@ -9439,6 +10900,7 @@ export namespace Prisma {
   export type UserMediaCreateInput = {
     id?: string
     mediaType: $Enums.UserMediaType
+    visibility: $Enums.MediaVisibility
     url: string
     publicId: string
     isPrimary?: boolean
@@ -9451,6 +10913,7 @@ export namespace Prisma {
     id?: string
     userId: string
     mediaType: $Enums.UserMediaType
+    visibility: $Enums.MediaVisibility
     url: string
     publicId: string
     isPrimary?: boolean
@@ -9461,6 +10924,7 @@ export namespace Prisma {
   export type UserMediaUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     mediaType?: EnumUserMediaTypeFieldUpdateOperationsInput | $Enums.UserMediaType
+    visibility?: EnumMediaVisibilityFieldUpdateOperationsInput | $Enums.MediaVisibility
     url?: StringFieldUpdateOperationsInput | string
     publicId?: StringFieldUpdateOperationsInput | string
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
@@ -9473,6 +10937,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     mediaType?: EnumUserMediaTypeFieldUpdateOperationsInput | $Enums.UserMediaType
+    visibility?: EnumMediaVisibilityFieldUpdateOperationsInput | $Enums.MediaVisibility
     url?: StringFieldUpdateOperationsInput | string
     publicId?: StringFieldUpdateOperationsInput | string
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
@@ -9484,6 +10949,7 @@ export namespace Prisma {
     id?: string
     userId: string
     mediaType: $Enums.UserMediaType
+    visibility: $Enums.MediaVisibility
     url: string
     publicId: string
     isPrimary?: boolean
@@ -9494,6 +10960,7 @@ export namespace Prisma {
   export type UserMediaUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     mediaType?: EnumUserMediaTypeFieldUpdateOperationsInput | $Enums.UserMediaType
+    visibility?: EnumMediaVisibilityFieldUpdateOperationsInput | $Enums.MediaVisibility
     url?: StringFieldUpdateOperationsInput | string
     publicId?: StringFieldUpdateOperationsInput | string
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
@@ -9505,6 +10972,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     mediaType?: EnumUserMediaTypeFieldUpdateOperationsInput | $Enums.UserMediaType
+    visibility?: EnumMediaVisibilityFieldUpdateOperationsInput | $Enums.MediaVisibility
     url?: StringFieldUpdateOperationsInput | string
     publicId?: StringFieldUpdateOperationsInput | string
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
@@ -9642,6 +11110,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutPropertiesInput
     application?: ApplicationCreateNestedManyWithoutPropertyInput
+    media?: PropertyMediaCreateNestedManyWithoutPropertyInput
   }
 
   export type PropertyUncheckedCreateInput = {
@@ -9663,6 +11132,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     application?: ApplicationUncheckedCreateNestedManyWithoutPropertyInput
+    media?: PropertyMediaUncheckedCreateNestedManyWithoutPropertyInput
   }
 
   export type PropertyUpdateInput = {
@@ -9684,6 +11154,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutPropertiesNestedInput
     application?: ApplicationUpdateManyWithoutPropertyNestedInput
+    media?: PropertyMediaUpdateManyWithoutPropertyNestedInput
   }
 
   export type PropertyUncheckedUpdateInput = {
@@ -9705,6 +11176,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     application?: ApplicationUncheckedUpdateManyWithoutPropertyNestedInput
+    media?: PropertyMediaUncheckedUpdateManyWithoutPropertyNestedInput
   }
 
   export type PropertyCreateManyInput = {
@@ -9894,6 +11366,96 @@ export namespace Prisma {
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PropertyMediaCreateInput = {
+    id?: string
+    mediaType: $Enums.PropertyMediaType
+    visibility: $Enums.MediaVisibility
+    url: string
+    publicId: string
+    isPrimary?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    property: PropertyCreateNestedOneWithoutMediaInput
+  }
+
+  export type PropertyMediaUncheckedCreateInput = {
+    id?: string
+    propertyId: string
+    mediaType: $Enums.PropertyMediaType
+    visibility: $Enums.MediaVisibility
+    url: string
+    publicId: string
+    isPrimary?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PropertyMediaUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mediaType?: EnumPropertyMediaTypeFieldUpdateOperationsInput | $Enums.PropertyMediaType
+    visibility?: EnumMediaVisibilityFieldUpdateOperationsInput | $Enums.MediaVisibility
+    url?: StringFieldUpdateOperationsInput | string
+    publicId?: StringFieldUpdateOperationsInput | string
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    property?: PropertyUpdateOneRequiredWithoutMediaNestedInput
+  }
+
+  export type PropertyMediaUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    propertyId?: StringFieldUpdateOperationsInput | string
+    mediaType?: EnumPropertyMediaTypeFieldUpdateOperationsInput | $Enums.PropertyMediaType
+    visibility?: EnumMediaVisibilityFieldUpdateOperationsInput | $Enums.MediaVisibility
+    url?: StringFieldUpdateOperationsInput | string
+    publicId?: StringFieldUpdateOperationsInput | string
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PropertyMediaCreateManyInput = {
+    id?: string
+    propertyId: string
+    mediaType: $Enums.PropertyMediaType
+    visibility: $Enums.MediaVisibility
+    url: string
+    publicId: string
+    isPrimary?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PropertyMediaUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mediaType?: EnumPropertyMediaTypeFieldUpdateOperationsInput | $Enums.PropertyMediaType
+    visibility?: EnumMediaVisibilityFieldUpdateOperationsInput | $Enums.MediaVisibility
+    url?: StringFieldUpdateOperationsInput | string
+    publicId?: StringFieldUpdateOperationsInput | string
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PropertyMediaUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    propertyId?: StringFieldUpdateOperationsInput | string
+    mediaType?: EnumPropertyMediaTypeFieldUpdateOperationsInput | $Enums.PropertyMediaType
+    visibility?: EnumMediaVisibilityFieldUpdateOperationsInput | $Enums.MediaVisibility
+    url?: StringFieldUpdateOperationsInput | string
+    publicId?: StringFieldUpdateOperationsInput | string
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -10116,6 +11678,13 @@ export namespace Prisma {
     not?: NestedEnumUserMediaTypeFilter<$PrismaModel> | $Enums.UserMediaType
   }
 
+  export type EnumMediaVisibilityFilter<$PrismaModel = never> = {
+    equals?: $Enums.MediaVisibility | EnumMediaVisibilityFieldRefInput<$PrismaModel>
+    in?: $Enums.MediaVisibility[] | ListEnumMediaVisibilityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MediaVisibility[] | ListEnumMediaVisibilityFieldRefInput<$PrismaModel>
+    not?: NestedEnumMediaVisibilityFilter<$PrismaModel> | $Enums.MediaVisibility
+  }
+
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
@@ -10125,6 +11694,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     mediaType?: SortOrder
+    visibility?: SortOrder
     url?: SortOrder
     publicId?: SortOrder
     isPrimary?: SortOrder
@@ -10136,6 +11706,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     mediaType?: SortOrder
+    visibility?: SortOrder
     url?: SortOrder
     publicId?: SortOrder
     isPrimary?: SortOrder
@@ -10147,6 +11718,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     mediaType?: SortOrder
+    visibility?: SortOrder
     url?: SortOrder
     publicId?: SortOrder
     isPrimary?: SortOrder
@@ -10162,6 +11734,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumUserMediaTypeFilter<$PrismaModel>
     _max?: NestedEnumUserMediaTypeFilter<$PrismaModel>
+  }
+
+  export type EnumMediaVisibilityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MediaVisibility | EnumMediaVisibilityFieldRefInput<$PrismaModel>
+    in?: $Enums.MediaVisibility[] | ListEnumMediaVisibilityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MediaVisibility[] | ListEnumMediaVisibilityFieldRefInput<$PrismaModel>
+    not?: NestedEnumMediaVisibilityWithAggregatesFilter<$PrismaModel> | $Enums.MediaVisibility
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMediaVisibilityFilter<$PrismaModel>
+    _max?: NestedEnumMediaVisibilityFilter<$PrismaModel>
   }
 
   export type DecimalFilter<$PrismaModel = never> = {
@@ -10299,6 +11881,16 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type PropertyMediaListRelationFilter = {
+    every?: PropertyMediaWhereInput
+    some?: PropertyMediaWhereInput
+    none?: PropertyMediaWhereInput
+  }
+
+  export type PropertyMediaOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type PropertyCountOrderByAggregateInput = {
@@ -10518,6 +12110,70 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type EnumPropertyMediaTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.PropertyMediaType | EnumPropertyMediaTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.PropertyMediaType[] | ListEnumPropertyMediaTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PropertyMediaType[] | ListEnumPropertyMediaTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPropertyMediaTypeFilter<$PrismaModel> | $Enums.PropertyMediaType
+  }
+
+  export type PropertyMediaCountOrderByAggregateInput = {
+    id?: SortOrder
+    propertyId?: SortOrder
+    mediaType?: SortOrder
+    visibility?: SortOrder
+    url?: SortOrder
+    publicId?: SortOrder
+    isPrimary?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PropertyMediaAvgOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type PropertyMediaMaxOrderByAggregateInput = {
+    id?: SortOrder
+    propertyId?: SortOrder
+    mediaType?: SortOrder
+    visibility?: SortOrder
+    url?: SortOrder
+    publicId?: SortOrder
+    isPrimary?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PropertyMediaMinOrderByAggregateInput = {
+    id?: SortOrder
+    propertyId?: SortOrder
+    mediaType?: SortOrder
+    visibility?: SortOrder
+    url?: SortOrder
+    publicId?: SortOrder
+    isPrimary?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PropertyMediaSumOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type EnumPropertyMediaTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PropertyMediaType | EnumPropertyMediaTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.PropertyMediaType[] | ListEnumPropertyMediaTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PropertyMediaType[] | ListEnumPropertyMediaTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPropertyMediaTypeWithAggregatesFilter<$PrismaModel> | $Enums.PropertyMediaType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPropertyMediaTypeFilter<$PrismaModel>
+    _max?: NestedEnumPropertyMediaTypeFilter<$PrismaModel>
   }
 
   export type PropertyCreateNestedManyWithoutCreatedByInput = {
@@ -10750,6 +12406,10 @@ export namespace Prisma {
     set?: $Enums.UserMediaType
   }
 
+  export type EnumMediaVisibilityFieldUpdateOperationsInput = {
+    set?: $Enums.MediaVisibility
+  }
+
   export type UserUpdateOneRequiredWithoutMediaNestedInput = {
     create?: XOR<UserCreateWithoutMediaInput, UserUncheckedCreateWithoutMediaInput>
     connectOrCreate?: UserCreateOrConnectWithoutMediaInput
@@ -10801,11 +12461,25 @@ export namespace Prisma {
     connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
   }
 
+  export type PropertyMediaCreateNestedManyWithoutPropertyInput = {
+    create?: XOR<PropertyMediaCreateWithoutPropertyInput, PropertyMediaUncheckedCreateWithoutPropertyInput> | PropertyMediaCreateWithoutPropertyInput[] | PropertyMediaUncheckedCreateWithoutPropertyInput[]
+    connectOrCreate?: PropertyMediaCreateOrConnectWithoutPropertyInput | PropertyMediaCreateOrConnectWithoutPropertyInput[]
+    createMany?: PropertyMediaCreateManyPropertyInputEnvelope
+    connect?: PropertyMediaWhereUniqueInput | PropertyMediaWhereUniqueInput[]
+  }
+
   export type ApplicationUncheckedCreateNestedManyWithoutPropertyInput = {
     create?: XOR<ApplicationCreateWithoutPropertyInput, ApplicationUncheckedCreateWithoutPropertyInput> | ApplicationCreateWithoutPropertyInput[] | ApplicationUncheckedCreateWithoutPropertyInput[]
     connectOrCreate?: ApplicationCreateOrConnectWithoutPropertyInput | ApplicationCreateOrConnectWithoutPropertyInput[]
     createMany?: ApplicationCreateManyPropertyInputEnvelope
     connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
+  }
+
+  export type PropertyMediaUncheckedCreateNestedManyWithoutPropertyInput = {
+    create?: XOR<PropertyMediaCreateWithoutPropertyInput, PropertyMediaUncheckedCreateWithoutPropertyInput> | PropertyMediaCreateWithoutPropertyInput[] | PropertyMediaUncheckedCreateWithoutPropertyInput[]
+    connectOrCreate?: PropertyMediaCreateOrConnectWithoutPropertyInput | PropertyMediaCreateOrConnectWithoutPropertyInput[]
+    createMany?: PropertyMediaCreateManyPropertyInputEnvelope
+    connect?: PropertyMediaWhereUniqueInput | PropertyMediaWhereUniqueInput[]
   }
 
   export type EnumListingTypeFieldUpdateOperationsInput = {
@@ -10846,6 +12520,20 @@ export namespace Prisma {
     deleteMany?: ApplicationScalarWhereInput | ApplicationScalarWhereInput[]
   }
 
+  export type PropertyMediaUpdateManyWithoutPropertyNestedInput = {
+    create?: XOR<PropertyMediaCreateWithoutPropertyInput, PropertyMediaUncheckedCreateWithoutPropertyInput> | PropertyMediaCreateWithoutPropertyInput[] | PropertyMediaUncheckedCreateWithoutPropertyInput[]
+    connectOrCreate?: PropertyMediaCreateOrConnectWithoutPropertyInput | PropertyMediaCreateOrConnectWithoutPropertyInput[]
+    upsert?: PropertyMediaUpsertWithWhereUniqueWithoutPropertyInput | PropertyMediaUpsertWithWhereUniqueWithoutPropertyInput[]
+    createMany?: PropertyMediaCreateManyPropertyInputEnvelope
+    set?: PropertyMediaWhereUniqueInput | PropertyMediaWhereUniqueInput[]
+    disconnect?: PropertyMediaWhereUniqueInput | PropertyMediaWhereUniqueInput[]
+    delete?: PropertyMediaWhereUniqueInput | PropertyMediaWhereUniqueInput[]
+    connect?: PropertyMediaWhereUniqueInput | PropertyMediaWhereUniqueInput[]
+    update?: PropertyMediaUpdateWithWhereUniqueWithoutPropertyInput | PropertyMediaUpdateWithWhereUniqueWithoutPropertyInput[]
+    updateMany?: PropertyMediaUpdateManyWithWhereWithoutPropertyInput | PropertyMediaUpdateManyWithWhereWithoutPropertyInput[]
+    deleteMany?: PropertyMediaScalarWhereInput | PropertyMediaScalarWhereInput[]
+  }
+
   export type ApplicationUncheckedUpdateManyWithoutPropertyNestedInput = {
     create?: XOR<ApplicationCreateWithoutPropertyInput, ApplicationUncheckedCreateWithoutPropertyInput> | ApplicationCreateWithoutPropertyInput[] | ApplicationUncheckedCreateWithoutPropertyInput[]
     connectOrCreate?: ApplicationCreateOrConnectWithoutPropertyInput | ApplicationCreateOrConnectWithoutPropertyInput[]
@@ -10858,6 +12546,20 @@ export namespace Prisma {
     update?: ApplicationUpdateWithWhereUniqueWithoutPropertyInput | ApplicationUpdateWithWhereUniqueWithoutPropertyInput[]
     updateMany?: ApplicationUpdateManyWithWhereWithoutPropertyInput | ApplicationUpdateManyWithWhereWithoutPropertyInput[]
     deleteMany?: ApplicationScalarWhereInput | ApplicationScalarWhereInput[]
+  }
+
+  export type PropertyMediaUncheckedUpdateManyWithoutPropertyNestedInput = {
+    create?: XOR<PropertyMediaCreateWithoutPropertyInput, PropertyMediaUncheckedCreateWithoutPropertyInput> | PropertyMediaCreateWithoutPropertyInput[] | PropertyMediaUncheckedCreateWithoutPropertyInput[]
+    connectOrCreate?: PropertyMediaCreateOrConnectWithoutPropertyInput | PropertyMediaCreateOrConnectWithoutPropertyInput[]
+    upsert?: PropertyMediaUpsertWithWhereUniqueWithoutPropertyInput | PropertyMediaUpsertWithWhereUniqueWithoutPropertyInput[]
+    createMany?: PropertyMediaCreateManyPropertyInputEnvelope
+    set?: PropertyMediaWhereUniqueInput | PropertyMediaWhereUniqueInput[]
+    disconnect?: PropertyMediaWhereUniqueInput | PropertyMediaWhereUniqueInput[]
+    delete?: PropertyMediaWhereUniqueInput | PropertyMediaWhereUniqueInput[]
+    connect?: PropertyMediaWhereUniqueInput | PropertyMediaWhereUniqueInput[]
+    update?: PropertyMediaUpdateWithWhereUniqueWithoutPropertyInput | PropertyMediaUpdateWithWhereUniqueWithoutPropertyInput[]
+    updateMany?: PropertyMediaUpdateManyWithWhereWithoutPropertyInput | PropertyMediaUpdateManyWithWhereWithoutPropertyInput[]
+    deleteMany?: PropertyMediaScalarWhereInput | PropertyMediaScalarWhereInput[]
   }
 
   export type PropertyCreateNestedOneWithoutApplicationInput = {
@@ -10908,6 +12610,24 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutEmailVerificationTokensInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutEmailVerificationTokensInput, UserUpdateWithoutEmailVerificationTokensInput>, UserUncheckedUpdateWithoutEmailVerificationTokensInput>
+  }
+
+  export type PropertyCreateNestedOneWithoutMediaInput = {
+    create?: XOR<PropertyCreateWithoutMediaInput, PropertyUncheckedCreateWithoutMediaInput>
+    connectOrCreate?: PropertyCreateOrConnectWithoutMediaInput
+    connect?: PropertyWhereUniqueInput
+  }
+
+  export type EnumPropertyMediaTypeFieldUpdateOperationsInput = {
+    set?: $Enums.PropertyMediaType
+  }
+
+  export type PropertyUpdateOneRequiredWithoutMediaNestedInput = {
+    create?: XOR<PropertyCreateWithoutMediaInput, PropertyUncheckedCreateWithoutMediaInput>
+    connectOrCreate?: PropertyCreateOrConnectWithoutMediaInput
+    upsert?: PropertyUpsertWithoutMediaInput
+    connect?: PropertyWhereUniqueInput
+    update?: XOR<XOR<PropertyUpdateToOneWithWhereWithoutMediaInput, PropertyUpdateWithoutMediaInput>, PropertyUncheckedUpdateWithoutMediaInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -11056,6 +12776,13 @@ export namespace Prisma {
     not?: NestedEnumUserMediaTypeFilter<$PrismaModel> | $Enums.UserMediaType
   }
 
+  export type NestedEnumMediaVisibilityFilter<$PrismaModel = never> = {
+    equals?: $Enums.MediaVisibility | EnumMediaVisibilityFieldRefInput<$PrismaModel>
+    in?: $Enums.MediaVisibility[] | ListEnumMediaVisibilityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MediaVisibility[] | ListEnumMediaVisibilityFieldRefInput<$PrismaModel>
+    not?: NestedEnumMediaVisibilityFilter<$PrismaModel> | $Enums.MediaVisibility
+  }
+
   export type NestedEnumUserMediaTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.UserMediaType | EnumUserMediaTypeFieldRefInput<$PrismaModel>
     in?: $Enums.UserMediaType[] | ListEnumUserMediaTypeFieldRefInput<$PrismaModel>
@@ -11064,6 +12791,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumUserMediaTypeFilter<$PrismaModel>
     _max?: NestedEnumUserMediaTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumMediaVisibilityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MediaVisibility | EnumMediaVisibilityFieldRefInput<$PrismaModel>
+    in?: $Enums.MediaVisibility[] | ListEnumMediaVisibilityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MediaVisibility[] | ListEnumMediaVisibilityFieldRefInput<$PrismaModel>
+    not?: NestedEnumMediaVisibilityWithAggregatesFilter<$PrismaModel> | $Enums.MediaVisibility
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMediaVisibilityFilter<$PrismaModel>
+    _max?: NestedEnumMediaVisibilityFilter<$PrismaModel>
   }
 
   export type NestedDecimalFilter<$PrismaModel = never> = {
@@ -11223,6 +12960,23 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type NestedEnumPropertyMediaTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.PropertyMediaType | EnumPropertyMediaTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.PropertyMediaType[] | ListEnumPropertyMediaTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PropertyMediaType[] | ListEnumPropertyMediaTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPropertyMediaTypeFilter<$PrismaModel> | $Enums.PropertyMediaType
+  }
+
+  export type NestedEnumPropertyMediaTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PropertyMediaType | EnumPropertyMediaTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.PropertyMediaType[] | ListEnumPropertyMediaTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PropertyMediaType[] | ListEnumPropertyMediaTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPropertyMediaTypeWithAggregatesFilter<$PrismaModel> | $Enums.PropertyMediaType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPropertyMediaTypeFilter<$PrismaModel>
+    _max?: NestedEnumPropertyMediaTypeFilter<$PrismaModel>
+  }
+
   export type PropertyCreateWithoutCreatedByInput = {
     id?: string
     title: string
@@ -11241,6 +12995,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     application?: ApplicationCreateNestedManyWithoutPropertyInput
+    media?: PropertyMediaCreateNestedManyWithoutPropertyInput
   }
 
   export type PropertyUncheckedCreateWithoutCreatedByInput = {
@@ -11261,6 +13016,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     application?: ApplicationUncheckedCreateNestedManyWithoutPropertyInput
+    media?: PropertyMediaUncheckedCreateNestedManyWithoutPropertyInput
   }
 
   export type PropertyCreateOrConnectWithoutCreatedByInput = {
@@ -11365,6 +13121,7 @@ export namespace Prisma {
   export type UserMediaCreateWithoutUserInput = {
     id?: string
     mediaType: $Enums.UserMediaType
+    visibility: $Enums.MediaVisibility
     url: string
     publicId: string
     isPrimary?: boolean
@@ -11375,6 +13132,7 @@ export namespace Prisma {
   export type UserMediaUncheckedCreateWithoutUserInput = {
     id?: string
     mediaType: $Enums.UserMediaType
+    visibility: $Enums.MediaVisibility
     url: string
     publicId: string
     isPrimary?: boolean
@@ -11552,6 +13310,7 @@ export namespace Prisma {
     id?: StringFilter<"UserMedia"> | string
     userId?: StringFilter<"UserMedia"> | string
     mediaType?: EnumUserMediaTypeFilter<"UserMedia"> | $Enums.UserMediaType
+    visibility?: EnumMediaVisibilityFilter<"UserMedia"> | $Enums.MediaVisibility
     url?: StringFilter<"UserMedia"> | string
     publicId?: StringFilter<"UserMedia"> | string
     isPrimary?: BoolFilter<"UserMedia"> | boolean
@@ -11804,6 +13563,40 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type PropertyMediaCreateWithoutPropertyInput = {
+    id?: string
+    mediaType: $Enums.PropertyMediaType
+    visibility: $Enums.MediaVisibility
+    url: string
+    publicId: string
+    isPrimary?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PropertyMediaUncheckedCreateWithoutPropertyInput = {
+    id?: string
+    mediaType: $Enums.PropertyMediaType
+    visibility: $Enums.MediaVisibility
+    url: string
+    publicId: string
+    isPrimary?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PropertyMediaCreateOrConnectWithoutPropertyInput = {
+    where: PropertyMediaWhereUniqueInput
+    create: XOR<PropertyMediaCreateWithoutPropertyInput, PropertyMediaUncheckedCreateWithoutPropertyInput>
+  }
+
+  export type PropertyMediaCreateManyPropertyInputEnvelope = {
+    data: PropertyMediaCreateManyPropertyInput | PropertyMediaCreateManyPropertyInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutPropertiesInput = {
     update: XOR<UserUpdateWithoutPropertiesInput, UserUncheckedUpdateWithoutPropertiesInput>
     create: XOR<UserCreateWithoutPropertiesInput, UserUncheckedCreateWithoutPropertiesInput>
@@ -11867,6 +13660,38 @@ export namespace Prisma {
     data: XOR<ApplicationUpdateManyMutationInput, ApplicationUncheckedUpdateManyWithoutPropertyInput>
   }
 
+  export type PropertyMediaUpsertWithWhereUniqueWithoutPropertyInput = {
+    where: PropertyMediaWhereUniqueInput
+    update: XOR<PropertyMediaUpdateWithoutPropertyInput, PropertyMediaUncheckedUpdateWithoutPropertyInput>
+    create: XOR<PropertyMediaCreateWithoutPropertyInput, PropertyMediaUncheckedCreateWithoutPropertyInput>
+  }
+
+  export type PropertyMediaUpdateWithWhereUniqueWithoutPropertyInput = {
+    where: PropertyMediaWhereUniqueInput
+    data: XOR<PropertyMediaUpdateWithoutPropertyInput, PropertyMediaUncheckedUpdateWithoutPropertyInput>
+  }
+
+  export type PropertyMediaUpdateManyWithWhereWithoutPropertyInput = {
+    where: PropertyMediaScalarWhereInput
+    data: XOR<PropertyMediaUpdateManyMutationInput, PropertyMediaUncheckedUpdateManyWithoutPropertyInput>
+  }
+
+  export type PropertyMediaScalarWhereInput = {
+    AND?: PropertyMediaScalarWhereInput | PropertyMediaScalarWhereInput[]
+    OR?: PropertyMediaScalarWhereInput[]
+    NOT?: PropertyMediaScalarWhereInput | PropertyMediaScalarWhereInput[]
+    id?: StringFilter<"PropertyMedia"> | string
+    propertyId?: StringFilter<"PropertyMedia"> | string
+    mediaType?: EnumPropertyMediaTypeFilter<"PropertyMedia"> | $Enums.PropertyMediaType
+    visibility?: EnumMediaVisibilityFilter<"PropertyMedia"> | $Enums.MediaVisibility
+    url?: StringFilter<"PropertyMedia"> | string
+    publicId?: StringFilter<"PropertyMedia"> | string
+    isPrimary?: BoolFilter<"PropertyMedia"> | boolean
+    sortOrder?: IntFilter<"PropertyMedia"> | number
+    createdAt?: DateTimeFilter<"PropertyMedia"> | Date | string
+    updatedAt?: DateTimeFilter<"PropertyMedia"> | Date | string
+  }
+
   export type PropertyCreateWithoutApplicationInput = {
     id?: string
     title: string
@@ -11885,6 +13710,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutPropertiesInput
+    media?: PropertyMediaCreateNestedManyWithoutPropertyInput
   }
 
   export type PropertyUncheckedCreateWithoutApplicationInput = {
@@ -11905,6 +13731,7 @@ export namespace Prisma {
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    media?: PropertyMediaUncheckedCreateNestedManyWithoutPropertyInput
   }
 
   export type PropertyCreateOrConnectWithoutApplicationInput = {
@@ -11982,6 +13809,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutPropertiesNestedInput
+    media?: PropertyMediaUpdateManyWithoutPropertyNestedInput
   }
 
   export type PropertyUncheckedUpdateWithoutApplicationInput = {
@@ -12002,6 +13830,7 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    media?: PropertyMediaUncheckedUpdateManyWithoutPropertyNestedInput
   }
 
   export type UserUpsertWithoutApplicationsInput = {
@@ -12139,6 +13968,106 @@ export namespace Prisma {
     media?: UserMediaUncheckedUpdateManyWithoutUserNestedInput
   }
 
+  export type PropertyCreateWithoutMediaInput = {
+    id?: string
+    title: string
+    description: string
+    listingType: $Enums.ListingType
+    propertyType: $Enums.PropertyType
+    price: Decimal | DecimalJsLike | number | string
+    addressLine1: string
+    suburb: string
+    state: string
+    postcode: string
+    bedrooms?: number | null
+    bathrooms?: number | null
+    parkingSpaces?: number | null
+    isPublished?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: UserCreateNestedOneWithoutPropertiesInput
+    application?: ApplicationCreateNestedManyWithoutPropertyInput
+  }
+
+  export type PropertyUncheckedCreateWithoutMediaInput = {
+    id?: string
+    title: string
+    description: string
+    listingType: $Enums.ListingType
+    propertyType: $Enums.PropertyType
+    price: Decimal | DecimalJsLike | number | string
+    addressLine1: string
+    suburb: string
+    state: string
+    postcode: string
+    bedrooms?: number | null
+    bathrooms?: number | null
+    parkingSpaces?: number | null
+    isPublished?: boolean
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    application?: ApplicationUncheckedCreateNestedManyWithoutPropertyInput
+  }
+
+  export type PropertyCreateOrConnectWithoutMediaInput = {
+    where: PropertyWhereUniqueInput
+    create: XOR<PropertyCreateWithoutMediaInput, PropertyUncheckedCreateWithoutMediaInput>
+  }
+
+  export type PropertyUpsertWithoutMediaInput = {
+    update: XOR<PropertyUpdateWithoutMediaInput, PropertyUncheckedUpdateWithoutMediaInput>
+    create: XOR<PropertyCreateWithoutMediaInput, PropertyUncheckedCreateWithoutMediaInput>
+    where?: PropertyWhereInput
+  }
+
+  export type PropertyUpdateToOneWithWhereWithoutMediaInput = {
+    where?: PropertyWhereInput
+    data: XOR<PropertyUpdateWithoutMediaInput, PropertyUncheckedUpdateWithoutMediaInput>
+  }
+
+  export type PropertyUpdateWithoutMediaInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    listingType?: EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+    propertyType?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    addressLine1?: StringFieldUpdateOperationsInput | string
+    suburb?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    postcode?: StringFieldUpdateOperationsInput | string
+    bedrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneRequiredWithoutPropertiesNestedInput
+    application?: ApplicationUpdateManyWithoutPropertyNestedInput
+  }
+
+  export type PropertyUncheckedUpdateWithoutMediaInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    listingType?: EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+    propertyType?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    addressLine1?: StringFieldUpdateOperationsInput | string
+    suburb?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    postcode?: StringFieldUpdateOperationsInput | string
+    bedrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    application?: ApplicationUncheckedUpdateManyWithoutPropertyNestedInput
+  }
+
   export type PropertyCreateManyCreatedByInput = {
     id?: string
     title: string
@@ -12178,6 +14107,7 @@ export namespace Prisma {
   export type UserMediaCreateManyUserInput = {
     id?: string
     mediaType: $Enums.UserMediaType
+    visibility: $Enums.MediaVisibility
     url: string
     publicId: string
     isPrimary?: boolean
@@ -12203,6 +14133,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     application?: ApplicationUpdateManyWithoutPropertyNestedInput
+    media?: PropertyMediaUpdateManyWithoutPropertyNestedInput
   }
 
   export type PropertyUncheckedUpdateWithoutCreatedByInput = {
@@ -12223,6 +14154,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     application?: ApplicationUncheckedUpdateManyWithoutPropertyNestedInput
+    media?: PropertyMediaUncheckedUpdateManyWithoutPropertyNestedInput
   }
 
   export type PropertyUncheckedUpdateManyWithoutCreatedByInput = {
@@ -12298,6 +14230,7 @@ export namespace Prisma {
   export type UserMediaUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     mediaType?: EnumUserMediaTypeFieldUpdateOperationsInput | $Enums.UserMediaType
+    visibility?: EnumMediaVisibilityFieldUpdateOperationsInput | $Enums.MediaVisibility
     url?: StringFieldUpdateOperationsInput | string
     publicId?: StringFieldUpdateOperationsInput | string
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
@@ -12308,6 +14241,7 @@ export namespace Prisma {
   export type UserMediaUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     mediaType?: EnumUserMediaTypeFieldUpdateOperationsInput | $Enums.UserMediaType
+    visibility?: EnumMediaVisibilityFieldUpdateOperationsInput | $Enums.MediaVisibility
     url?: StringFieldUpdateOperationsInput | string
     publicId?: StringFieldUpdateOperationsInput | string
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
@@ -12318,6 +14252,7 @@ export namespace Prisma {
   export type UserMediaUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     mediaType?: EnumUserMediaTypeFieldUpdateOperationsInput | $Enums.UserMediaType
+    visibility?: EnumMediaVisibilityFieldUpdateOperationsInput | $Enums.MediaVisibility
     url?: StringFieldUpdateOperationsInput | string
     publicId?: StringFieldUpdateOperationsInput | string
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
@@ -12330,6 +14265,18 @@ export namespace Prisma {
     applicantId: string
     status?: $Enums.ApplicationStatus
     message?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PropertyMediaCreateManyPropertyInput = {
+    id?: string
+    mediaType: $Enums.PropertyMediaType
+    visibility: $Enums.MediaVisibility
+    url: string
+    publicId: string
+    isPrimary?: boolean
+    sortOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12357,6 +14304,42 @@ export namespace Prisma {
     applicantId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     message?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PropertyMediaUpdateWithoutPropertyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mediaType?: EnumPropertyMediaTypeFieldUpdateOperationsInput | $Enums.PropertyMediaType
+    visibility?: EnumMediaVisibilityFieldUpdateOperationsInput | $Enums.MediaVisibility
+    url?: StringFieldUpdateOperationsInput | string
+    publicId?: StringFieldUpdateOperationsInput | string
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PropertyMediaUncheckedUpdateWithoutPropertyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mediaType?: EnumPropertyMediaTypeFieldUpdateOperationsInput | $Enums.PropertyMediaType
+    visibility?: EnumMediaVisibilityFieldUpdateOperationsInput | $Enums.MediaVisibility
+    url?: StringFieldUpdateOperationsInput | string
+    publicId?: StringFieldUpdateOperationsInput | string
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PropertyMediaUncheckedUpdateManyWithoutPropertyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mediaType?: EnumPropertyMediaTypeFieldUpdateOperationsInput | $Enums.PropertyMediaType
+    visibility?: EnumMediaVisibilityFieldUpdateOperationsInput | $Enums.MediaVisibility
+    url?: StringFieldUpdateOperationsInput | string
+    publicId?: StringFieldUpdateOperationsInput | string
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -3,6 +3,7 @@ import Joi from 'joi';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
+import { MailModule } from './common/mail/mail.module';
 import { PrismaModule } from './database/prisma.module';
 import { ApplicationsModule } from './modules/applications/applications.module';
 import { AuthModule } from './modules/auth/auth.module';
@@ -10,7 +11,7 @@ import { HealthModule } from './modules/health/health.module';
 import { MeModule } from './modules/me/me.module';
 import { PropertiesModule } from './modules/properties/properties.module';
 import { UsersModule } from './modules/users/users.module';
-import { MailModule } from './common/mail/mail.module';
+import { CloudinaryModule } from './common/cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -30,6 +31,9 @@ import { MailModule } from './common/mail/mail.module';
         MAIL_DEV_TO: Joi.string().required(),
         APP_BASE_URL: Joi.string().required(),
         FRONTEND_URL: Joi.string().required(),
+        CLOUDINARY_CLOUD_NAME: Joi.string().required(),
+        CLOUDINARY_API_KEY: Joi.string().required(),
+        CLOUDINARY_API_SECRET: Joi.string().required(),
       }),
     }),
     PrismaModule,
@@ -40,6 +44,7 @@ import { MailModule } from './common/mail/mail.module';
     MeModule,
     ApplicationsModule,
     MailModule,
+    CloudinaryModule,
   ],
   controllers: [],
   providers: [],

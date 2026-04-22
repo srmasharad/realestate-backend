@@ -138,6 +138,7 @@ exports.Prisma.UserMediaScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   mediaType: 'mediaType',
+  visibility: 'visibility',
   url: 'url',
   publicId: 'publicId',
   isPrimary: 'isPrimary',
@@ -200,6 +201,19 @@ exports.Prisma.EmailVerificationTokenScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.PropertyMediaScalarFieldEnum = {
+  id: 'id',
+  propertyId: 'propertyId',
+  mediaType: 'mediaType',
+  visibility: 'visibility',
+  url: 'url',
+  publicId: 'publicId',
+  isPrimary: 'isPrimary',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -224,6 +238,11 @@ exports.UserMediaType = exports.$Enums.UserMediaType = {
   PROFILE_IMAGE: 'PROFILE_IMAGE'
 };
 
+exports.MediaVisibility = exports.$Enums.MediaVisibility = {
+  PUBLIC: 'PUBLIC',
+  PROTECTED: 'PROTECTED'
+};
+
 exports.ListingType = exports.$Enums.ListingType = {
   RENT: 'RENT',
   SALE: 'SALE'
@@ -244,13 +263,18 @@ exports.ApplicationStatus = exports.$Enums.ApplicationStatus = {
   REJECTED: 'REJECTED'
 };
 
+exports.PropertyMediaType = exports.$Enums.PropertyMediaType = {
+  IMAGE: 'IMAGE'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   UserMedia: 'UserMedia',
   PersonProfile: 'PersonProfile',
   Property: 'Property',
   Application: 'Application',
-  EmailVerificationToken: 'EmailVerificationToken'
+  EmailVerificationToken: 'EmailVerificationToken',
+  PropertyMedia: 'PropertyMedia'
 };
 
 /**
