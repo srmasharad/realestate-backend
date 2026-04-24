@@ -241,6 +241,7 @@ export class MeService {
       status: string;
       message: string | null;
       createdAt: Date;
+      updatedAt: Date;
       property: {
         id: string;
         title: string;
@@ -251,6 +252,11 @@ export class MeService {
         state: string;
         postcode: string;
         isPublished: boolean;
+        primaryImage: {
+          id: string;
+          url: string;
+          isPrimary: boolean;
+        } | null;
       };
     }>
   > {
@@ -278,6 +284,7 @@ export class MeService {
           status: true,
           message: true,
           createdAt: true,
+          updatedAt: true,
           property: {
             select: {
               id: true,
@@ -289,6 +296,18 @@ export class MeService {
               state: true,
               postcode: true,
               isPublished: true,
+              media: {
+                where: {
+                  isPrimary: true,
+                  visibility: MediaVisibility.PUBLIC,
+                },
+                select: {
+                  id: true,
+                  url: true,
+                  isPrimary: true,
+                },
+                take: 1,
+              },
             },
           },
         },
@@ -297,7 +316,25 @@ export class MeService {
     ]);
 
     return {
-      items: applications,
+      items: applications.map((app) => ({
+        id: app.id,
+        status: app.status,
+        message: app.message,
+        createdAt: app.createdAt,
+        updatedAt: app.updatedAt,
+        property: {
+          id: app.property.id,
+          title: app.property.title,
+          listingType: app.property.listingType,
+          propertyType: app.property.propertyType,
+          price: app.property.price,
+          suburb: app.property.suburb,
+          state: app.property.state,
+          postcode: app.property.postcode,
+          isPublished: app.property.isPublished,
+          primaryImage: app.property.media[0] ?? null,
+        },
+      })),
       meta: {
         total,
         page,

@@ -48,6 +48,16 @@ export type EmailVerificationToken = $Result.DefaultSelection<Prisma.$EmailVerif
  * 
  */
 export type PropertyMedia = $Result.DefaultSelection<Prisma.$PropertyMediaPayload>
+/**
+ * Model Agency
+ * 
+ */
+export type Agency = $Result.DefaultSelection<Prisma.$AgencyPayload>
+/**
+ * Model AgencyMember
+ * 
+ */
+export type AgencyMember = $Result.DefaultSelection<Prisma.$AgencyMemberPayload>
 
 /**
  * Enums
@@ -112,6 +122,25 @@ export const MediaVisibility: {
 
 export type MediaVisibility = (typeof MediaVisibility)[keyof typeof MediaVisibility]
 
+
+export const AgencyStatus: {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  SUSPENDED: 'SUSPENDED'
+};
+
+export type AgencyStatus = (typeof AgencyStatus)[keyof typeof AgencyStatus]
+
+
+export const AgencyMemberRole: {
+  AGENCY_OWNER: 'AGENCY_OWNER',
+  AGENCY_ADMIN: 'AGENCY_ADMIN',
+  AGENT: 'AGENT'
+};
+
+export type AgencyMemberRole = (typeof AgencyMemberRole)[keyof typeof AgencyMemberRole]
+
 }
 
 export type UserRole = $Enums.UserRole
@@ -141,6 +170,14 @@ export const PropertyMediaType: typeof $Enums.PropertyMediaType
 export type MediaVisibility = $Enums.MediaVisibility
 
 export const MediaVisibility: typeof $Enums.MediaVisibility
+
+export type AgencyStatus = $Enums.AgencyStatus
+
+export const AgencyStatus: typeof $Enums.AgencyStatus
+
+export type AgencyMemberRole = $Enums.AgencyMemberRole
+
+export const AgencyMemberRole: typeof $Enums.AgencyMemberRole
 
 /**
  * ##  Prisma Client ʲˢ
@@ -332,6 +369,26 @@ export class PrismaClient<
     * ```
     */
   get propertyMedia(): Prisma.PropertyMediaDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.agency`: Exposes CRUD operations for the **Agency** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Agencies
+    * const agencies = await prisma.agency.findMany()
+    * ```
+    */
+  get agency(): Prisma.AgencyDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.agencyMember`: Exposes CRUD operations for the **AgencyMember** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AgencyMembers
+    * const agencyMembers = await prisma.agencyMember.findMany()
+    * ```
+    */
+  get agencyMember(): Prisma.AgencyMemberDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -772,7 +829,9 @@ export namespace Prisma {
     Property: 'Property',
     Application: 'Application',
     EmailVerificationToken: 'EmailVerificationToken',
-    PropertyMedia: 'PropertyMedia'
+    PropertyMedia: 'PropertyMedia',
+    Agency: 'Agency',
+    AgencyMember: 'AgencyMember'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -788,7 +847,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "userMedia" | "personProfile" | "property" | "application" | "emailVerificationToken" | "propertyMedia"
+      modelProps: "user" | "userMedia" | "personProfile" | "property" | "application" | "emailVerificationToken" | "propertyMedia" | "agency" | "agencyMember"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1310,6 +1369,154 @@ export namespace Prisma {
           }
         }
       }
+      Agency: {
+        payload: Prisma.$AgencyPayload<ExtArgs>
+        fields: Prisma.AgencyFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AgencyFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgencyPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AgencyFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgencyPayload>
+          }
+          findFirst: {
+            args: Prisma.AgencyFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgencyPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AgencyFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgencyPayload>
+          }
+          findMany: {
+            args: Prisma.AgencyFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgencyPayload>[]
+          }
+          create: {
+            args: Prisma.AgencyCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgencyPayload>
+          }
+          createMany: {
+            args: Prisma.AgencyCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AgencyCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgencyPayload>[]
+          }
+          delete: {
+            args: Prisma.AgencyDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgencyPayload>
+          }
+          update: {
+            args: Prisma.AgencyUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgencyPayload>
+          }
+          deleteMany: {
+            args: Prisma.AgencyDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AgencyUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AgencyUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgencyPayload>[]
+          }
+          upsert: {
+            args: Prisma.AgencyUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgencyPayload>
+          }
+          aggregate: {
+            args: Prisma.AgencyAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAgency>
+          }
+          groupBy: {
+            args: Prisma.AgencyGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AgencyGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AgencyCountArgs<ExtArgs>
+            result: $Utils.Optional<AgencyCountAggregateOutputType> | number
+          }
+        }
+      }
+      AgencyMember: {
+        payload: Prisma.$AgencyMemberPayload<ExtArgs>
+        fields: Prisma.AgencyMemberFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AgencyMemberFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgencyMemberPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AgencyMemberFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgencyMemberPayload>
+          }
+          findFirst: {
+            args: Prisma.AgencyMemberFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgencyMemberPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AgencyMemberFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgencyMemberPayload>
+          }
+          findMany: {
+            args: Prisma.AgencyMemberFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgencyMemberPayload>[]
+          }
+          create: {
+            args: Prisma.AgencyMemberCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgencyMemberPayload>
+          }
+          createMany: {
+            args: Prisma.AgencyMemberCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AgencyMemberCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgencyMemberPayload>[]
+          }
+          delete: {
+            args: Prisma.AgencyMemberDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgencyMemberPayload>
+          }
+          update: {
+            args: Prisma.AgencyMemberUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgencyMemberPayload>
+          }
+          deleteMany: {
+            args: Prisma.AgencyMemberDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AgencyMemberUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AgencyMemberUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgencyMemberPayload>[]
+          }
+          upsert: {
+            args: Prisma.AgencyMemberUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgencyMemberPayload>
+          }
+          aggregate: {
+            args: Prisma.AgencyMemberAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAgencyMember>
+          }
+          groupBy: {
+            args: Prisma.AgencyMemberGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AgencyMemberGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AgencyMemberCountArgs<ExtArgs>
+            result: $Utils.Optional<AgencyMemberCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1425,6 +1632,8 @@ export namespace Prisma {
     application?: ApplicationOmit
     emailVerificationToken?: EmailVerificationTokenOmit
     propertyMedia?: PropertyMediaOmit
+    agency?: AgencyOmit
+    agencyMember?: AgencyMemberOmit
   }
 
   /* Types for Logging */
@@ -1509,6 +1718,7 @@ export namespace Prisma {
     applications: number
     emailVerificationTokens: number
     media: number
+    agencyMemberships: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1516,6 +1726,7 @@ export namespace Prisma {
     applications?: boolean | UserCountOutputTypeCountApplicationsArgs
     emailVerificationTokens?: boolean | UserCountOutputTypeCountEmailVerificationTokensArgs
     media?: boolean | UserCountOutputTypeCountMediaArgs
+    agencyMemberships?: boolean | UserCountOutputTypeCountAgencyMembershipsArgs
   }
 
   // Custom InputTypes
@@ -1557,6 +1768,13 @@ export namespace Prisma {
     where?: UserMediaWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountAgencyMembershipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AgencyMemberWhereInput
+  }
+
 
   /**
    * Count Type PropertyCountOutputType
@@ -1595,6 +1813,37 @@ export namespace Prisma {
    */
   export type PropertyCountOutputTypeCountMediaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PropertyMediaWhereInput
+  }
+
+
+  /**
+   * Count Type AgencyCountOutputType
+   */
+
+  export type AgencyCountOutputType = {
+    members: number
+  }
+
+  export type AgencyCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    members?: boolean | AgencyCountOutputTypeCountMembersArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * AgencyCountOutputType without action
+   */
+  export type AgencyCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgencyCountOutputType
+     */
+    select?: AgencyCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * AgencyCountOutputType without action
+   */
+  export type AgencyCountOutputTypeCountMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AgencyMemberWhereInput
   }
 
 
@@ -1819,6 +2068,7 @@ export namespace Prisma {
     applications?: boolean | User$applicationsArgs<ExtArgs>
     emailVerificationTokens?: boolean | User$emailVerificationTokensArgs<ExtArgs>
     media?: boolean | User$mediaArgs<ExtArgs>
+    agencyMemberships?: boolean | User$agencyMembershipsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1871,6 +2121,7 @@ export namespace Prisma {
     applications?: boolean | User$applicationsArgs<ExtArgs>
     emailVerificationTokens?: boolean | User$emailVerificationTokensArgs<ExtArgs>
     media?: boolean | User$mediaArgs<ExtArgs>
+    agencyMemberships?: boolean | User$agencyMembershipsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1884,6 +2135,7 @@ export namespace Prisma {
       applications: Prisma.$ApplicationPayload<ExtArgs>[]
       emailVerificationTokens: Prisma.$EmailVerificationTokenPayload<ExtArgs>[]
       media: Prisma.$UserMediaPayload<ExtArgs>[]
+      agencyMemberships: Prisma.$AgencyMemberPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2296,6 +2548,7 @@ export namespace Prisma {
     applications<T extends User$applicationsArgs<ExtArgs> = {}>(args?: Subset<T, User$applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     emailVerificationTokens<T extends User$emailVerificationTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$emailVerificationTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailVerificationTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     media<T extends User$mediaArgs<ExtArgs> = {}>(args?: Subset<T, User$mediaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserMediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    agencyMemberships<T extends User$agencyMembershipsArgs<ExtArgs> = {}>(args?: Subset<T, User$agencyMembershipsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgencyMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2841,6 +3094,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UserMediaScalarFieldEnum | UserMediaScalarFieldEnum[]
+  }
+
+  /**
+   * User.agencyMemberships
+   */
+  export type User$agencyMembershipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgencyMember
+     */
+    select?: AgencyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgencyMember
+     */
+    omit?: AgencyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyMemberInclude<ExtArgs> | null
+    where?: AgencyMemberWhereInput
+    orderBy?: AgencyMemberOrderByWithRelationInput | AgencyMemberOrderByWithRelationInput[]
+    cursor?: AgencyMemberWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AgencyMemberScalarFieldEnum | AgencyMemberScalarFieldEnum[]
   }
 
   /**
@@ -9841,6 +10118,2269 @@ export namespace Prisma {
 
 
   /**
+   * Model Agency
+   */
+
+  export type AggregateAgency = {
+    _count: AgencyCountAggregateOutputType | null
+    _min: AgencyMinAggregateOutputType | null
+    _max: AgencyMaxAggregateOutputType | null
+  }
+
+  export type AgencyMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    slug: string | null
+    email: string | null
+    phone: string | null
+    addressLine1: string | null
+    suburb: string | null
+    state: string | null
+    postcode: string | null
+    status: $Enums.AgencyStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AgencyMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    slug: string | null
+    email: string | null
+    phone: string | null
+    addressLine1: string | null
+    suburb: string | null
+    state: string | null
+    postcode: string | null
+    status: $Enums.AgencyStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AgencyCountAggregateOutputType = {
+    id: number
+    name: number
+    slug: number
+    email: number
+    phone: number
+    addressLine1: number
+    suburb: number
+    state: number
+    postcode: number
+    status: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AgencyMinAggregateInputType = {
+    id?: true
+    name?: true
+    slug?: true
+    email?: true
+    phone?: true
+    addressLine1?: true
+    suburb?: true
+    state?: true
+    postcode?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AgencyMaxAggregateInputType = {
+    id?: true
+    name?: true
+    slug?: true
+    email?: true
+    phone?: true
+    addressLine1?: true
+    suburb?: true
+    state?: true
+    postcode?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AgencyCountAggregateInputType = {
+    id?: true
+    name?: true
+    slug?: true
+    email?: true
+    phone?: true
+    addressLine1?: true
+    suburb?: true
+    state?: true
+    postcode?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AgencyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Agency to aggregate.
+     */
+    where?: AgencyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Agencies to fetch.
+     */
+    orderBy?: AgencyOrderByWithRelationInput | AgencyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AgencyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Agencies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Agencies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Agencies
+    **/
+    _count?: true | AgencyCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AgencyMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AgencyMaxAggregateInputType
+  }
+
+  export type GetAgencyAggregateType<T extends AgencyAggregateArgs> = {
+        [P in keyof T & keyof AggregateAgency]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAgency[P]>
+      : GetScalarType<T[P], AggregateAgency[P]>
+  }
+
+
+
+
+  export type AgencyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AgencyWhereInput
+    orderBy?: AgencyOrderByWithAggregationInput | AgencyOrderByWithAggregationInput[]
+    by: AgencyScalarFieldEnum[] | AgencyScalarFieldEnum
+    having?: AgencyScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AgencyCountAggregateInputType | true
+    _min?: AgencyMinAggregateInputType
+    _max?: AgencyMaxAggregateInputType
+  }
+
+  export type AgencyGroupByOutputType = {
+    id: string
+    name: string
+    slug: string
+    email: string
+    phone: string | null
+    addressLine1: string | null
+    suburb: string | null
+    state: string | null
+    postcode: string | null
+    status: $Enums.AgencyStatus
+    createdAt: Date
+    updatedAt: Date
+    _count: AgencyCountAggregateOutputType | null
+    _min: AgencyMinAggregateOutputType | null
+    _max: AgencyMaxAggregateOutputType | null
+  }
+
+  type GetAgencyGroupByPayload<T extends AgencyGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AgencyGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AgencyGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AgencyGroupByOutputType[P]>
+            : GetScalarType<T[P], AgencyGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AgencySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    email?: boolean
+    phone?: boolean
+    addressLine1?: boolean
+    suburb?: boolean
+    state?: boolean
+    postcode?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    members?: boolean | Agency$membersArgs<ExtArgs>
+    _count?: boolean | AgencyCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["agency"]>
+
+  export type AgencySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    email?: boolean
+    phone?: boolean
+    addressLine1?: boolean
+    suburb?: boolean
+    state?: boolean
+    postcode?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["agency"]>
+
+  export type AgencySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    email?: boolean
+    phone?: boolean
+    addressLine1?: boolean
+    suburb?: boolean
+    state?: boolean
+    postcode?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["agency"]>
+
+  export type AgencySelectScalar = {
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    email?: boolean
+    phone?: boolean
+    addressLine1?: boolean
+    suburb?: boolean
+    state?: boolean
+    postcode?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AgencyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "email" | "phone" | "addressLine1" | "suburb" | "state" | "postcode" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["agency"]>
+  export type AgencyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    members?: boolean | Agency$membersArgs<ExtArgs>
+    _count?: boolean | AgencyCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type AgencyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type AgencyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $AgencyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Agency"
+    objects: {
+      members: Prisma.$AgencyMemberPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      slug: string
+      email: string
+      phone: string | null
+      addressLine1: string | null
+      suburb: string | null
+      state: string | null
+      postcode: string | null
+      status: $Enums.AgencyStatus
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["agency"]>
+    composites: {}
+  }
+
+  type AgencyGetPayload<S extends boolean | null | undefined | AgencyDefaultArgs> = $Result.GetResult<Prisma.$AgencyPayload, S>
+
+  type AgencyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AgencyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AgencyCountAggregateInputType | true
+    }
+
+  export interface AgencyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Agency'], meta: { name: 'Agency' } }
+    /**
+     * Find zero or one Agency that matches the filter.
+     * @param {AgencyFindUniqueArgs} args - Arguments to find a Agency
+     * @example
+     * // Get one Agency
+     * const agency = await prisma.agency.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AgencyFindUniqueArgs>(args: SelectSubset<T, AgencyFindUniqueArgs<ExtArgs>>): Prisma__AgencyClient<$Result.GetResult<Prisma.$AgencyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Agency that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AgencyFindUniqueOrThrowArgs} args - Arguments to find a Agency
+     * @example
+     * // Get one Agency
+     * const agency = await prisma.agency.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AgencyFindUniqueOrThrowArgs>(args: SelectSubset<T, AgencyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AgencyClient<$Result.GetResult<Prisma.$AgencyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Agency that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgencyFindFirstArgs} args - Arguments to find a Agency
+     * @example
+     * // Get one Agency
+     * const agency = await prisma.agency.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AgencyFindFirstArgs>(args?: SelectSubset<T, AgencyFindFirstArgs<ExtArgs>>): Prisma__AgencyClient<$Result.GetResult<Prisma.$AgencyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Agency that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgencyFindFirstOrThrowArgs} args - Arguments to find a Agency
+     * @example
+     * // Get one Agency
+     * const agency = await prisma.agency.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AgencyFindFirstOrThrowArgs>(args?: SelectSubset<T, AgencyFindFirstOrThrowArgs<ExtArgs>>): Prisma__AgencyClient<$Result.GetResult<Prisma.$AgencyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Agencies that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgencyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Agencies
+     * const agencies = await prisma.agency.findMany()
+     * 
+     * // Get first 10 Agencies
+     * const agencies = await prisma.agency.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const agencyWithIdOnly = await prisma.agency.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AgencyFindManyArgs>(args?: SelectSubset<T, AgencyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgencyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Agency.
+     * @param {AgencyCreateArgs} args - Arguments to create a Agency.
+     * @example
+     * // Create one Agency
+     * const Agency = await prisma.agency.create({
+     *   data: {
+     *     // ... data to create a Agency
+     *   }
+     * })
+     * 
+     */
+    create<T extends AgencyCreateArgs>(args: SelectSubset<T, AgencyCreateArgs<ExtArgs>>): Prisma__AgencyClient<$Result.GetResult<Prisma.$AgencyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Agencies.
+     * @param {AgencyCreateManyArgs} args - Arguments to create many Agencies.
+     * @example
+     * // Create many Agencies
+     * const agency = await prisma.agency.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AgencyCreateManyArgs>(args?: SelectSubset<T, AgencyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Agencies and returns the data saved in the database.
+     * @param {AgencyCreateManyAndReturnArgs} args - Arguments to create many Agencies.
+     * @example
+     * // Create many Agencies
+     * const agency = await prisma.agency.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Agencies and only return the `id`
+     * const agencyWithIdOnly = await prisma.agency.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AgencyCreateManyAndReturnArgs>(args?: SelectSubset<T, AgencyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgencyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Agency.
+     * @param {AgencyDeleteArgs} args - Arguments to delete one Agency.
+     * @example
+     * // Delete one Agency
+     * const Agency = await prisma.agency.delete({
+     *   where: {
+     *     // ... filter to delete one Agency
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AgencyDeleteArgs>(args: SelectSubset<T, AgencyDeleteArgs<ExtArgs>>): Prisma__AgencyClient<$Result.GetResult<Prisma.$AgencyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Agency.
+     * @param {AgencyUpdateArgs} args - Arguments to update one Agency.
+     * @example
+     * // Update one Agency
+     * const agency = await prisma.agency.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AgencyUpdateArgs>(args: SelectSubset<T, AgencyUpdateArgs<ExtArgs>>): Prisma__AgencyClient<$Result.GetResult<Prisma.$AgencyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Agencies.
+     * @param {AgencyDeleteManyArgs} args - Arguments to filter Agencies to delete.
+     * @example
+     * // Delete a few Agencies
+     * const { count } = await prisma.agency.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AgencyDeleteManyArgs>(args?: SelectSubset<T, AgencyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Agencies.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgencyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Agencies
+     * const agency = await prisma.agency.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AgencyUpdateManyArgs>(args: SelectSubset<T, AgencyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Agencies and returns the data updated in the database.
+     * @param {AgencyUpdateManyAndReturnArgs} args - Arguments to update many Agencies.
+     * @example
+     * // Update many Agencies
+     * const agency = await prisma.agency.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Agencies and only return the `id`
+     * const agencyWithIdOnly = await prisma.agency.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AgencyUpdateManyAndReturnArgs>(args: SelectSubset<T, AgencyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgencyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Agency.
+     * @param {AgencyUpsertArgs} args - Arguments to update or create a Agency.
+     * @example
+     * // Update or create a Agency
+     * const agency = await prisma.agency.upsert({
+     *   create: {
+     *     // ... data to create a Agency
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Agency we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AgencyUpsertArgs>(args: SelectSubset<T, AgencyUpsertArgs<ExtArgs>>): Prisma__AgencyClient<$Result.GetResult<Prisma.$AgencyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Agencies.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgencyCountArgs} args - Arguments to filter Agencies to count.
+     * @example
+     * // Count the number of Agencies
+     * const count = await prisma.agency.count({
+     *   where: {
+     *     // ... the filter for the Agencies we want to count
+     *   }
+     * })
+    **/
+    count<T extends AgencyCountArgs>(
+      args?: Subset<T, AgencyCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AgencyCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Agency.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgencyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AgencyAggregateArgs>(args: Subset<T, AgencyAggregateArgs>): Prisma.PrismaPromise<GetAgencyAggregateType<T>>
+
+    /**
+     * Group by Agency.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgencyGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AgencyGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AgencyGroupByArgs['orderBy'] }
+        : { orderBy?: AgencyGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AgencyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAgencyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Agency model
+   */
+  readonly fields: AgencyFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Agency.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AgencyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    members<T extends Agency$membersArgs<ExtArgs> = {}>(args?: Subset<T, Agency$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgencyMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Agency model
+   */
+  interface AgencyFieldRefs {
+    readonly id: FieldRef<"Agency", 'String'>
+    readonly name: FieldRef<"Agency", 'String'>
+    readonly slug: FieldRef<"Agency", 'String'>
+    readonly email: FieldRef<"Agency", 'String'>
+    readonly phone: FieldRef<"Agency", 'String'>
+    readonly addressLine1: FieldRef<"Agency", 'String'>
+    readonly suburb: FieldRef<"Agency", 'String'>
+    readonly state: FieldRef<"Agency", 'String'>
+    readonly postcode: FieldRef<"Agency", 'String'>
+    readonly status: FieldRef<"Agency", 'AgencyStatus'>
+    readonly createdAt: FieldRef<"Agency", 'DateTime'>
+    readonly updatedAt: FieldRef<"Agency", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Agency findUnique
+   */
+  export type AgencyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Agency
+     */
+    select?: AgencySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Agency
+     */
+    omit?: AgencyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyInclude<ExtArgs> | null
+    /**
+     * Filter, which Agency to fetch.
+     */
+    where: AgencyWhereUniqueInput
+  }
+
+  /**
+   * Agency findUniqueOrThrow
+   */
+  export type AgencyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Agency
+     */
+    select?: AgencySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Agency
+     */
+    omit?: AgencyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyInclude<ExtArgs> | null
+    /**
+     * Filter, which Agency to fetch.
+     */
+    where: AgencyWhereUniqueInput
+  }
+
+  /**
+   * Agency findFirst
+   */
+  export type AgencyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Agency
+     */
+    select?: AgencySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Agency
+     */
+    omit?: AgencyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyInclude<ExtArgs> | null
+    /**
+     * Filter, which Agency to fetch.
+     */
+    where?: AgencyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Agencies to fetch.
+     */
+    orderBy?: AgencyOrderByWithRelationInput | AgencyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Agencies.
+     */
+    cursor?: AgencyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Agencies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Agencies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Agencies.
+     */
+    distinct?: AgencyScalarFieldEnum | AgencyScalarFieldEnum[]
+  }
+
+  /**
+   * Agency findFirstOrThrow
+   */
+  export type AgencyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Agency
+     */
+    select?: AgencySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Agency
+     */
+    omit?: AgencyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyInclude<ExtArgs> | null
+    /**
+     * Filter, which Agency to fetch.
+     */
+    where?: AgencyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Agencies to fetch.
+     */
+    orderBy?: AgencyOrderByWithRelationInput | AgencyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Agencies.
+     */
+    cursor?: AgencyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Agencies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Agencies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Agencies.
+     */
+    distinct?: AgencyScalarFieldEnum | AgencyScalarFieldEnum[]
+  }
+
+  /**
+   * Agency findMany
+   */
+  export type AgencyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Agency
+     */
+    select?: AgencySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Agency
+     */
+    omit?: AgencyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyInclude<ExtArgs> | null
+    /**
+     * Filter, which Agencies to fetch.
+     */
+    where?: AgencyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Agencies to fetch.
+     */
+    orderBy?: AgencyOrderByWithRelationInput | AgencyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Agencies.
+     */
+    cursor?: AgencyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Agencies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Agencies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Agencies.
+     */
+    distinct?: AgencyScalarFieldEnum | AgencyScalarFieldEnum[]
+  }
+
+  /**
+   * Agency create
+   */
+  export type AgencyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Agency
+     */
+    select?: AgencySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Agency
+     */
+    omit?: AgencyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Agency.
+     */
+    data: XOR<AgencyCreateInput, AgencyUncheckedCreateInput>
+  }
+
+  /**
+   * Agency createMany
+   */
+  export type AgencyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Agencies.
+     */
+    data: AgencyCreateManyInput | AgencyCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Agency createManyAndReturn
+   */
+  export type AgencyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Agency
+     */
+    select?: AgencySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Agency
+     */
+    omit?: AgencyOmit<ExtArgs> | null
+    /**
+     * The data used to create many Agencies.
+     */
+    data: AgencyCreateManyInput | AgencyCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Agency update
+   */
+  export type AgencyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Agency
+     */
+    select?: AgencySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Agency
+     */
+    omit?: AgencyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Agency.
+     */
+    data: XOR<AgencyUpdateInput, AgencyUncheckedUpdateInput>
+    /**
+     * Choose, which Agency to update.
+     */
+    where: AgencyWhereUniqueInput
+  }
+
+  /**
+   * Agency updateMany
+   */
+  export type AgencyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Agencies.
+     */
+    data: XOR<AgencyUpdateManyMutationInput, AgencyUncheckedUpdateManyInput>
+    /**
+     * Filter which Agencies to update
+     */
+    where?: AgencyWhereInput
+    /**
+     * Limit how many Agencies to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Agency updateManyAndReturn
+   */
+  export type AgencyUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Agency
+     */
+    select?: AgencySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Agency
+     */
+    omit?: AgencyOmit<ExtArgs> | null
+    /**
+     * The data used to update Agencies.
+     */
+    data: XOR<AgencyUpdateManyMutationInput, AgencyUncheckedUpdateManyInput>
+    /**
+     * Filter which Agencies to update
+     */
+    where?: AgencyWhereInput
+    /**
+     * Limit how many Agencies to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Agency upsert
+   */
+  export type AgencyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Agency
+     */
+    select?: AgencySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Agency
+     */
+    omit?: AgencyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Agency to update in case it exists.
+     */
+    where: AgencyWhereUniqueInput
+    /**
+     * In case the Agency found by the `where` argument doesn't exist, create a new Agency with this data.
+     */
+    create: XOR<AgencyCreateInput, AgencyUncheckedCreateInput>
+    /**
+     * In case the Agency was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AgencyUpdateInput, AgencyUncheckedUpdateInput>
+  }
+
+  /**
+   * Agency delete
+   */
+  export type AgencyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Agency
+     */
+    select?: AgencySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Agency
+     */
+    omit?: AgencyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyInclude<ExtArgs> | null
+    /**
+     * Filter which Agency to delete.
+     */
+    where: AgencyWhereUniqueInput
+  }
+
+  /**
+   * Agency deleteMany
+   */
+  export type AgencyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Agencies to delete
+     */
+    where?: AgencyWhereInput
+    /**
+     * Limit how many Agencies to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Agency.members
+   */
+  export type Agency$membersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgencyMember
+     */
+    select?: AgencyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgencyMember
+     */
+    omit?: AgencyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyMemberInclude<ExtArgs> | null
+    where?: AgencyMemberWhereInput
+    orderBy?: AgencyMemberOrderByWithRelationInput | AgencyMemberOrderByWithRelationInput[]
+    cursor?: AgencyMemberWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AgencyMemberScalarFieldEnum | AgencyMemberScalarFieldEnum[]
+  }
+
+  /**
+   * Agency without action
+   */
+  export type AgencyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Agency
+     */
+    select?: AgencySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Agency
+     */
+    omit?: AgencyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AgencyMember
+   */
+
+  export type AggregateAgencyMember = {
+    _count: AgencyMemberCountAggregateOutputType | null
+    _min: AgencyMemberMinAggregateOutputType | null
+    _max: AgencyMemberMaxAggregateOutputType | null
+  }
+
+  export type AgencyMemberMinAggregateOutputType = {
+    id: string | null
+    agencyId: string | null
+    userId: string | null
+    role: $Enums.AgencyMemberRole | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AgencyMemberMaxAggregateOutputType = {
+    id: string | null
+    agencyId: string | null
+    userId: string | null
+    role: $Enums.AgencyMemberRole | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AgencyMemberCountAggregateOutputType = {
+    id: number
+    agencyId: number
+    userId: number
+    role: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AgencyMemberMinAggregateInputType = {
+    id?: true
+    agencyId?: true
+    userId?: true
+    role?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AgencyMemberMaxAggregateInputType = {
+    id?: true
+    agencyId?: true
+    userId?: true
+    role?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AgencyMemberCountAggregateInputType = {
+    id?: true
+    agencyId?: true
+    userId?: true
+    role?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AgencyMemberAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AgencyMember to aggregate.
+     */
+    where?: AgencyMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AgencyMembers to fetch.
+     */
+    orderBy?: AgencyMemberOrderByWithRelationInput | AgencyMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AgencyMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AgencyMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AgencyMembers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AgencyMembers
+    **/
+    _count?: true | AgencyMemberCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AgencyMemberMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AgencyMemberMaxAggregateInputType
+  }
+
+  export type GetAgencyMemberAggregateType<T extends AgencyMemberAggregateArgs> = {
+        [P in keyof T & keyof AggregateAgencyMember]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAgencyMember[P]>
+      : GetScalarType<T[P], AggregateAgencyMember[P]>
+  }
+
+
+
+
+  export type AgencyMemberGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AgencyMemberWhereInput
+    orderBy?: AgencyMemberOrderByWithAggregationInput | AgencyMemberOrderByWithAggregationInput[]
+    by: AgencyMemberScalarFieldEnum[] | AgencyMemberScalarFieldEnum
+    having?: AgencyMemberScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AgencyMemberCountAggregateInputType | true
+    _min?: AgencyMemberMinAggregateInputType
+    _max?: AgencyMemberMaxAggregateInputType
+  }
+
+  export type AgencyMemberGroupByOutputType = {
+    id: string
+    agencyId: string
+    userId: string
+    role: $Enums.AgencyMemberRole
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: AgencyMemberCountAggregateOutputType | null
+    _min: AgencyMemberMinAggregateOutputType | null
+    _max: AgencyMemberMaxAggregateOutputType | null
+  }
+
+  type GetAgencyMemberGroupByPayload<T extends AgencyMemberGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AgencyMemberGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AgencyMemberGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AgencyMemberGroupByOutputType[P]>
+            : GetScalarType<T[P], AgencyMemberGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AgencyMemberSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    agencyId?: boolean
+    userId?: boolean
+    role?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    agency?: boolean | AgencyDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["agencyMember"]>
+
+  export type AgencyMemberSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    agencyId?: boolean
+    userId?: boolean
+    role?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    agency?: boolean | AgencyDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["agencyMember"]>
+
+  export type AgencyMemberSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    agencyId?: boolean
+    userId?: boolean
+    role?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    agency?: boolean | AgencyDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["agencyMember"]>
+
+  export type AgencyMemberSelectScalar = {
+    id?: boolean
+    agencyId?: boolean
+    userId?: boolean
+    role?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AgencyMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "agencyId" | "userId" | "role" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["agencyMember"]>
+  export type AgencyMemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    agency?: boolean | AgencyDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type AgencyMemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    agency?: boolean | AgencyDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type AgencyMemberIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    agency?: boolean | AgencyDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $AgencyMemberPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AgencyMember"
+    objects: {
+      agency: Prisma.$AgencyPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      agencyId: string
+      userId: string
+      role: $Enums.AgencyMemberRole
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["agencyMember"]>
+    composites: {}
+  }
+
+  type AgencyMemberGetPayload<S extends boolean | null | undefined | AgencyMemberDefaultArgs> = $Result.GetResult<Prisma.$AgencyMemberPayload, S>
+
+  type AgencyMemberCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AgencyMemberFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AgencyMemberCountAggregateInputType | true
+    }
+
+  export interface AgencyMemberDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AgencyMember'], meta: { name: 'AgencyMember' } }
+    /**
+     * Find zero or one AgencyMember that matches the filter.
+     * @param {AgencyMemberFindUniqueArgs} args - Arguments to find a AgencyMember
+     * @example
+     * // Get one AgencyMember
+     * const agencyMember = await prisma.agencyMember.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AgencyMemberFindUniqueArgs>(args: SelectSubset<T, AgencyMemberFindUniqueArgs<ExtArgs>>): Prisma__AgencyMemberClient<$Result.GetResult<Prisma.$AgencyMemberPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AgencyMember that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AgencyMemberFindUniqueOrThrowArgs} args - Arguments to find a AgencyMember
+     * @example
+     * // Get one AgencyMember
+     * const agencyMember = await prisma.agencyMember.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AgencyMemberFindUniqueOrThrowArgs>(args: SelectSubset<T, AgencyMemberFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AgencyMemberClient<$Result.GetResult<Prisma.$AgencyMemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AgencyMember that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgencyMemberFindFirstArgs} args - Arguments to find a AgencyMember
+     * @example
+     * // Get one AgencyMember
+     * const agencyMember = await prisma.agencyMember.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AgencyMemberFindFirstArgs>(args?: SelectSubset<T, AgencyMemberFindFirstArgs<ExtArgs>>): Prisma__AgencyMemberClient<$Result.GetResult<Prisma.$AgencyMemberPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AgencyMember that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgencyMemberFindFirstOrThrowArgs} args - Arguments to find a AgencyMember
+     * @example
+     * // Get one AgencyMember
+     * const agencyMember = await prisma.agencyMember.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AgencyMemberFindFirstOrThrowArgs>(args?: SelectSubset<T, AgencyMemberFindFirstOrThrowArgs<ExtArgs>>): Prisma__AgencyMemberClient<$Result.GetResult<Prisma.$AgencyMemberPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AgencyMembers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgencyMemberFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AgencyMembers
+     * const agencyMembers = await prisma.agencyMember.findMany()
+     * 
+     * // Get first 10 AgencyMembers
+     * const agencyMembers = await prisma.agencyMember.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const agencyMemberWithIdOnly = await prisma.agencyMember.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AgencyMemberFindManyArgs>(args?: SelectSubset<T, AgencyMemberFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgencyMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AgencyMember.
+     * @param {AgencyMemberCreateArgs} args - Arguments to create a AgencyMember.
+     * @example
+     * // Create one AgencyMember
+     * const AgencyMember = await prisma.agencyMember.create({
+     *   data: {
+     *     // ... data to create a AgencyMember
+     *   }
+     * })
+     * 
+     */
+    create<T extends AgencyMemberCreateArgs>(args: SelectSubset<T, AgencyMemberCreateArgs<ExtArgs>>): Prisma__AgencyMemberClient<$Result.GetResult<Prisma.$AgencyMemberPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AgencyMembers.
+     * @param {AgencyMemberCreateManyArgs} args - Arguments to create many AgencyMembers.
+     * @example
+     * // Create many AgencyMembers
+     * const agencyMember = await prisma.agencyMember.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AgencyMemberCreateManyArgs>(args?: SelectSubset<T, AgencyMemberCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AgencyMembers and returns the data saved in the database.
+     * @param {AgencyMemberCreateManyAndReturnArgs} args - Arguments to create many AgencyMembers.
+     * @example
+     * // Create many AgencyMembers
+     * const agencyMember = await prisma.agencyMember.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AgencyMembers and only return the `id`
+     * const agencyMemberWithIdOnly = await prisma.agencyMember.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AgencyMemberCreateManyAndReturnArgs>(args?: SelectSubset<T, AgencyMemberCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgencyMemberPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AgencyMember.
+     * @param {AgencyMemberDeleteArgs} args - Arguments to delete one AgencyMember.
+     * @example
+     * // Delete one AgencyMember
+     * const AgencyMember = await prisma.agencyMember.delete({
+     *   where: {
+     *     // ... filter to delete one AgencyMember
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AgencyMemberDeleteArgs>(args: SelectSubset<T, AgencyMemberDeleteArgs<ExtArgs>>): Prisma__AgencyMemberClient<$Result.GetResult<Prisma.$AgencyMemberPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AgencyMember.
+     * @param {AgencyMemberUpdateArgs} args - Arguments to update one AgencyMember.
+     * @example
+     * // Update one AgencyMember
+     * const agencyMember = await prisma.agencyMember.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AgencyMemberUpdateArgs>(args: SelectSubset<T, AgencyMemberUpdateArgs<ExtArgs>>): Prisma__AgencyMemberClient<$Result.GetResult<Prisma.$AgencyMemberPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AgencyMembers.
+     * @param {AgencyMemberDeleteManyArgs} args - Arguments to filter AgencyMembers to delete.
+     * @example
+     * // Delete a few AgencyMembers
+     * const { count } = await prisma.agencyMember.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AgencyMemberDeleteManyArgs>(args?: SelectSubset<T, AgencyMemberDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AgencyMembers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgencyMemberUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AgencyMembers
+     * const agencyMember = await prisma.agencyMember.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AgencyMemberUpdateManyArgs>(args: SelectSubset<T, AgencyMemberUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AgencyMembers and returns the data updated in the database.
+     * @param {AgencyMemberUpdateManyAndReturnArgs} args - Arguments to update many AgencyMembers.
+     * @example
+     * // Update many AgencyMembers
+     * const agencyMember = await prisma.agencyMember.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AgencyMembers and only return the `id`
+     * const agencyMemberWithIdOnly = await prisma.agencyMember.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AgencyMemberUpdateManyAndReturnArgs>(args: SelectSubset<T, AgencyMemberUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgencyMemberPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AgencyMember.
+     * @param {AgencyMemberUpsertArgs} args - Arguments to update or create a AgencyMember.
+     * @example
+     * // Update or create a AgencyMember
+     * const agencyMember = await prisma.agencyMember.upsert({
+     *   create: {
+     *     // ... data to create a AgencyMember
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AgencyMember we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AgencyMemberUpsertArgs>(args: SelectSubset<T, AgencyMemberUpsertArgs<ExtArgs>>): Prisma__AgencyMemberClient<$Result.GetResult<Prisma.$AgencyMemberPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AgencyMembers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgencyMemberCountArgs} args - Arguments to filter AgencyMembers to count.
+     * @example
+     * // Count the number of AgencyMembers
+     * const count = await prisma.agencyMember.count({
+     *   where: {
+     *     // ... the filter for the AgencyMembers we want to count
+     *   }
+     * })
+    **/
+    count<T extends AgencyMemberCountArgs>(
+      args?: Subset<T, AgencyMemberCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AgencyMemberCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AgencyMember.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgencyMemberAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AgencyMemberAggregateArgs>(args: Subset<T, AgencyMemberAggregateArgs>): Prisma.PrismaPromise<GetAgencyMemberAggregateType<T>>
+
+    /**
+     * Group by AgencyMember.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgencyMemberGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AgencyMemberGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AgencyMemberGroupByArgs['orderBy'] }
+        : { orderBy?: AgencyMemberGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AgencyMemberGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAgencyMemberGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AgencyMember model
+   */
+  readonly fields: AgencyMemberFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AgencyMember.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AgencyMemberClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    agency<T extends AgencyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AgencyDefaultArgs<ExtArgs>>): Prisma__AgencyClient<$Result.GetResult<Prisma.$AgencyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AgencyMember model
+   */
+  interface AgencyMemberFieldRefs {
+    readonly id: FieldRef<"AgencyMember", 'String'>
+    readonly agencyId: FieldRef<"AgencyMember", 'String'>
+    readonly userId: FieldRef<"AgencyMember", 'String'>
+    readonly role: FieldRef<"AgencyMember", 'AgencyMemberRole'>
+    readonly isActive: FieldRef<"AgencyMember", 'Boolean'>
+    readonly createdAt: FieldRef<"AgencyMember", 'DateTime'>
+    readonly updatedAt: FieldRef<"AgencyMember", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AgencyMember findUnique
+   */
+  export type AgencyMemberFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgencyMember
+     */
+    select?: AgencyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgencyMember
+     */
+    omit?: AgencyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which AgencyMember to fetch.
+     */
+    where: AgencyMemberWhereUniqueInput
+  }
+
+  /**
+   * AgencyMember findUniqueOrThrow
+   */
+  export type AgencyMemberFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgencyMember
+     */
+    select?: AgencyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgencyMember
+     */
+    omit?: AgencyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which AgencyMember to fetch.
+     */
+    where: AgencyMemberWhereUniqueInput
+  }
+
+  /**
+   * AgencyMember findFirst
+   */
+  export type AgencyMemberFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgencyMember
+     */
+    select?: AgencyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgencyMember
+     */
+    omit?: AgencyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which AgencyMember to fetch.
+     */
+    where?: AgencyMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AgencyMembers to fetch.
+     */
+    orderBy?: AgencyMemberOrderByWithRelationInput | AgencyMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AgencyMembers.
+     */
+    cursor?: AgencyMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AgencyMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AgencyMembers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AgencyMembers.
+     */
+    distinct?: AgencyMemberScalarFieldEnum | AgencyMemberScalarFieldEnum[]
+  }
+
+  /**
+   * AgencyMember findFirstOrThrow
+   */
+  export type AgencyMemberFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgencyMember
+     */
+    select?: AgencyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgencyMember
+     */
+    omit?: AgencyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which AgencyMember to fetch.
+     */
+    where?: AgencyMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AgencyMembers to fetch.
+     */
+    orderBy?: AgencyMemberOrderByWithRelationInput | AgencyMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AgencyMembers.
+     */
+    cursor?: AgencyMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AgencyMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AgencyMembers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AgencyMembers.
+     */
+    distinct?: AgencyMemberScalarFieldEnum | AgencyMemberScalarFieldEnum[]
+  }
+
+  /**
+   * AgencyMember findMany
+   */
+  export type AgencyMemberFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgencyMember
+     */
+    select?: AgencyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgencyMember
+     */
+    omit?: AgencyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which AgencyMembers to fetch.
+     */
+    where?: AgencyMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AgencyMembers to fetch.
+     */
+    orderBy?: AgencyMemberOrderByWithRelationInput | AgencyMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AgencyMembers.
+     */
+    cursor?: AgencyMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AgencyMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AgencyMembers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AgencyMembers.
+     */
+    distinct?: AgencyMemberScalarFieldEnum | AgencyMemberScalarFieldEnum[]
+  }
+
+  /**
+   * AgencyMember create
+   */
+  export type AgencyMemberCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgencyMember
+     */
+    select?: AgencyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgencyMember
+     */
+    omit?: AgencyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyMemberInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AgencyMember.
+     */
+    data: XOR<AgencyMemberCreateInput, AgencyMemberUncheckedCreateInput>
+  }
+
+  /**
+   * AgencyMember createMany
+   */
+  export type AgencyMemberCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AgencyMembers.
+     */
+    data: AgencyMemberCreateManyInput | AgencyMemberCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AgencyMember createManyAndReturn
+   */
+  export type AgencyMemberCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgencyMember
+     */
+    select?: AgencyMemberSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgencyMember
+     */
+    omit?: AgencyMemberOmit<ExtArgs> | null
+    /**
+     * The data used to create many AgencyMembers.
+     */
+    data: AgencyMemberCreateManyInput | AgencyMemberCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyMemberIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AgencyMember update
+   */
+  export type AgencyMemberUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgencyMember
+     */
+    select?: AgencyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgencyMember
+     */
+    omit?: AgencyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyMemberInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AgencyMember.
+     */
+    data: XOR<AgencyMemberUpdateInput, AgencyMemberUncheckedUpdateInput>
+    /**
+     * Choose, which AgencyMember to update.
+     */
+    where: AgencyMemberWhereUniqueInput
+  }
+
+  /**
+   * AgencyMember updateMany
+   */
+  export type AgencyMemberUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AgencyMembers.
+     */
+    data: XOR<AgencyMemberUpdateManyMutationInput, AgencyMemberUncheckedUpdateManyInput>
+    /**
+     * Filter which AgencyMembers to update
+     */
+    where?: AgencyMemberWhereInput
+    /**
+     * Limit how many AgencyMembers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AgencyMember updateManyAndReturn
+   */
+  export type AgencyMemberUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgencyMember
+     */
+    select?: AgencyMemberSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgencyMember
+     */
+    omit?: AgencyMemberOmit<ExtArgs> | null
+    /**
+     * The data used to update AgencyMembers.
+     */
+    data: XOR<AgencyMemberUpdateManyMutationInput, AgencyMemberUncheckedUpdateManyInput>
+    /**
+     * Filter which AgencyMembers to update
+     */
+    where?: AgencyMemberWhereInput
+    /**
+     * Limit how many AgencyMembers to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyMemberIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AgencyMember upsert
+   */
+  export type AgencyMemberUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgencyMember
+     */
+    select?: AgencyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgencyMember
+     */
+    omit?: AgencyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyMemberInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AgencyMember to update in case it exists.
+     */
+    where: AgencyMemberWhereUniqueInput
+    /**
+     * In case the AgencyMember found by the `where` argument doesn't exist, create a new AgencyMember with this data.
+     */
+    create: XOR<AgencyMemberCreateInput, AgencyMemberUncheckedCreateInput>
+    /**
+     * In case the AgencyMember was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AgencyMemberUpdateInput, AgencyMemberUncheckedUpdateInput>
+  }
+
+  /**
+   * AgencyMember delete
+   */
+  export type AgencyMemberDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgencyMember
+     */
+    select?: AgencyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgencyMember
+     */
+    omit?: AgencyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyMemberInclude<ExtArgs> | null
+    /**
+     * Filter which AgencyMember to delete.
+     */
+    where: AgencyMemberWhereUniqueInput
+  }
+
+  /**
+   * AgencyMember deleteMany
+   */
+  export type AgencyMemberDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AgencyMembers to delete
+     */
+    where?: AgencyMemberWhereInput
+    /**
+     * Limit how many AgencyMembers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AgencyMember without action
+   */
+  export type AgencyMemberDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgencyMember
+     */
+    select?: AgencyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgencyMember
+     */
+    omit?: AgencyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyMemberInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -9967,6 +12507,37 @@ export namespace Prisma {
   };
 
   export type PropertyMediaScalarFieldEnum = (typeof PropertyMediaScalarFieldEnum)[keyof typeof PropertyMediaScalarFieldEnum]
+
+
+  export const AgencyScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    slug: 'slug',
+    email: 'email',
+    phone: 'phone',
+    addressLine1: 'addressLine1',
+    suburb: 'suburb',
+    state: 'state',
+    postcode: 'postcode',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AgencyScalarFieldEnum = (typeof AgencyScalarFieldEnum)[keyof typeof AgencyScalarFieldEnum]
+
+
+  export const AgencyMemberScalarFieldEnum: {
+    id: 'id',
+    agencyId: 'agencyId',
+    userId: 'userId',
+    role: 'role',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AgencyMemberScalarFieldEnum = (typeof AgencyMemberScalarFieldEnum)[keyof typeof AgencyMemberScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -10160,6 +12731,34 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'AgencyStatus'
+   */
+  export type EnumAgencyStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AgencyStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'AgencyStatus[]'
+   */
+  export type ListEnumAgencyStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AgencyStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'AgencyMemberRole'
+   */
+  export type EnumAgencyMemberRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AgencyMemberRole'>
+    
+
+
+  /**
+   * Reference to a field of type 'AgencyMemberRole[]'
+   */
+  export type ListEnumAgencyMemberRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AgencyMemberRole[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -10196,6 +12795,7 @@ export namespace Prisma {
     applications?: ApplicationListRelationFilter
     emailVerificationTokens?: EmailVerificationTokenListRelationFilter
     media?: UserMediaListRelationFilter
+    agencyMemberships?: AgencyMemberListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -10215,6 +12815,7 @@ export namespace Prisma {
     applications?: ApplicationOrderByRelationAggregateInput
     emailVerificationTokens?: EmailVerificationTokenOrderByRelationAggregateInput
     media?: UserMediaOrderByRelationAggregateInput
+    agencyMemberships?: AgencyMemberOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -10237,6 +12838,7 @@ export namespace Prisma {
     applications?: ApplicationListRelationFilter
     emailVerificationTokens?: EmailVerificationTokenListRelationFilter
     media?: UserMediaListRelationFilter
+    agencyMemberships?: AgencyMemberListRelationFilter
   }, "id" | "email" | "phone" | "googleId">
 
   export type UserOrderByWithAggregationInput = {
@@ -10779,6 +13381,165 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"PropertyMedia"> | Date | string
   }
 
+  export type AgencyWhereInput = {
+    AND?: AgencyWhereInput | AgencyWhereInput[]
+    OR?: AgencyWhereInput[]
+    NOT?: AgencyWhereInput | AgencyWhereInput[]
+    id?: StringFilter<"Agency"> | string
+    name?: StringFilter<"Agency"> | string
+    slug?: StringFilter<"Agency"> | string
+    email?: StringFilter<"Agency"> | string
+    phone?: StringNullableFilter<"Agency"> | string | null
+    addressLine1?: StringNullableFilter<"Agency"> | string | null
+    suburb?: StringNullableFilter<"Agency"> | string | null
+    state?: StringNullableFilter<"Agency"> | string | null
+    postcode?: StringNullableFilter<"Agency"> | string | null
+    status?: EnumAgencyStatusFilter<"Agency"> | $Enums.AgencyStatus
+    createdAt?: DateTimeFilter<"Agency"> | Date | string
+    updatedAt?: DateTimeFilter<"Agency"> | Date | string
+    members?: AgencyMemberListRelationFilter
+  }
+
+  export type AgencyOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    email?: SortOrder
+    phone?: SortOrderInput | SortOrder
+    addressLine1?: SortOrderInput | SortOrder
+    suburb?: SortOrderInput | SortOrder
+    state?: SortOrderInput | SortOrder
+    postcode?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    members?: AgencyMemberOrderByRelationAggregateInput
+  }
+
+  export type AgencyWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    slug?: string
+    email?: string
+    AND?: AgencyWhereInput | AgencyWhereInput[]
+    OR?: AgencyWhereInput[]
+    NOT?: AgencyWhereInput | AgencyWhereInput[]
+    name?: StringFilter<"Agency"> | string
+    phone?: StringNullableFilter<"Agency"> | string | null
+    addressLine1?: StringNullableFilter<"Agency"> | string | null
+    suburb?: StringNullableFilter<"Agency"> | string | null
+    state?: StringNullableFilter<"Agency"> | string | null
+    postcode?: StringNullableFilter<"Agency"> | string | null
+    status?: EnumAgencyStatusFilter<"Agency"> | $Enums.AgencyStatus
+    createdAt?: DateTimeFilter<"Agency"> | Date | string
+    updatedAt?: DateTimeFilter<"Agency"> | Date | string
+    members?: AgencyMemberListRelationFilter
+  }, "id" | "slug" | "email">
+
+  export type AgencyOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    email?: SortOrder
+    phone?: SortOrderInput | SortOrder
+    addressLine1?: SortOrderInput | SortOrder
+    suburb?: SortOrderInput | SortOrder
+    state?: SortOrderInput | SortOrder
+    postcode?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AgencyCountOrderByAggregateInput
+    _max?: AgencyMaxOrderByAggregateInput
+    _min?: AgencyMinOrderByAggregateInput
+  }
+
+  export type AgencyScalarWhereWithAggregatesInput = {
+    AND?: AgencyScalarWhereWithAggregatesInput | AgencyScalarWhereWithAggregatesInput[]
+    OR?: AgencyScalarWhereWithAggregatesInput[]
+    NOT?: AgencyScalarWhereWithAggregatesInput | AgencyScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Agency"> | string
+    name?: StringWithAggregatesFilter<"Agency"> | string
+    slug?: StringWithAggregatesFilter<"Agency"> | string
+    email?: StringWithAggregatesFilter<"Agency"> | string
+    phone?: StringNullableWithAggregatesFilter<"Agency"> | string | null
+    addressLine1?: StringNullableWithAggregatesFilter<"Agency"> | string | null
+    suburb?: StringNullableWithAggregatesFilter<"Agency"> | string | null
+    state?: StringNullableWithAggregatesFilter<"Agency"> | string | null
+    postcode?: StringNullableWithAggregatesFilter<"Agency"> | string | null
+    status?: EnumAgencyStatusWithAggregatesFilter<"Agency"> | $Enums.AgencyStatus
+    createdAt?: DateTimeWithAggregatesFilter<"Agency"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Agency"> | Date | string
+  }
+
+  export type AgencyMemberWhereInput = {
+    AND?: AgencyMemberWhereInput | AgencyMemberWhereInput[]
+    OR?: AgencyMemberWhereInput[]
+    NOT?: AgencyMemberWhereInput | AgencyMemberWhereInput[]
+    id?: StringFilter<"AgencyMember"> | string
+    agencyId?: StringFilter<"AgencyMember"> | string
+    userId?: StringFilter<"AgencyMember"> | string
+    role?: EnumAgencyMemberRoleFilter<"AgencyMember"> | $Enums.AgencyMemberRole
+    isActive?: BoolFilter<"AgencyMember"> | boolean
+    createdAt?: DateTimeFilter<"AgencyMember"> | Date | string
+    updatedAt?: DateTimeFilter<"AgencyMember"> | Date | string
+    agency?: XOR<AgencyScalarRelationFilter, AgencyWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type AgencyMemberOrderByWithRelationInput = {
+    id?: SortOrder
+    agencyId?: SortOrder
+    userId?: SortOrder
+    role?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    agency?: AgencyOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type AgencyMemberWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    agencyId_userId?: AgencyMemberAgencyIdUserIdCompoundUniqueInput
+    AND?: AgencyMemberWhereInput | AgencyMemberWhereInput[]
+    OR?: AgencyMemberWhereInput[]
+    NOT?: AgencyMemberWhereInput | AgencyMemberWhereInput[]
+    agencyId?: StringFilter<"AgencyMember"> | string
+    userId?: StringFilter<"AgencyMember"> | string
+    role?: EnumAgencyMemberRoleFilter<"AgencyMember"> | $Enums.AgencyMemberRole
+    isActive?: BoolFilter<"AgencyMember"> | boolean
+    createdAt?: DateTimeFilter<"AgencyMember"> | Date | string
+    updatedAt?: DateTimeFilter<"AgencyMember"> | Date | string
+    agency?: XOR<AgencyScalarRelationFilter, AgencyWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "agencyId_userId">
+
+  export type AgencyMemberOrderByWithAggregationInput = {
+    id?: SortOrder
+    agencyId?: SortOrder
+    userId?: SortOrder
+    role?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AgencyMemberCountOrderByAggregateInput
+    _max?: AgencyMemberMaxOrderByAggregateInput
+    _min?: AgencyMemberMinOrderByAggregateInput
+  }
+
+  export type AgencyMemberScalarWhereWithAggregatesInput = {
+    AND?: AgencyMemberScalarWhereWithAggregatesInput | AgencyMemberScalarWhereWithAggregatesInput[]
+    OR?: AgencyMemberScalarWhereWithAggregatesInput[]
+    NOT?: AgencyMemberScalarWhereWithAggregatesInput | AgencyMemberScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AgencyMember"> | string
+    agencyId?: StringWithAggregatesFilter<"AgencyMember"> | string
+    userId?: StringWithAggregatesFilter<"AgencyMember"> | string
+    role?: EnumAgencyMemberRoleWithAggregatesFilter<"AgencyMember"> | $Enums.AgencyMemberRole
+    isActive?: BoolWithAggregatesFilter<"AgencyMember"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"AgencyMember"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AgencyMember"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     email: string
@@ -10796,6 +13557,7 @@ export namespace Prisma {
     applications?: ApplicationCreateNestedManyWithoutApplicantInput
     emailVerificationTokens?: EmailVerificationTokenCreateNestedManyWithoutUserInput
     media?: UserMediaCreateNestedManyWithoutUserInput
+    agencyMemberships?: AgencyMemberCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -10815,6 +13577,7 @@ export namespace Prisma {
     applications?: ApplicationUncheckedCreateNestedManyWithoutApplicantInput
     emailVerificationTokens?: EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
     media?: UserMediaUncheckedCreateNestedManyWithoutUserInput
+    agencyMemberships?: AgencyMemberUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -10834,6 +13597,7 @@ export namespace Prisma {
     applications?: ApplicationUpdateManyWithoutApplicantNestedInput
     emailVerificationTokens?: EmailVerificationTokenUpdateManyWithoutUserNestedInput
     media?: UserMediaUpdateManyWithoutUserNestedInput
+    agencyMemberships?: AgencyMemberUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -10853,6 +13617,7 @@ export namespace Prisma {
     applications?: ApplicationUncheckedUpdateManyWithoutApplicantNestedInput
     emailVerificationTokens?: EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
     media?: UserMediaUncheckedUpdateManyWithoutUserNestedInput
+    agencyMemberships?: AgencyMemberUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -11458,6 +14223,183 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type AgencyCreateInput = {
+    id?: string
+    name: string
+    slug: string
+    email: string
+    phone?: string | null
+    addressLine1?: string | null
+    suburb?: string | null
+    state?: string | null
+    postcode?: string | null
+    status?: $Enums.AgencyStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    members?: AgencyMemberCreateNestedManyWithoutAgencyInput
+  }
+
+  export type AgencyUncheckedCreateInput = {
+    id?: string
+    name: string
+    slug: string
+    email: string
+    phone?: string | null
+    addressLine1?: string | null
+    suburb?: string | null
+    state?: string | null
+    postcode?: string | null
+    status?: $Enums.AgencyStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    members?: AgencyMemberUncheckedCreateNestedManyWithoutAgencyInput
+  }
+
+  export type AgencyUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
+    suburb?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postcode?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumAgencyStatusFieldUpdateOperationsInput | $Enums.AgencyStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: AgencyMemberUpdateManyWithoutAgencyNestedInput
+  }
+
+  export type AgencyUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
+    suburb?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postcode?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumAgencyStatusFieldUpdateOperationsInput | $Enums.AgencyStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: AgencyMemberUncheckedUpdateManyWithoutAgencyNestedInput
+  }
+
+  export type AgencyCreateManyInput = {
+    id?: string
+    name: string
+    slug: string
+    email: string
+    phone?: string | null
+    addressLine1?: string | null
+    suburb?: string | null
+    state?: string | null
+    postcode?: string | null
+    status?: $Enums.AgencyStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AgencyUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
+    suburb?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postcode?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumAgencyStatusFieldUpdateOperationsInput | $Enums.AgencyStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgencyUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
+    suburb?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postcode?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumAgencyStatusFieldUpdateOperationsInput | $Enums.AgencyStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgencyMemberCreateInput = {
+    id?: string
+    role: $Enums.AgencyMemberRole
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agency: AgencyCreateNestedOneWithoutMembersInput
+    user: UserCreateNestedOneWithoutAgencyMembershipsInput
+  }
+
+  export type AgencyMemberUncheckedCreateInput = {
+    id?: string
+    agencyId: string
+    userId: string
+    role: $Enums.AgencyMemberRole
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AgencyMemberUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    role?: EnumAgencyMemberRoleFieldUpdateOperationsInput | $Enums.AgencyMemberRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agency?: AgencyUpdateOneRequiredWithoutMembersNestedInput
+    user?: UserUpdateOneRequiredWithoutAgencyMembershipsNestedInput
+  }
+
+  export type AgencyMemberUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    agencyId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    role?: EnumAgencyMemberRoleFieldUpdateOperationsInput | $Enums.AgencyMemberRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgencyMemberCreateManyInput = {
+    id?: string
+    agencyId: string
+    userId: string
+    role: $Enums.AgencyMemberRole
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AgencyMemberUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    role?: EnumAgencyMemberRoleFieldUpdateOperationsInput | $Enums.AgencyMemberRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgencyMemberUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    agencyId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    role?: EnumAgencyMemberRoleFieldUpdateOperationsInput | $Enums.AgencyMemberRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -11540,6 +14482,12 @@ export namespace Prisma {
     none?: UserMediaWhereInput
   }
 
+  export type AgencyMemberListRelationFilter = {
+    every?: AgencyMemberWhereInput
+    some?: AgencyMemberWhereInput
+    none?: AgencyMemberWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -11558,6 +14506,10 @@ export namespace Prisma {
   }
 
   export type UserMediaOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AgencyMemberOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -12176,6 +15128,125 @@ export namespace Prisma {
     _max?: NestedEnumPropertyMediaTypeFilter<$PrismaModel>
   }
 
+  export type EnumAgencyStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.AgencyStatus | EnumAgencyStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AgencyStatus[] | ListEnumAgencyStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AgencyStatus[] | ListEnumAgencyStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAgencyStatusFilter<$PrismaModel> | $Enums.AgencyStatus
+  }
+
+  export type AgencyCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    addressLine1?: SortOrder
+    suburb?: SortOrder
+    state?: SortOrder
+    postcode?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AgencyMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    addressLine1?: SortOrder
+    suburb?: SortOrder
+    state?: SortOrder
+    postcode?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AgencyMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    addressLine1?: SortOrder
+    suburb?: SortOrder
+    state?: SortOrder
+    postcode?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumAgencyStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AgencyStatus | EnumAgencyStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AgencyStatus[] | ListEnumAgencyStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AgencyStatus[] | ListEnumAgencyStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAgencyStatusWithAggregatesFilter<$PrismaModel> | $Enums.AgencyStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAgencyStatusFilter<$PrismaModel>
+    _max?: NestedEnumAgencyStatusFilter<$PrismaModel>
+  }
+
+  export type EnumAgencyMemberRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.AgencyMemberRole | EnumAgencyMemberRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.AgencyMemberRole[] | ListEnumAgencyMemberRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AgencyMemberRole[] | ListEnumAgencyMemberRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumAgencyMemberRoleFilter<$PrismaModel> | $Enums.AgencyMemberRole
+  }
+
+  export type AgencyScalarRelationFilter = {
+    is?: AgencyWhereInput
+    isNot?: AgencyWhereInput
+  }
+
+  export type AgencyMemberAgencyIdUserIdCompoundUniqueInput = {
+    agencyId: string
+    userId: string
+  }
+
+  export type AgencyMemberCountOrderByAggregateInput = {
+    id?: SortOrder
+    agencyId?: SortOrder
+    userId?: SortOrder
+    role?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AgencyMemberMaxOrderByAggregateInput = {
+    id?: SortOrder
+    agencyId?: SortOrder
+    userId?: SortOrder
+    role?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AgencyMemberMinOrderByAggregateInput = {
+    id?: SortOrder
+    agencyId?: SortOrder
+    userId?: SortOrder
+    role?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumAgencyMemberRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AgencyMemberRole | EnumAgencyMemberRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.AgencyMemberRole[] | ListEnumAgencyMemberRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AgencyMemberRole[] | ListEnumAgencyMemberRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumAgencyMemberRoleWithAggregatesFilter<$PrismaModel> | $Enums.AgencyMemberRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAgencyMemberRoleFilter<$PrismaModel>
+    _max?: NestedEnumAgencyMemberRoleFilter<$PrismaModel>
+  }
+
   export type PropertyCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<PropertyCreateWithoutCreatedByInput, PropertyUncheckedCreateWithoutCreatedByInput> | PropertyCreateWithoutCreatedByInput[] | PropertyUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: PropertyCreateOrConnectWithoutCreatedByInput | PropertyCreateOrConnectWithoutCreatedByInput[]
@@ -12210,6 +15281,13 @@ export namespace Prisma {
     connect?: UserMediaWhereUniqueInput | UserMediaWhereUniqueInput[]
   }
 
+  export type AgencyMemberCreateNestedManyWithoutUserInput = {
+    create?: XOR<AgencyMemberCreateWithoutUserInput, AgencyMemberUncheckedCreateWithoutUserInput> | AgencyMemberCreateWithoutUserInput[] | AgencyMemberUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AgencyMemberCreateOrConnectWithoutUserInput | AgencyMemberCreateOrConnectWithoutUserInput[]
+    createMany?: AgencyMemberCreateManyUserInputEnvelope
+    connect?: AgencyMemberWhereUniqueInput | AgencyMemberWhereUniqueInput[]
+  }
+
   export type PropertyUncheckedCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<PropertyCreateWithoutCreatedByInput, PropertyUncheckedCreateWithoutCreatedByInput> | PropertyCreateWithoutCreatedByInput[] | PropertyUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: PropertyCreateOrConnectWithoutCreatedByInput | PropertyCreateOrConnectWithoutCreatedByInput[]
@@ -12242,6 +15320,13 @@ export namespace Prisma {
     connectOrCreate?: UserMediaCreateOrConnectWithoutUserInput | UserMediaCreateOrConnectWithoutUserInput[]
     createMany?: UserMediaCreateManyUserInputEnvelope
     connect?: UserMediaWhereUniqueInput | UserMediaWhereUniqueInput[]
+  }
+
+  export type AgencyMemberUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<AgencyMemberCreateWithoutUserInput, AgencyMemberUncheckedCreateWithoutUserInput> | AgencyMemberCreateWithoutUserInput[] | AgencyMemberUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AgencyMemberCreateOrConnectWithoutUserInput | AgencyMemberCreateOrConnectWithoutUserInput[]
+    createMany?: AgencyMemberCreateManyUserInputEnvelope
+    connect?: AgencyMemberWhereUniqueInput | AgencyMemberWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -12330,6 +15415,20 @@ export namespace Prisma {
     deleteMany?: UserMediaScalarWhereInput | UserMediaScalarWhereInput[]
   }
 
+  export type AgencyMemberUpdateManyWithoutUserNestedInput = {
+    create?: XOR<AgencyMemberCreateWithoutUserInput, AgencyMemberUncheckedCreateWithoutUserInput> | AgencyMemberCreateWithoutUserInput[] | AgencyMemberUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AgencyMemberCreateOrConnectWithoutUserInput | AgencyMemberCreateOrConnectWithoutUserInput[]
+    upsert?: AgencyMemberUpsertWithWhereUniqueWithoutUserInput | AgencyMemberUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: AgencyMemberCreateManyUserInputEnvelope
+    set?: AgencyMemberWhereUniqueInput | AgencyMemberWhereUniqueInput[]
+    disconnect?: AgencyMemberWhereUniqueInput | AgencyMemberWhereUniqueInput[]
+    delete?: AgencyMemberWhereUniqueInput | AgencyMemberWhereUniqueInput[]
+    connect?: AgencyMemberWhereUniqueInput | AgencyMemberWhereUniqueInput[]
+    update?: AgencyMemberUpdateWithWhereUniqueWithoutUserInput | AgencyMemberUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: AgencyMemberUpdateManyWithWhereWithoutUserInput | AgencyMemberUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: AgencyMemberScalarWhereInput | AgencyMemberScalarWhereInput[]
+  }
+
   export type PropertyUncheckedUpdateManyWithoutCreatedByNestedInput = {
     create?: XOR<PropertyCreateWithoutCreatedByInput, PropertyUncheckedCreateWithoutCreatedByInput> | PropertyCreateWithoutCreatedByInput[] | PropertyUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: PropertyCreateOrConnectWithoutCreatedByInput | PropertyCreateOrConnectWithoutCreatedByInput[]
@@ -12394,6 +15493,20 @@ export namespace Prisma {
     update?: UserMediaUpdateWithWhereUniqueWithoutUserInput | UserMediaUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: UserMediaUpdateManyWithWhereWithoutUserInput | UserMediaUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: UserMediaScalarWhereInput | UserMediaScalarWhereInput[]
+  }
+
+  export type AgencyMemberUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<AgencyMemberCreateWithoutUserInput, AgencyMemberUncheckedCreateWithoutUserInput> | AgencyMemberCreateWithoutUserInput[] | AgencyMemberUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AgencyMemberCreateOrConnectWithoutUserInput | AgencyMemberCreateOrConnectWithoutUserInput[]
+    upsert?: AgencyMemberUpsertWithWhereUniqueWithoutUserInput | AgencyMemberUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: AgencyMemberCreateManyUserInputEnvelope
+    set?: AgencyMemberWhereUniqueInput | AgencyMemberWhereUniqueInput[]
+    disconnect?: AgencyMemberWhereUniqueInput | AgencyMemberWhereUniqueInput[]
+    delete?: AgencyMemberWhereUniqueInput | AgencyMemberWhereUniqueInput[]
+    connect?: AgencyMemberWhereUniqueInput | AgencyMemberWhereUniqueInput[]
+    update?: AgencyMemberUpdateWithWhereUniqueWithoutUserInput | AgencyMemberUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: AgencyMemberUpdateManyWithWhereWithoutUserInput | AgencyMemberUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: AgencyMemberScalarWhereInput | AgencyMemberScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutMediaInput = {
@@ -12628,6 +15741,84 @@ export namespace Prisma {
     upsert?: PropertyUpsertWithoutMediaInput
     connect?: PropertyWhereUniqueInput
     update?: XOR<XOR<PropertyUpdateToOneWithWhereWithoutMediaInput, PropertyUpdateWithoutMediaInput>, PropertyUncheckedUpdateWithoutMediaInput>
+  }
+
+  export type AgencyMemberCreateNestedManyWithoutAgencyInput = {
+    create?: XOR<AgencyMemberCreateWithoutAgencyInput, AgencyMemberUncheckedCreateWithoutAgencyInput> | AgencyMemberCreateWithoutAgencyInput[] | AgencyMemberUncheckedCreateWithoutAgencyInput[]
+    connectOrCreate?: AgencyMemberCreateOrConnectWithoutAgencyInput | AgencyMemberCreateOrConnectWithoutAgencyInput[]
+    createMany?: AgencyMemberCreateManyAgencyInputEnvelope
+    connect?: AgencyMemberWhereUniqueInput | AgencyMemberWhereUniqueInput[]
+  }
+
+  export type AgencyMemberUncheckedCreateNestedManyWithoutAgencyInput = {
+    create?: XOR<AgencyMemberCreateWithoutAgencyInput, AgencyMemberUncheckedCreateWithoutAgencyInput> | AgencyMemberCreateWithoutAgencyInput[] | AgencyMemberUncheckedCreateWithoutAgencyInput[]
+    connectOrCreate?: AgencyMemberCreateOrConnectWithoutAgencyInput | AgencyMemberCreateOrConnectWithoutAgencyInput[]
+    createMany?: AgencyMemberCreateManyAgencyInputEnvelope
+    connect?: AgencyMemberWhereUniqueInput | AgencyMemberWhereUniqueInput[]
+  }
+
+  export type EnumAgencyStatusFieldUpdateOperationsInput = {
+    set?: $Enums.AgencyStatus
+  }
+
+  export type AgencyMemberUpdateManyWithoutAgencyNestedInput = {
+    create?: XOR<AgencyMemberCreateWithoutAgencyInput, AgencyMemberUncheckedCreateWithoutAgencyInput> | AgencyMemberCreateWithoutAgencyInput[] | AgencyMemberUncheckedCreateWithoutAgencyInput[]
+    connectOrCreate?: AgencyMemberCreateOrConnectWithoutAgencyInput | AgencyMemberCreateOrConnectWithoutAgencyInput[]
+    upsert?: AgencyMemberUpsertWithWhereUniqueWithoutAgencyInput | AgencyMemberUpsertWithWhereUniqueWithoutAgencyInput[]
+    createMany?: AgencyMemberCreateManyAgencyInputEnvelope
+    set?: AgencyMemberWhereUniqueInput | AgencyMemberWhereUniqueInput[]
+    disconnect?: AgencyMemberWhereUniqueInput | AgencyMemberWhereUniqueInput[]
+    delete?: AgencyMemberWhereUniqueInput | AgencyMemberWhereUniqueInput[]
+    connect?: AgencyMemberWhereUniqueInput | AgencyMemberWhereUniqueInput[]
+    update?: AgencyMemberUpdateWithWhereUniqueWithoutAgencyInput | AgencyMemberUpdateWithWhereUniqueWithoutAgencyInput[]
+    updateMany?: AgencyMemberUpdateManyWithWhereWithoutAgencyInput | AgencyMemberUpdateManyWithWhereWithoutAgencyInput[]
+    deleteMany?: AgencyMemberScalarWhereInput | AgencyMemberScalarWhereInput[]
+  }
+
+  export type AgencyMemberUncheckedUpdateManyWithoutAgencyNestedInput = {
+    create?: XOR<AgencyMemberCreateWithoutAgencyInput, AgencyMemberUncheckedCreateWithoutAgencyInput> | AgencyMemberCreateWithoutAgencyInput[] | AgencyMemberUncheckedCreateWithoutAgencyInput[]
+    connectOrCreate?: AgencyMemberCreateOrConnectWithoutAgencyInput | AgencyMemberCreateOrConnectWithoutAgencyInput[]
+    upsert?: AgencyMemberUpsertWithWhereUniqueWithoutAgencyInput | AgencyMemberUpsertWithWhereUniqueWithoutAgencyInput[]
+    createMany?: AgencyMemberCreateManyAgencyInputEnvelope
+    set?: AgencyMemberWhereUniqueInput | AgencyMemberWhereUniqueInput[]
+    disconnect?: AgencyMemberWhereUniqueInput | AgencyMemberWhereUniqueInput[]
+    delete?: AgencyMemberWhereUniqueInput | AgencyMemberWhereUniqueInput[]
+    connect?: AgencyMemberWhereUniqueInput | AgencyMemberWhereUniqueInput[]
+    update?: AgencyMemberUpdateWithWhereUniqueWithoutAgencyInput | AgencyMemberUpdateWithWhereUniqueWithoutAgencyInput[]
+    updateMany?: AgencyMemberUpdateManyWithWhereWithoutAgencyInput | AgencyMemberUpdateManyWithWhereWithoutAgencyInput[]
+    deleteMany?: AgencyMemberScalarWhereInput | AgencyMemberScalarWhereInput[]
+  }
+
+  export type AgencyCreateNestedOneWithoutMembersInput = {
+    create?: XOR<AgencyCreateWithoutMembersInput, AgencyUncheckedCreateWithoutMembersInput>
+    connectOrCreate?: AgencyCreateOrConnectWithoutMembersInput
+    connect?: AgencyWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutAgencyMembershipsInput = {
+    create?: XOR<UserCreateWithoutAgencyMembershipsInput, UserUncheckedCreateWithoutAgencyMembershipsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAgencyMembershipsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumAgencyMemberRoleFieldUpdateOperationsInput = {
+    set?: $Enums.AgencyMemberRole
+  }
+
+  export type AgencyUpdateOneRequiredWithoutMembersNestedInput = {
+    create?: XOR<AgencyCreateWithoutMembersInput, AgencyUncheckedCreateWithoutMembersInput>
+    connectOrCreate?: AgencyCreateOrConnectWithoutMembersInput
+    upsert?: AgencyUpsertWithoutMembersInput
+    connect?: AgencyWhereUniqueInput
+    update?: XOR<XOR<AgencyUpdateToOneWithWhereWithoutMembersInput, AgencyUpdateWithoutMembersInput>, AgencyUncheckedUpdateWithoutMembersInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutAgencyMembershipsNestedInput = {
+    create?: XOR<UserCreateWithoutAgencyMembershipsInput, UserUncheckedCreateWithoutAgencyMembershipsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAgencyMembershipsInput
+    upsert?: UserUpsertWithoutAgencyMembershipsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAgencyMembershipsInput, UserUpdateWithoutAgencyMembershipsInput>, UserUncheckedUpdateWithoutAgencyMembershipsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -12977,6 +16168,40 @@ export namespace Prisma {
     _max?: NestedEnumPropertyMediaTypeFilter<$PrismaModel>
   }
 
+  export type NestedEnumAgencyStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.AgencyStatus | EnumAgencyStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AgencyStatus[] | ListEnumAgencyStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AgencyStatus[] | ListEnumAgencyStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAgencyStatusFilter<$PrismaModel> | $Enums.AgencyStatus
+  }
+
+  export type NestedEnumAgencyStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AgencyStatus | EnumAgencyStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AgencyStatus[] | ListEnumAgencyStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AgencyStatus[] | ListEnumAgencyStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAgencyStatusWithAggregatesFilter<$PrismaModel> | $Enums.AgencyStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAgencyStatusFilter<$PrismaModel>
+    _max?: NestedEnumAgencyStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumAgencyMemberRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.AgencyMemberRole | EnumAgencyMemberRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.AgencyMemberRole[] | ListEnumAgencyMemberRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AgencyMemberRole[] | ListEnumAgencyMemberRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumAgencyMemberRoleFilter<$PrismaModel> | $Enums.AgencyMemberRole
+  }
+
+  export type NestedEnumAgencyMemberRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AgencyMemberRole | EnumAgencyMemberRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.AgencyMemberRole[] | ListEnumAgencyMemberRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AgencyMemberRole[] | ListEnumAgencyMemberRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumAgencyMemberRoleWithAggregatesFilter<$PrismaModel> | $Enums.AgencyMemberRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAgencyMemberRoleFilter<$PrismaModel>
+    _max?: NestedEnumAgencyMemberRoleFilter<$PrismaModel>
+  }
+
   export type PropertyCreateWithoutCreatedByInput = {
     id?: string
     title: string
@@ -13150,6 +16375,34 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type AgencyMemberCreateWithoutUserInput = {
+    id?: string
+    role: $Enums.AgencyMemberRole
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agency: AgencyCreateNestedOneWithoutMembersInput
+  }
+
+  export type AgencyMemberUncheckedCreateWithoutUserInput = {
+    id?: string
+    agencyId: string
+    role: $Enums.AgencyMemberRole
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AgencyMemberCreateOrConnectWithoutUserInput = {
+    where: AgencyMemberWhereUniqueInput
+    create: XOR<AgencyMemberCreateWithoutUserInput, AgencyMemberUncheckedCreateWithoutUserInput>
+  }
+
+  export type AgencyMemberCreateManyUserInputEnvelope = {
+    data: AgencyMemberCreateManyUserInput | AgencyMemberCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type PropertyUpsertWithWhereUniqueWithoutCreatedByInput = {
     where: PropertyWhereUniqueInput
     update: XOR<PropertyUpdateWithoutCreatedByInput, PropertyUncheckedUpdateWithoutCreatedByInput>
@@ -13318,6 +16571,35 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"UserMedia"> | Date | string
   }
 
+  export type AgencyMemberUpsertWithWhereUniqueWithoutUserInput = {
+    where: AgencyMemberWhereUniqueInput
+    update: XOR<AgencyMemberUpdateWithoutUserInput, AgencyMemberUncheckedUpdateWithoutUserInput>
+    create: XOR<AgencyMemberCreateWithoutUserInput, AgencyMemberUncheckedCreateWithoutUserInput>
+  }
+
+  export type AgencyMemberUpdateWithWhereUniqueWithoutUserInput = {
+    where: AgencyMemberWhereUniqueInput
+    data: XOR<AgencyMemberUpdateWithoutUserInput, AgencyMemberUncheckedUpdateWithoutUserInput>
+  }
+
+  export type AgencyMemberUpdateManyWithWhereWithoutUserInput = {
+    where: AgencyMemberScalarWhereInput
+    data: XOR<AgencyMemberUpdateManyMutationInput, AgencyMemberUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type AgencyMemberScalarWhereInput = {
+    AND?: AgencyMemberScalarWhereInput | AgencyMemberScalarWhereInput[]
+    OR?: AgencyMemberScalarWhereInput[]
+    NOT?: AgencyMemberScalarWhereInput | AgencyMemberScalarWhereInput[]
+    id?: StringFilter<"AgencyMember"> | string
+    agencyId?: StringFilter<"AgencyMember"> | string
+    userId?: StringFilter<"AgencyMember"> | string
+    role?: EnumAgencyMemberRoleFilter<"AgencyMember"> | $Enums.AgencyMemberRole
+    isActive?: BoolFilter<"AgencyMember"> | boolean
+    createdAt?: DateTimeFilter<"AgencyMember"> | Date | string
+    updatedAt?: DateTimeFilter<"AgencyMember"> | Date | string
+  }
+
   export type UserCreateWithoutMediaInput = {
     id?: string
     email: string
@@ -13334,6 +16616,7 @@ export namespace Prisma {
     profile?: PersonProfileCreateNestedOneWithoutUserInput
     applications?: ApplicationCreateNestedManyWithoutApplicantInput
     emailVerificationTokens?: EmailVerificationTokenCreateNestedManyWithoutUserInput
+    agencyMemberships?: AgencyMemberCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMediaInput = {
@@ -13352,6 +16635,7 @@ export namespace Prisma {
     profile?: PersonProfileUncheckedCreateNestedOneWithoutUserInput
     applications?: ApplicationUncheckedCreateNestedManyWithoutApplicantInput
     emailVerificationTokens?: EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    agencyMemberships?: AgencyMemberUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMediaInput = {
@@ -13386,6 +16670,7 @@ export namespace Prisma {
     profile?: PersonProfileUpdateOneWithoutUserNestedInput
     applications?: ApplicationUpdateManyWithoutApplicantNestedInput
     emailVerificationTokens?: EmailVerificationTokenUpdateManyWithoutUserNestedInput
+    agencyMemberships?: AgencyMemberUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMediaInput = {
@@ -13404,6 +16689,7 @@ export namespace Prisma {
     profile?: PersonProfileUncheckedUpdateOneWithoutUserNestedInput
     applications?: ApplicationUncheckedUpdateManyWithoutApplicantNestedInput
     emailVerificationTokens?: EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    agencyMemberships?: AgencyMemberUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutProfileInput = {
@@ -13422,6 +16708,7 @@ export namespace Prisma {
     applications?: ApplicationCreateNestedManyWithoutApplicantInput
     emailVerificationTokens?: EmailVerificationTokenCreateNestedManyWithoutUserInput
     media?: UserMediaCreateNestedManyWithoutUserInput
+    agencyMemberships?: AgencyMemberCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProfileInput = {
@@ -13440,6 +16727,7 @@ export namespace Prisma {
     applications?: ApplicationUncheckedCreateNestedManyWithoutApplicantInput
     emailVerificationTokens?: EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
     media?: UserMediaUncheckedCreateNestedManyWithoutUserInput
+    agencyMemberships?: AgencyMemberUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProfileInput = {
@@ -13474,6 +16762,7 @@ export namespace Prisma {
     applications?: ApplicationUpdateManyWithoutApplicantNestedInput
     emailVerificationTokens?: EmailVerificationTokenUpdateManyWithoutUserNestedInput
     media?: UserMediaUpdateManyWithoutUserNestedInput
+    agencyMemberships?: AgencyMemberUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProfileInput = {
@@ -13492,6 +16781,7 @@ export namespace Prisma {
     applications?: ApplicationUncheckedUpdateManyWithoutApplicantNestedInput
     emailVerificationTokens?: EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
     media?: UserMediaUncheckedUpdateManyWithoutUserNestedInput
+    agencyMemberships?: AgencyMemberUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutPropertiesInput = {
@@ -13510,6 +16800,7 @@ export namespace Prisma {
     applications?: ApplicationCreateNestedManyWithoutApplicantInput
     emailVerificationTokens?: EmailVerificationTokenCreateNestedManyWithoutUserInput
     media?: UserMediaCreateNestedManyWithoutUserInput
+    agencyMemberships?: AgencyMemberCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPropertiesInput = {
@@ -13528,6 +16819,7 @@ export namespace Prisma {
     applications?: ApplicationUncheckedCreateNestedManyWithoutApplicantInput
     emailVerificationTokens?: EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
     media?: UserMediaUncheckedCreateNestedManyWithoutUserInput
+    agencyMemberships?: AgencyMemberUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPropertiesInput = {
@@ -13624,6 +16916,7 @@ export namespace Prisma {
     applications?: ApplicationUpdateManyWithoutApplicantNestedInput
     emailVerificationTokens?: EmailVerificationTokenUpdateManyWithoutUserNestedInput
     media?: UserMediaUpdateManyWithoutUserNestedInput
+    agencyMemberships?: AgencyMemberUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPropertiesInput = {
@@ -13642,6 +16935,7 @@ export namespace Prisma {
     applications?: ApplicationUncheckedUpdateManyWithoutApplicantNestedInput
     emailVerificationTokens?: EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
     media?: UserMediaUncheckedUpdateManyWithoutUserNestedInput
+    agencyMemberships?: AgencyMemberUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ApplicationUpsertWithWhereUniqueWithoutPropertyInput = {
@@ -13755,6 +17049,7 @@ export namespace Prisma {
     profile?: PersonProfileCreateNestedOneWithoutUserInput
     emailVerificationTokens?: EmailVerificationTokenCreateNestedManyWithoutUserInput
     media?: UserMediaCreateNestedManyWithoutUserInput
+    agencyMemberships?: AgencyMemberCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApplicationsInput = {
@@ -13773,6 +17068,7 @@ export namespace Prisma {
     profile?: PersonProfileUncheckedCreateNestedOneWithoutUserInput
     emailVerificationTokens?: EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
     media?: UserMediaUncheckedCreateNestedManyWithoutUserInput
+    agencyMemberships?: AgencyMemberUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApplicationsInput = {
@@ -13860,6 +17156,7 @@ export namespace Prisma {
     profile?: PersonProfileUpdateOneWithoutUserNestedInput
     emailVerificationTokens?: EmailVerificationTokenUpdateManyWithoutUserNestedInput
     media?: UserMediaUpdateManyWithoutUserNestedInput
+    agencyMemberships?: AgencyMemberUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApplicationsInput = {
@@ -13878,6 +17175,7 @@ export namespace Prisma {
     profile?: PersonProfileUncheckedUpdateOneWithoutUserNestedInput
     emailVerificationTokens?: EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
     media?: UserMediaUncheckedUpdateManyWithoutUserNestedInput
+    agencyMemberships?: AgencyMemberUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutEmailVerificationTokensInput = {
@@ -13896,6 +17194,7 @@ export namespace Prisma {
     profile?: PersonProfileCreateNestedOneWithoutUserInput
     applications?: ApplicationCreateNestedManyWithoutApplicantInput
     media?: UserMediaCreateNestedManyWithoutUserInput
+    agencyMemberships?: AgencyMemberCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEmailVerificationTokensInput = {
@@ -13914,6 +17213,7 @@ export namespace Prisma {
     profile?: PersonProfileUncheckedCreateNestedOneWithoutUserInput
     applications?: ApplicationUncheckedCreateNestedManyWithoutApplicantInput
     media?: UserMediaUncheckedCreateNestedManyWithoutUserInput
+    agencyMemberships?: AgencyMemberUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEmailVerificationTokensInput = {
@@ -13948,6 +17248,7 @@ export namespace Prisma {
     profile?: PersonProfileUpdateOneWithoutUserNestedInput
     applications?: ApplicationUpdateManyWithoutApplicantNestedInput
     media?: UserMediaUpdateManyWithoutUserNestedInput
+    agencyMemberships?: AgencyMemberUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmailVerificationTokensInput = {
@@ -13966,6 +17267,7 @@ export namespace Prisma {
     profile?: PersonProfileUncheckedUpdateOneWithoutUserNestedInput
     applications?: ApplicationUncheckedUpdateManyWithoutApplicantNestedInput
     media?: UserMediaUncheckedUpdateManyWithoutUserNestedInput
+    agencyMemberships?: AgencyMemberUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PropertyCreateWithoutMediaInput = {
@@ -14068,6 +17370,218 @@ export namespace Prisma {
     application?: ApplicationUncheckedUpdateManyWithoutPropertyNestedInput
   }
 
+  export type AgencyMemberCreateWithoutAgencyInput = {
+    id?: string
+    role: $Enums.AgencyMemberRole
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutAgencyMembershipsInput
+  }
+
+  export type AgencyMemberUncheckedCreateWithoutAgencyInput = {
+    id?: string
+    userId: string
+    role: $Enums.AgencyMemberRole
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AgencyMemberCreateOrConnectWithoutAgencyInput = {
+    where: AgencyMemberWhereUniqueInput
+    create: XOR<AgencyMemberCreateWithoutAgencyInput, AgencyMemberUncheckedCreateWithoutAgencyInput>
+  }
+
+  export type AgencyMemberCreateManyAgencyInputEnvelope = {
+    data: AgencyMemberCreateManyAgencyInput | AgencyMemberCreateManyAgencyInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AgencyMemberUpsertWithWhereUniqueWithoutAgencyInput = {
+    where: AgencyMemberWhereUniqueInput
+    update: XOR<AgencyMemberUpdateWithoutAgencyInput, AgencyMemberUncheckedUpdateWithoutAgencyInput>
+    create: XOR<AgencyMemberCreateWithoutAgencyInput, AgencyMemberUncheckedCreateWithoutAgencyInput>
+  }
+
+  export type AgencyMemberUpdateWithWhereUniqueWithoutAgencyInput = {
+    where: AgencyMemberWhereUniqueInput
+    data: XOR<AgencyMemberUpdateWithoutAgencyInput, AgencyMemberUncheckedUpdateWithoutAgencyInput>
+  }
+
+  export type AgencyMemberUpdateManyWithWhereWithoutAgencyInput = {
+    where: AgencyMemberScalarWhereInput
+    data: XOR<AgencyMemberUpdateManyMutationInput, AgencyMemberUncheckedUpdateManyWithoutAgencyInput>
+  }
+
+  export type AgencyCreateWithoutMembersInput = {
+    id?: string
+    name: string
+    slug: string
+    email: string
+    phone?: string | null
+    addressLine1?: string | null
+    suburb?: string | null
+    state?: string | null
+    postcode?: string | null
+    status?: $Enums.AgencyStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AgencyUncheckedCreateWithoutMembersInput = {
+    id?: string
+    name: string
+    slug: string
+    email: string
+    phone?: string | null
+    addressLine1?: string | null
+    suburb?: string | null
+    state?: string | null
+    postcode?: string | null
+    status?: $Enums.AgencyStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AgencyCreateOrConnectWithoutMembersInput = {
+    where: AgencyWhereUniqueInput
+    create: XOR<AgencyCreateWithoutMembersInput, AgencyUncheckedCreateWithoutMembersInput>
+  }
+
+  export type UserCreateWithoutAgencyMembershipsInput = {
+    id?: string
+    email: string
+    fullName: string
+    passwordHash?: string | null
+    phone?: string | null
+    googleId?: string | null
+    role?: $Enums.UserRole
+    isActive?: boolean
+    isEmailVerified?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    properties?: PropertyCreateNestedManyWithoutCreatedByInput
+    profile?: PersonProfileCreateNestedOneWithoutUserInput
+    applications?: ApplicationCreateNestedManyWithoutApplicantInput
+    emailVerificationTokens?: EmailVerificationTokenCreateNestedManyWithoutUserInput
+    media?: UserMediaCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutAgencyMembershipsInput = {
+    id?: string
+    email: string
+    fullName: string
+    passwordHash?: string | null
+    phone?: string | null
+    googleId?: string | null
+    role?: $Enums.UserRole
+    isActive?: boolean
+    isEmailVerified?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    properties?: PropertyUncheckedCreateNestedManyWithoutCreatedByInput
+    profile?: PersonProfileUncheckedCreateNestedOneWithoutUserInput
+    applications?: ApplicationUncheckedCreateNestedManyWithoutApplicantInput
+    emailVerificationTokens?: EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    media?: UserMediaUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutAgencyMembershipsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAgencyMembershipsInput, UserUncheckedCreateWithoutAgencyMembershipsInput>
+  }
+
+  export type AgencyUpsertWithoutMembersInput = {
+    update: XOR<AgencyUpdateWithoutMembersInput, AgencyUncheckedUpdateWithoutMembersInput>
+    create: XOR<AgencyCreateWithoutMembersInput, AgencyUncheckedCreateWithoutMembersInput>
+    where?: AgencyWhereInput
+  }
+
+  export type AgencyUpdateToOneWithWhereWithoutMembersInput = {
+    where?: AgencyWhereInput
+    data: XOR<AgencyUpdateWithoutMembersInput, AgencyUncheckedUpdateWithoutMembersInput>
+  }
+
+  export type AgencyUpdateWithoutMembersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
+    suburb?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postcode?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumAgencyStatusFieldUpdateOperationsInput | $Enums.AgencyStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgencyUncheckedUpdateWithoutMembersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
+    suburb?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postcode?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumAgencyStatusFieldUpdateOperationsInput | $Enums.AgencyStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpsertWithoutAgencyMembershipsInput = {
+    update: XOR<UserUpdateWithoutAgencyMembershipsInput, UserUncheckedUpdateWithoutAgencyMembershipsInput>
+    create: XOR<UserCreateWithoutAgencyMembershipsInput, UserUncheckedCreateWithoutAgencyMembershipsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAgencyMembershipsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAgencyMembershipsInput, UserUncheckedUpdateWithoutAgencyMembershipsInput>
+  }
+
+  export type UserUpdateWithoutAgencyMembershipsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    properties?: PropertyUpdateManyWithoutCreatedByNestedInput
+    profile?: PersonProfileUpdateOneWithoutUserNestedInput
+    applications?: ApplicationUpdateManyWithoutApplicantNestedInput
+    emailVerificationTokens?: EmailVerificationTokenUpdateManyWithoutUserNestedInput
+    media?: UserMediaUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAgencyMembershipsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    properties?: PropertyUncheckedUpdateManyWithoutCreatedByNestedInput
+    profile?: PersonProfileUncheckedUpdateOneWithoutUserNestedInput
+    applications?: ApplicationUncheckedUpdateManyWithoutApplicantNestedInput
+    emailVerificationTokens?: EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    media?: UserMediaUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type PropertyCreateManyCreatedByInput = {
     id?: string
     title: string
@@ -14111,6 +17625,15 @@ export namespace Prisma {
     url: string
     publicId: string
     isPrimary?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AgencyMemberCreateManyUserInput = {
+    id?: string
+    agencyId: string
+    role: $Enums.AgencyMemberRole
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14260,6 +17783,33 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type AgencyMemberUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    role?: EnumAgencyMemberRoleFieldUpdateOperationsInput | $Enums.AgencyMemberRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agency?: AgencyUpdateOneRequiredWithoutMembersNestedInput
+  }
+
+  export type AgencyMemberUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    agencyId?: StringFieldUpdateOperationsInput | string
+    role?: EnumAgencyMemberRoleFieldUpdateOperationsInput | $Enums.AgencyMemberRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgencyMemberUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    agencyId?: StringFieldUpdateOperationsInput | string
+    role?: EnumAgencyMemberRoleFieldUpdateOperationsInput | $Enums.AgencyMemberRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ApplicationCreateManyPropertyInput = {
     id?: string
     applicantId: string
@@ -14340,6 +17890,42 @@ export namespace Prisma {
     publicId?: StringFieldUpdateOperationsInput | string
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgencyMemberCreateManyAgencyInput = {
+    id?: string
+    userId: string
+    role: $Enums.AgencyMemberRole
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AgencyMemberUpdateWithoutAgencyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    role?: EnumAgencyMemberRoleFieldUpdateOperationsInput | $Enums.AgencyMemberRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutAgencyMembershipsNestedInput
+  }
+
+  export type AgencyMemberUncheckedUpdateWithoutAgencyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    role?: EnumAgencyMemberRoleFieldUpdateOperationsInput | $Enums.AgencyMemberRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgencyMemberUncheckedUpdateManyWithoutAgencyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    role?: EnumAgencyMemberRoleFieldUpdateOperationsInput | $Enums.AgencyMemberRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

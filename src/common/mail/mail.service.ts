@@ -80,4 +80,114 @@ export class MailService {
       throw new InternalServerErrorException('Failed to send application status email');
     }
   }
+
+  async sendAgencyOnboardingReceivedEmail(to: string, contactName: string, agencyName: string) {
+    const recipient = process.env.NODE_ENV === 'development' ? (process.env.MAIL_DEV_TO ?? 'delivered@resend.dev') : to;
+
+    const { error } = await this.resend.emails.send({
+      from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
+      to: [recipient],
+      subject: 'Your agency onboarding request has been received',
+      html: `
+      <h2>Agency onboarding received</h2>
+      <p>Hello ${contactName},</p>
+      <p>Your agency onboarding request for <strong>${agencyName}</strong> has been received.</p>
+      <p>Your request is currently pending admin review.</p>
+      <p>We will notify you again once your agency has been approved or rejected.</p>
+    `,
+    });
+
+    if (error) {
+      throw new InternalServerErrorException('Failed to send agency onboarding confirmation email');
+    }
+  }
+
+  async sendAdminAgencyOnboardingNotification(agencyName: string, contactName: string, contactEmail: string) {
+    const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
+
+    if (!adminEmail) {
+      return;
+    }
+
+    const recipient =
+      process.env.NODE_ENV === 'development' ? (process.env.MAIL_DEV_TO ?? 'delivered@resend.dev') : adminEmail;
+
+    const { error } = await this.resend.emails.send({
+      from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
+      to: [recipient],
+      subject: 'New agency onboarding request submitted',
+      html: `
+      <h2>New agency onboarding request</h2>
+      <p>A new agency onboarding request has been submitted.</p>
+      <p><strong>Agency:</strong> ${agencyName}</p>
+      <p><strong>Contact Name:</strong> ${contactName}</p>
+      <p><strong>Contact Email:</strong> ${contactEmail}</p>
+      <p><strong>Status:</strong> PENDING</p>
+    `,
+    });
+
+    if (error) {
+      throw new InternalServerErrorException('Failed to send admin agency onboarding notification');
+    }
+  }
+
+  async sendAgencyApprovedEmail(to: string, contactName: string, agencyName: string) {
+    const recipient = process.env.NODE_ENV === 'development' ? (process.env.MAIL_DEV_TO ?? 'delivered@resend.dev') : to;
+
+    const { error } = await this.resend.emails.send({
+      from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
+      to: [recipient],
+      subject: 'Your agency has been approved',
+      html: `
+      <h2>Agency approved</h2>
+      <p>Hello ${contactName},</p>
+      <p>Your agency <strong>${agencyName}</strong> has been approved.</p>
+      <p>You can now continue with agency-related operations on the platform.</p>
+    `,
+    });
+
+    if (error) {
+      throw new InternalServerErrorException('Failed to send agency approved email');
+    }
+  }
+
+  async sendAgencyRejectedEmail(to: string, contactName: string, agencyName: string) {
+    const recipient = process.env.NODE_ENV === 'development' ? (process.env.MAIL_DEV_TO ?? 'delivered@resend.dev') : to;
+
+    const { error } = await this.resend.emails.send({
+      from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
+      to: [recipient],
+      subject: 'Your agency onboarding request was not approved',
+      html: `
+      <h2>Agency onboarding update</h2>
+      <p>Hello ${contactName},</p>
+      <p>Your agency onboarding request for <strong>${agencyName}</strong> was not approved.</p>
+      <p>If needed, the platform team may contact you with further details.</p>
+    `,
+    });
+
+    if (error) {
+      throw new InternalServerErrorException('Failed to send agency rejected email');
+    }
+  }
+
+  async sendAgencySuspendedEmail(to: string, contactName: string, agencyName: string) {
+    const recipient = process.env.NODE_ENV === 'development' ? (process.env.MAIL_DEV_TO ?? 'delivered@resend.dev') : to;
+
+    const { error } = await this.resend.emails.send({
+      from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
+      to: [recipient],
+      subject: 'Your agency account has been suspended',
+      html: `
+      <h2>Agency suspended</h2>
+      <p>Hello ${contactName},</p>
+      <p>Your agency <strong>${agencyName}</strong> has been suspended.</p>
+      <p>If you believe this is a mistake, please contact platform support.</p>
+    `,
+    });
+
+    if (error) {
+      throw new InternalServerErrorException('Failed to send agency suspended email');
+    }
+  }
 }

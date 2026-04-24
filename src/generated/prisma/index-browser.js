@@ -214,6 +214,31 @@ exports.Prisma.PropertyMediaScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.AgencyScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  email: 'email',
+  phone: 'phone',
+  addressLine1: 'addressLine1',
+  suburb: 'suburb',
+  state: 'state',
+  postcode: 'postcode',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AgencyMemberScalarFieldEnum = {
+  id: 'id',
+  agencyId: 'agencyId',
+  userId: 'userId',
+  role: 'role',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -267,6 +292,19 @@ exports.PropertyMediaType = exports.$Enums.PropertyMediaType = {
   IMAGE: 'IMAGE'
 };
 
+exports.AgencyStatus = exports.$Enums.AgencyStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  SUSPENDED: 'SUSPENDED'
+};
+
+exports.AgencyMemberRole = exports.$Enums.AgencyMemberRole = {
+  AGENCY_OWNER: 'AGENCY_OWNER',
+  AGENCY_ADMIN: 'AGENCY_ADMIN',
+  AGENT: 'AGENT'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   UserMedia: 'UserMedia',
@@ -274,7 +312,9 @@ exports.Prisma.ModelName = {
   Property: 'Property',
   Application: 'Application',
   EmailVerificationToken: 'EmailVerificationToken',
-  PropertyMedia: 'PropertyMedia'
+  PropertyMedia: 'PropertyMedia',
+  Agency: 'Agency',
+  AgencyMember: 'AgencyMember'
 };
 
 /**

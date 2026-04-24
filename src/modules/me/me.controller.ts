@@ -3,7 +3,7 @@ import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { VerifiedEmailGuard } from 'src/common/guards/verified-email.guard';
 import { type UploadedImageFile } from 'src/common/types/uploaded-image-file.type';
 
-import { Body, Controller, Get, Param, Patch, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 
@@ -82,7 +82,7 @@ export class MeController {
 
   @Get('applications')
   @ApiOperation({ summary: 'Get current user applications' })
-  getMyApplications(@CurrentUser() currentUser: AuthenticatedUser, @Body() query: PaginationQueryDto) {
+  getMyApplications(@CurrentUser() currentUser: AuthenticatedUser, @Query() query: PaginationQueryDto) {
     return this.meService.getMyApplications(currentUser, query);
   }
 }
