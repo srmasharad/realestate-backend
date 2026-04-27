@@ -133,13 +133,21 @@ model Property {
   bathrooms     Int?
   parkingSpaces Int?
   isPublished   Boolean      @default(false)
-  createdById   String
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
 
-  createdBy   User            @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdById String
+  createdBy   User   @relation(fields: [createdById], references: [id])
+
+  agencyId String?
+  agency   Agency? @relation(fields: [agencyId], references: [id], onDelete: SetNull)
+
+  assignedAgentMemberId String?
+  assignedAgentMember   AgencyMember? @relation("AssignedPropertyAgent", fields: [assignedAgentMemberId], references: [id], onDelete: SetNull)
+
   application Application[]
   media       PropertyMedia[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Application {
@@ -197,7 +205,8 @@ model Agency {
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
 
-  members AgencyMember[]
+  members  AgencyMember[]
+  property Property[]
 }
 
 model AgencyMember {
@@ -209,8 +218,9 @@ model AgencyMember {
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
 
-  agency Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  agency             Agency     @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+  user               User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assignedProperties Property[] @relation("AssignedPropertyAgent")
 
   @@unique([agencyId, userId])
 }

@@ -1,6 +1,10 @@
 import { Resend } from 'resend';
 
-import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 
 @Injectable()
 export class MailService {
@@ -188,6 +192,72 @@ export class MailService {
 
     if (error) {
       throw new InternalServerErrorException('Failed to send agency suspended email');
+    }
+  }
+
+  async sendAgencyMemberAddedEmail(
+    to: string,
+    fullName: string,
+    agencyName: string,
+    role: string,
+    temporaryPassword: string,
+  ) {
+    const recipient = process.env.NODE_ENV === 'development' ? (process.env.MAIL_DEV_TO ?? 'delivered@resend.dev') : to;
+
+    const { error } = await this.resend.emails.send({
+      from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
+      to: [recipient],
+      subject: `You have been added to ${agencyName}`,
+      html: `
+      <h2>Agency account created</h2>
+      <p>Hello ${fullName},</p>
+      <p>You have been added to <strong>${agencyName}</strong> as <strong>${role}</strong>.</p>
+      <p>You can log in using this temporary password:</p>
+      <p><strong>${temporaryPassword}</strong></p>
+      <p>Please change your password after logging in.</p>
+    `,
+    });
+
+    if (error) {
+      throw new InternalServerErrorException('Failed to send agency member added email');
+    }
+  }
+
+  async sendAgentAssignedToPropertyEmail(to: string, fullName: string, propertyTitle: string, agencyName: string) {
+    const recipient = process.env.NODE_ENV === 'development' ? (process.env.MAIL_DEV_TO ?? 'delivered@resend.dev') : to;
+
+    const { error } = await this.resend.emails.send({
+      from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
+      to: [recipient],
+      subject: `You have been assigned to ${propertyTitle}`,
+      html: `
+      <h2>Property assignment</h2>
+      <p>Hello ${fullName},</p>
+      <p>You have been assigned to manage <strong>${propertyTitle}</strong> for <strong>${agencyName}</strong>.</p>
+    `,
+    });
+
+    if (error) {
+      throw new InternalServerErrorException('Failed to send property assignment email');
+    }
+  }
+
+  async sendAgentRemovedFromPropertyEmail(to: string, fullName: string, propertyTitle: string, agencyName: string) {
+    const recipient = process.env.NODE_ENV === 'development' ? (process.env.MAIL_DEV_TO ?? 'delivered@resend.dev') : to;
+
+    const { error } = await this.resend.emails.send({
+      from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
+      to: [recipient],
+      subject: `You have been removed from ${propertyTitle}`,
+      html: `
+      <h2>Property assignment removed</h2>
+      <p>Hello ${fullName},</p>
+      <p>You have been removed from managing <strong>${propertyTitle}</strong> for <strong>${agencyName}</strong>.</p>
+    `,
+    });
+
+    if (error) {
+      throw new InternalServerErrorException('Failed to send property removal email');
     }
   }
 }

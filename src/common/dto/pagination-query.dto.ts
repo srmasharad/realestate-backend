@@ -21,7 +21,7 @@ export class PaginationQueryDto {
   @Max(100)
   limit?: number = 10;
 
-  @ApiPropertyOptional({ example: 'Anothony' })
+  @ApiPropertyOptional({ example: '' })
   @IsOptional()
   @IsString()
   @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value) as unknown)

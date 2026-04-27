@@ -1822,10 +1822,12 @@ export namespace Prisma {
 
   export type AgencyCountOutputType = {
     members: number
+    property: number
   }
 
   export type AgencyCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     members?: boolean | AgencyCountOutputTypeCountMembersArgs
+    property?: boolean | AgencyCountOutputTypeCountPropertyArgs
   }
 
   // Custom InputTypes
@@ -1844,6 +1846,44 @@ export namespace Prisma {
    */
   export type AgencyCountOutputTypeCountMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AgencyMemberWhereInput
+  }
+
+  /**
+   * AgencyCountOutputType without action
+   */
+  export type AgencyCountOutputTypeCountPropertyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PropertyWhereInput
+  }
+
+
+  /**
+   * Count Type AgencyMemberCountOutputType
+   */
+
+  export type AgencyMemberCountOutputType = {
+    assignedProperties: number
+  }
+
+  export type AgencyMemberCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    assignedProperties?: boolean | AgencyMemberCountOutputTypeCountAssignedPropertiesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * AgencyMemberCountOutputType without action
+   */
+  export type AgencyMemberCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgencyMemberCountOutputType
+     */
+    select?: AgencyMemberCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * AgencyMemberCountOutputType without action
+   */
+  export type AgencyMemberCountOutputTypeCountAssignedPropertiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PropertyWhereInput
   }
 
 
@@ -5501,6 +5541,8 @@ export namespace Prisma {
     parkingSpaces: number | null
     isPublished: boolean | null
     createdById: string | null
+    agencyId: string | null
+    assignedAgentMemberId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -5521,6 +5563,8 @@ export namespace Prisma {
     parkingSpaces: number | null
     isPublished: boolean | null
     createdById: string | null
+    agencyId: string | null
+    assignedAgentMemberId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -5541,6 +5585,8 @@ export namespace Prisma {
     parkingSpaces: number
     isPublished: number
     createdById: number
+    agencyId: number
+    assignedAgentMemberId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -5577,6 +5623,8 @@ export namespace Prisma {
     parkingSpaces?: true
     isPublished?: true
     createdById?: true
+    agencyId?: true
+    assignedAgentMemberId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -5597,6 +5645,8 @@ export namespace Prisma {
     parkingSpaces?: true
     isPublished?: true
     createdById?: true
+    agencyId?: true
+    assignedAgentMemberId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -5617,6 +5667,8 @@ export namespace Prisma {
     parkingSpaces?: true
     isPublished?: true
     createdById?: true
+    agencyId?: true
+    assignedAgentMemberId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -5724,6 +5776,8 @@ export namespace Prisma {
     parkingSpaces: number | null
     isPublished: boolean
     createdById: string
+    agencyId: string | null
+    assignedAgentMemberId: string | null
     createdAt: Date
     updatedAt: Date
     _count: PropertyCountAggregateOutputType | null
@@ -5763,9 +5817,13 @@ export namespace Prisma {
     parkingSpaces?: boolean
     isPublished?: boolean
     createdById?: boolean
+    agencyId?: boolean
+    assignedAgentMemberId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    agency?: boolean | Property$agencyArgs<ExtArgs>
+    assignedAgentMember?: boolean | Property$assignedAgentMemberArgs<ExtArgs>
     application?: boolean | Property$applicationArgs<ExtArgs>
     media?: boolean | Property$mediaArgs<ExtArgs>
     _count?: boolean | PropertyCountOutputTypeDefaultArgs<ExtArgs>
@@ -5787,9 +5845,13 @@ export namespace Prisma {
     parkingSpaces?: boolean
     isPublished?: boolean
     createdById?: boolean
+    agencyId?: boolean
+    assignedAgentMemberId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    agency?: boolean | Property$agencyArgs<ExtArgs>
+    assignedAgentMember?: boolean | Property$assignedAgentMemberArgs<ExtArgs>
   }, ExtArgs["result"]["property"]>
 
   export type PropertySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5808,9 +5870,13 @@ export namespace Prisma {
     parkingSpaces?: boolean
     isPublished?: boolean
     createdById?: boolean
+    agencyId?: boolean
+    assignedAgentMemberId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    agency?: boolean | Property$agencyArgs<ExtArgs>
+    assignedAgentMember?: boolean | Property$assignedAgentMemberArgs<ExtArgs>
   }, ExtArgs["result"]["property"]>
 
   export type PropertySelectScalar = {
@@ -5829,28 +5895,38 @@ export namespace Prisma {
     parkingSpaces?: boolean
     isPublished?: boolean
     createdById?: boolean
+    agencyId?: boolean
+    assignedAgentMemberId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type PropertyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "listingType" | "propertyType" | "price" | "addressLine1" | "suburb" | "state" | "postcode" | "bedrooms" | "bathrooms" | "parkingSpaces" | "isPublished" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["property"]>
+  export type PropertyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "listingType" | "propertyType" | "price" | "addressLine1" | "suburb" | "state" | "postcode" | "bedrooms" | "bathrooms" | "parkingSpaces" | "isPublished" | "createdById" | "agencyId" | "assignedAgentMemberId" | "createdAt" | "updatedAt", ExtArgs["result"]["property"]>
   export type PropertyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    agency?: boolean | Property$agencyArgs<ExtArgs>
+    assignedAgentMember?: boolean | Property$assignedAgentMemberArgs<ExtArgs>
     application?: boolean | Property$applicationArgs<ExtArgs>
     media?: boolean | Property$mediaArgs<ExtArgs>
     _count?: boolean | PropertyCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PropertyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    agency?: boolean | Property$agencyArgs<ExtArgs>
+    assignedAgentMember?: boolean | Property$assignedAgentMemberArgs<ExtArgs>
   }
   export type PropertyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    agency?: boolean | Property$agencyArgs<ExtArgs>
+    assignedAgentMember?: boolean | Property$assignedAgentMemberArgs<ExtArgs>
   }
 
   export type $PropertyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Property"
     objects: {
       createdBy: Prisma.$UserPayload<ExtArgs>
+      agency: Prisma.$AgencyPayload<ExtArgs> | null
+      assignedAgentMember: Prisma.$AgencyMemberPayload<ExtArgs> | null
       application: Prisma.$ApplicationPayload<ExtArgs>[]
       media: Prisma.$PropertyMediaPayload<ExtArgs>[]
     }
@@ -5870,6 +5946,8 @@ export namespace Prisma {
       parkingSpaces: number | null
       isPublished: boolean
       createdById: string
+      agencyId: string | null
+      assignedAgentMemberId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["property"]>
@@ -6267,6 +6345,8 @@ export namespace Prisma {
   export interface Prisma__PropertyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    agency<T extends Property$agencyArgs<ExtArgs> = {}>(args?: Subset<T, Property$agencyArgs<ExtArgs>>): Prisma__AgencyClient<$Result.GetResult<Prisma.$AgencyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    assignedAgentMember<T extends Property$assignedAgentMemberArgs<ExtArgs> = {}>(args?: Subset<T, Property$assignedAgentMemberArgs<ExtArgs>>): Prisma__AgencyMemberClient<$Result.GetResult<Prisma.$AgencyMemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     application<T extends Property$applicationArgs<ExtArgs> = {}>(args?: Subset<T, Property$applicationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     media<T extends Property$mediaArgs<ExtArgs> = {}>(args?: Subset<T, Property$mediaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyMediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -6313,6 +6393,8 @@ export namespace Prisma {
     readonly parkingSpaces: FieldRef<"Property", 'Int'>
     readonly isPublished: FieldRef<"Property", 'Boolean'>
     readonly createdById: FieldRef<"Property", 'String'>
+    readonly agencyId: FieldRef<"Property", 'String'>
+    readonly assignedAgentMemberId: FieldRef<"Property", 'String'>
     readonly createdAt: FieldRef<"Property", 'DateTime'>
     readonly updatedAt: FieldRef<"Property", 'DateTime'>
   }
@@ -6713,6 +6795,44 @@ export namespace Prisma {
      * Limit how many Properties to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Property.agency
+   */
+  export type Property$agencyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Agency
+     */
+    select?: AgencySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Agency
+     */
+    omit?: AgencyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyInclude<ExtArgs> | null
+    where?: AgencyWhereInput
+  }
+
+  /**
+   * Property.assignedAgentMember
+   */
+  export type Property$assignedAgentMemberArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgencyMember
+     */
+    select?: AgencyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgencyMember
+     */
+    omit?: AgencyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgencyMemberInclude<ExtArgs> | null
+    where?: AgencyMemberWhereInput
   }
 
   /**
@@ -10338,6 +10458,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     members?: boolean | Agency$membersArgs<ExtArgs>
+    property?: boolean | Agency$propertyArgs<ExtArgs>
     _count?: boolean | AgencyCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["agency"]>
 
@@ -10389,6 +10510,7 @@ export namespace Prisma {
   export type AgencyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "email" | "phone" | "addressLine1" | "suburb" | "state" | "postcode" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["agency"]>
   export type AgencyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     members?: boolean | Agency$membersArgs<ExtArgs>
+    property?: boolean | Agency$propertyArgs<ExtArgs>
     _count?: boolean | AgencyCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type AgencyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -10398,6 +10520,7 @@ export namespace Prisma {
     name: "Agency"
     objects: {
       members: Prisma.$AgencyMemberPayload<ExtArgs>[]
+      property: Prisma.$PropertyPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -10807,6 +10930,7 @@ export namespace Prisma {
   export interface Prisma__AgencyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     members<T extends Agency$membersArgs<ExtArgs> = {}>(args?: Subset<T, Agency$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgencyMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    property<T extends Agency$propertyArgs<ExtArgs> = {}>(args?: Subset<T, Agency$propertyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11265,6 +11389,30 @@ export namespace Prisma {
   }
 
   /**
+   * Agency.property
+   */
+  export type Agency$propertyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Property
+     */
+    select?: PropertySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Property
+     */
+    omit?: PropertyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyInclude<ExtArgs> | null
+    where?: PropertyWhereInput
+    orderBy?: PropertyOrderByWithRelationInput | PropertyOrderByWithRelationInput[]
+    cursor?: PropertyWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PropertyScalarFieldEnum | PropertyScalarFieldEnum[]
+  }
+
+  /**
    * Agency without action
    */
   export type AgencyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11465,6 +11613,8 @@ export namespace Prisma {
     updatedAt?: boolean
     agency?: boolean | AgencyDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
+    assignedProperties?: boolean | AgencyMember$assignedPropertiesArgs<ExtArgs>
+    _count?: boolean | AgencyMemberCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["agencyMember"]>
 
   export type AgencyMemberSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -11505,6 +11655,8 @@ export namespace Prisma {
   export type AgencyMemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     agency?: boolean | AgencyDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
+    assignedProperties?: boolean | AgencyMember$assignedPropertiesArgs<ExtArgs>
+    _count?: boolean | AgencyMemberCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type AgencyMemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     agency?: boolean | AgencyDefaultArgs<ExtArgs>
@@ -11520,6 +11672,7 @@ export namespace Prisma {
     objects: {
       agency: Prisma.$AgencyPayload<ExtArgs>
       user: Prisma.$UserPayload<ExtArgs>
+      assignedProperties: Prisma.$PropertyPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -11925,6 +12078,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     agency<T extends AgencyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AgencyDefaultArgs<ExtArgs>>): Prisma__AgencyClient<$Result.GetResult<Prisma.$AgencyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    assignedProperties<T extends AgencyMember$assignedPropertiesArgs<ExtArgs> = {}>(args?: Subset<T, AgencyMember$assignedPropertiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12362,6 +12516,30 @@ export namespace Prisma {
   }
 
   /**
+   * AgencyMember.assignedProperties
+   */
+  export type AgencyMember$assignedPropertiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Property
+     */
+    select?: PropertySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Property
+     */
+    omit?: PropertyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PropertyInclude<ExtArgs> | null
+    where?: PropertyWhereInput
+    orderBy?: PropertyOrderByWithRelationInput | PropertyOrderByWithRelationInput[]
+    cursor?: PropertyWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PropertyScalarFieldEnum | PropertyScalarFieldEnum[]
+  }
+
+  /**
    * AgencyMember without action
    */
   export type AgencyMemberDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12461,6 +12639,8 @@ export namespace Prisma {
     parkingSpaces: 'parkingSpaces',
     isPublished: 'isPublished',
     createdById: 'createdById',
+    agencyId: 'agencyId',
+    assignedAgentMemberId: 'assignedAgentMemberId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -13066,9 +13246,13 @@ export namespace Prisma {
     parkingSpaces?: IntNullableFilter<"Property"> | number | null
     isPublished?: BoolFilter<"Property"> | boolean
     createdById?: StringFilter<"Property"> | string
+    agencyId?: StringNullableFilter<"Property"> | string | null
+    assignedAgentMemberId?: StringNullableFilter<"Property"> | string | null
     createdAt?: DateTimeFilter<"Property"> | Date | string
     updatedAt?: DateTimeFilter<"Property"> | Date | string
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    agency?: XOR<AgencyNullableScalarRelationFilter, AgencyWhereInput> | null
+    assignedAgentMember?: XOR<AgencyMemberNullableScalarRelationFilter, AgencyMemberWhereInput> | null
     application?: ApplicationListRelationFilter
     media?: PropertyMediaListRelationFilter
   }
@@ -13089,9 +13273,13 @@ export namespace Prisma {
     parkingSpaces?: SortOrderInput | SortOrder
     isPublished?: SortOrder
     createdById?: SortOrder
+    agencyId?: SortOrderInput | SortOrder
+    assignedAgentMemberId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: UserOrderByWithRelationInput
+    agency?: AgencyOrderByWithRelationInput
+    assignedAgentMember?: AgencyMemberOrderByWithRelationInput
     application?: ApplicationOrderByRelationAggregateInput
     media?: PropertyMediaOrderByRelationAggregateInput
   }
@@ -13115,9 +13303,13 @@ export namespace Prisma {
     parkingSpaces?: IntNullableFilter<"Property"> | number | null
     isPublished?: BoolFilter<"Property"> | boolean
     createdById?: StringFilter<"Property"> | string
+    agencyId?: StringNullableFilter<"Property"> | string | null
+    assignedAgentMemberId?: StringNullableFilter<"Property"> | string | null
     createdAt?: DateTimeFilter<"Property"> | Date | string
     updatedAt?: DateTimeFilter<"Property"> | Date | string
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    agency?: XOR<AgencyNullableScalarRelationFilter, AgencyWhereInput> | null
+    assignedAgentMember?: XOR<AgencyMemberNullableScalarRelationFilter, AgencyMemberWhereInput> | null
     application?: ApplicationListRelationFilter
     media?: PropertyMediaListRelationFilter
   }, "id">
@@ -13138,6 +13330,8 @@ export namespace Prisma {
     parkingSpaces?: SortOrderInput | SortOrder
     isPublished?: SortOrder
     createdById?: SortOrder
+    agencyId?: SortOrderInput | SortOrder
+    assignedAgentMemberId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: PropertyCountOrderByAggregateInput
@@ -13166,6 +13360,8 @@ export namespace Prisma {
     parkingSpaces?: IntNullableWithAggregatesFilter<"Property"> | number | null
     isPublished?: BoolWithAggregatesFilter<"Property"> | boolean
     createdById?: StringWithAggregatesFilter<"Property"> | string
+    agencyId?: StringNullableWithAggregatesFilter<"Property"> | string | null
+    assignedAgentMemberId?: StringNullableWithAggregatesFilter<"Property"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Property"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Property"> | Date | string
   }
@@ -13398,6 +13594,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Agency"> | Date | string
     updatedAt?: DateTimeFilter<"Agency"> | Date | string
     members?: AgencyMemberListRelationFilter
+    property?: PropertyListRelationFilter
   }
 
   export type AgencyOrderByWithRelationInput = {
@@ -13414,6 +13611,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     members?: AgencyMemberOrderByRelationAggregateInput
+    property?: PropertyOrderByRelationAggregateInput
   }
 
   export type AgencyWhereUniqueInput = Prisma.AtLeast<{
@@ -13433,6 +13631,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Agency"> | Date | string
     updatedAt?: DateTimeFilter<"Agency"> | Date | string
     members?: AgencyMemberListRelationFilter
+    property?: PropertyListRelationFilter
   }, "id" | "slug" | "email">
 
   export type AgencyOrderByWithAggregationInput = {
@@ -13484,6 +13683,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"AgencyMember"> | Date | string
     agency?: XOR<AgencyScalarRelationFilter, AgencyWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    assignedProperties?: PropertyListRelationFilter
   }
 
   export type AgencyMemberOrderByWithRelationInput = {
@@ -13496,6 +13696,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     agency?: AgencyOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
+    assignedProperties?: PropertyOrderByRelationAggregateInput
   }
 
   export type AgencyMemberWhereUniqueInput = Prisma.AtLeast<{
@@ -13512,6 +13713,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"AgencyMember"> | Date | string
     agency?: XOR<AgencyScalarRelationFilter, AgencyWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    assignedProperties?: PropertyListRelationFilter
   }, "id" | "agencyId_userId">
 
   export type AgencyMemberOrderByWithAggregationInput = {
@@ -13874,6 +14076,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutPropertiesInput
+    agency?: AgencyCreateNestedOneWithoutPropertyInput
+    assignedAgentMember?: AgencyMemberCreateNestedOneWithoutAssignedPropertiesInput
     application?: ApplicationCreateNestedManyWithoutPropertyInput
     media?: PropertyMediaCreateNestedManyWithoutPropertyInput
   }
@@ -13894,6 +14098,8 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     createdById: string
+    agencyId?: string | null
+    assignedAgentMemberId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     application?: ApplicationUncheckedCreateNestedManyWithoutPropertyInput
@@ -13918,6 +14124,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutPropertiesNestedInput
+    agency?: AgencyUpdateOneWithoutPropertyNestedInput
+    assignedAgentMember?: AgencyMemberUpdateOneWithoutAssignedPropertiesNestedInput
     application?: ApplicationUpdateManyWithoutPropertyNestedInput
     media?: PropertyMediaUpdateManyWithoutPropertyNestedInput
   }
@@ -13938,6 +14146,8 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
+    agencyId?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     application?: ApplicationUncheckedUpdateManyWithoutPropertyNestedInput
@@ -13960,6 +14170,8 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     createdById: string
+    agencyId?: string | null
+    assignedAgentMemberId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -13999,6 +14211,8 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
+    agencyId?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14237,6 +14451,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: AgencyMemberCreateNestedManyWithoutAgencyInput
+    property?: PropertyCreateNestedManyWithoutAgencyInput
   }
 
   export type AgencyUncheckedCreateInput = {
@@ -14253,6 +14468,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: AgencyMemberUncheckedCreateNestedManyWithoutAgencyInput
+    property?: PropertyUncheckedCreateNestedManyWithoutAgencyInput
   }
 
   export type AgencyUpdateInput = {
@@ -14269,6 +14485,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: AgencyMemberUpdateManyWithoutAgencyNestedInput
+    property?: PropertyUpdateManyWithoutAgencyNestedInput
   }
 
   export type AgencyUncheckedUpdateInput = {
@@ -14285,6 +14502,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: AgencyMemberUncheckedUpdateManyWithoutAgencyNestedInput
+    property?: PropertyUncheckedUpdateManyWithoutAgencyNestedInput
   }
 
   export type AgencyCreateManyInput = {
@@ -14340,6 +14558,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     agency: AgencyCreateNestedOneWithoutMembersInput
     user: UserCreateNestedOneWithoutAgencyMembershipsInput
+    assignedProperties?: PropertyCreateNestedManyWithoutAssignedAgentMemberInput
   }
 
   export type AgencyMemberUncheckedCreateInput = {
@@ -14350,6 +14569,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    assignedProperties?: PropertyUncheckedCreateNestedManyWithoutAssignedAgentMemberInput
   }
 
   export type AgencyMemberUpdateInput = {
@@ -14360,6 +14580,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     agency?: AgencyUpdateOneRequiredWithoutMembersNestedInput
     user?: UserUpdateOneRequiredWithoutAgencyMembershipsNestedInput
+    assignedProperties?: PropertyUpdateManyWithoutAssignedAgentMemberNestedInput
   }
 
   export type AgencyMemberUncheckedUpdateInput = {
@@ -14370,6 +14591,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignedProperties?: PropertyUncheckedUpdateManyWithoutAssignedAgentMemberNestedInput
   }
 
   export type AgencyMemberCreateManyInput = {
@@ -14835,6 +15057,16 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type AgencyNullableScalarRelationFilter = {
+    is?: AgencyWhereInput | null
+    isNot?: AgencyWhereInput | null
+  }
+
+  export type AgencyMemberNullableScalarRelationFilter = {
+    is?: AgencyMemberWhereInput | null
+    isNot?: AgencyMemberWhereInput | null
+  }
+
   export type PropertyMediaListRelationFilter = {
     every?: PropertyMediaWhereInput
     some?: PropertyMediaWhereInput
@@ -14861,6 +15093,8 @@ export namespace Prisma {
     parkingSpaces?: SortOrder
     isPublished?: SortOrder
     createdById?: SortOrder
+    agencyId?: SortOrder
+    assignedAgentMemberId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14888,6 +15122,8 @@ export namespace Prisma {
     parkingSpaces?: SortOrder
     isPublished?: SortOrder
     createdById?: SortOrder
+    agencyId?: SortOrder
+    assignedAgentMemberId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14908,6 +15144,8 @@ export namespace Prisma {
     parkingSpaces?: SortOrder
     isPublished?: SortOrder
     createdById?: SortOrder
+    agencyId?: SortOrder
+    assignedAgentMemberId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -15567,6 +15805,18 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type AgencyCreateNestedOneWithoutPropertyInput = {
+    create?: XOR<AgencyCreateWithoutPropertyInput, AgencyUncheckedCreateWithoutPropertyInput>
+    connectOrCreate?: AgencyCreateOrConnectWithoutPropertyInput
+    connect?: AgencyWhereUniqueInput
+  }
+
+  export type AgencyMemberCreateNestedOneWithoutAssignedPropertiesInput = {
+    create?: XOR<AgencyMemberCreateWithoutAssignedPropertiesInput, AgencyMemberUncheckedCreateWithoutAssignedPropertiesInput>
+    connectOrCreate?: AgencyMemberCreateOrConnectWithoutAssignedPropertiesInput
+    connect?: AgencyMemberWhereUniqueInput
+  }
+
   export type ApplicationCreateNestedManyWithoutPropertyInput = {
     create?: XOR<ApplicationCreateWithoutPropertyInput, ApplicationUncheckedCreateWithoutPropertyInput> | ApplicationCreateWithoutPropertyInput[] | ApplicationUncheckedCreateWithoutPropertyInput[]
     connectOrCreate?: ApplicationCreateOrConnectWithoutPropertyInput | ApplicationCreateOrConnectWithoutPropertyInput[]
@@ -15617,6 +15867,26 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutPropertiesInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPropertiesInput, UserUpdateWithoutPropertiesInput>, UserUncheckedUpdateWithoutPropertiesInput>
+  }
+
+  export type AgencyUpdateOneWithoutPropertyNestedInput = {
+    create?: XOR<AgencyCreateWithoutPropertyInput, AgencyUncheckedCreateWithoutPropertyInput>
+    connectOrCreate?: AgencyCreateOrConnectWithoutPropertyInput
+    upsert?: AgencyUpsertWithoutPropertyInput
+    disconnect?: AgencyWhereInput | boolean
+    delete?: AgencyWhereInput | boolean
+    connect?: AgencyWhereUniqueInput
+    update?: XOR<XOR<AgencyUpdateToOneWithWhereWithoutPropertyInput, AgencyUpdateWithoutPropertyInput>, AgencyUncheckedUpdateWithoutPropertyInput>
+  }
+
+  export type AgencyMemberUpdateOneWithoutAssignedPropertiesNestedInput = {
+    create?: XOR<AgencyMemberCreateWithoutAssignedPropertiesInput, AgencyMemberUncheckedCreateWithoutAssignedPropertiesInput>
+    connectOrCreate?: AgencyMemberCreateOrConnectWithoutAssignedPropertiesInput
+    upsert?: AgencyMemberUpsertWithoutAssignedPropertiesInput
+    disconnect?: AgencyMemberWhereInput | boolean
+    delete?: AgencyMemberWhereInput | boolean
+    connect?: AgencyMemberWhereUniqueInput
+    update?: XOR<XOR<AgencyMemberUpdateToOneWithWhereWithoutAssignedPropertiesInput, AgencyMemberUpdateWithoutAssignedPropertiesInput>, AgencyMemberUncheckedUpdateWithoutAssignedPropertiesInput>
   }
 
   export type ApplicationUpdateManyWithoutPropertyNestedInput = {
@@ -15750,11 +16020,25 @@ export namespace Prisma {
     connect?: AgencyMemberWhereUniqueInput | AgencyMemberWhereUniqueInput[]
   }
 
+  export type PropertyCreateNestedManyWithoutAgencyInput = {
+    create?: XOR<PropertyCreateWithoutAgencyInput, PropertyUncheckedCreateWithoutAgencyInput> | PropertyCreateWithoutAgencyInput[] | PropertyUncheckedCreateWithoutAgencyInput[]
+    connectOrCreate?: PropertyCreateOrConnectWithoutAgencyInput | PropertyCreateOrConnectWithoutAgencyInput[]
+    createMany?: PropertyCreateManyAgencyInputEnvelope
+    connect?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+  }
+
   export type AgencyMemberUncheckedCreateNestedManyWithoutAgencyInput = {
     create?: XOR<AgencyMemberCreateWithoutAgencyInput, AgencyMemberUncheckedCreateWithoutAgencyInput> | AgencyMemberCreateWithoutAgencyInput[] | AgencyMemberUncheckedCreateWithoutAgencyInput[]
     connectOrCreate?: AgencyMemberCreateOrConnectWithoutAgencyInput | AgencyMemberCreateOrConnectWithoutAgencyInput[]
     createMany?: AgencyMemberCreateManyAgencyInputEnvelope
     connect?: AgencyMemberWhereUniqueInput | AgencyMemberWhereUniqueInput[]
+  }
+
+  export type PropertyUncheckedCreateNestedManyWithoutAgencyInput = {
+    create?: XOR<PropertyCreateWithoutAgencyInput, PropertyUncheckedCreateWithoutAgencyInput> | PropertyCreateWithoutAgencyInput[] | PropertyUncheckedCreateWithoutAgencyInput[]
+    connectOrCreate?: PropertyCreateOrConnectWithoutAgencyInput | PropertyCreateOrConnectWithoutAgencyInput[]
+    createMany?: PropertyCreateManyAgencyInputEnvelope
+    connect?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
   }
 
   export type EnumAgencyStatusFieldUpdateOperationsInput = {
@@ -15775,6 +16059,20 @@ export namespace Prisma {
     deleteMany?: AgencyMemberScalarWhereInput | AgencyMemberScalarWhereInput[]
   }
 
+  export type PropertyUpdateManyWithoutAgencyNestedInput = {
+    create?: XOR<PropertyCreateWithoutAgencyInput, PropertyUncheckedCreateWithoutAgencyInput> | PropertyCreateWithoutAgencyInput[] | PropertyUncheckedCreateWithoutAgencyInput[]
+    connectOrCreate?: PropertyCreateOrConnectWithoutAgencyInput | PropertyCreateOrConnectWithoutAgencyInput[]
+    upsert?: PropertyUpsertWithWhereUniqueWithoutAgencyInput | PropertyUpsertWithWhereUniqueWithoutAgencyInput[]
+    createMany?: PropertyCreateManyAgencyInputEnvelope
+    set?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+    disconnect?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+    delete?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+    connect?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+    update?: PropertyUpdateWithWhereUniqueWithoutAgencyInput | PropertyUpdateWithWhereUniqueWithoutAgencyInput[]
+    updateMany?: PropertyUpdateManyWithWhereWithoutAgencyInput | PropertyUpdateManyWithWhereWithoutAgencyInput[]
+    deleteMany?: PropertyScalarWhereInput | PropertyScalarWhereInput[]
+  }
+
   export type AgencyMemberUncheckedUpdateManyWithoutAgencyNestedInput = {
     create?: XOR<AgencyMemberCreateWithoutAgencyInput, AgencyMemberUncheckedCreateWithoutAgencyInput> | AgencyMemberCreateWithoutAgencyInput[] | AgencyMemberUncheckedCreateWithoutAgencyInput[]
     connectOrCreate?: AgencyMemberCreateOrConnectWithoutAgencyInput | AgencyMemberCreateOrConnectWithoutAgencyInput[]
@@ -15789,6 +16087,20 @@ export namespace Prisma {
     deleteMany?: AgencyMemberScalarWhereInput | AgencyMemberScalarWhereInput[]
   }
 
+  export type PropertyUncheckedUpdateManyWithoutAgencyNestedInput = {
+    create?: XOR<PropertyCreateWithoutAgencyInput, PropertyUncheckedCreateWithoutAgencyInput> | PropertyCreateWithoutAgencyInput[] | PropertyUncheckedCreateWithoutAgencyInput[]
+    connectOrCreate?: PropertyCreateOrConnectWithoutAgencyInput | PropertyCreateOrConnectWithoutAgencyInput[]
+    upsert?: PropertyUpsertWithWhereUniqueWithoutAgencyInput | PropertyUpsertWithWhereUniqueWithoutAgencyInput[]
+    createMany?: PropertyCreateManyAgencyInputEnvelope
+    set?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+    disconnect?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+    delete?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+    connect?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+    update?: PropertyUpdateWithWhereUniqueWithoutAgencyInput | PropertyUpdateWithWhereUniqueWithoutAgencyInput[]
+    updateMany?: PropertyUpdateManyWithWhereWithoutAgencyInput | PropertyUpdateManyWithWhereWithoutAgencyInput[]
+    deleteMany?: PropertyScalarWhereInput | PropertyScalarWhereInput[]
+  }
+
   export type AgencyCreateNestedOneWithoutMembersInput = {
     create?: XOR<AgencyCreateWithoutMembersInput, AgencyUncheckedCreateWithoutMembersInput>
     connectOrCreate?: AgencyCreateOrConnectWithoutMembersInput
@@ -15799,6 +16111,20 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutAgencyMembershipsInput, UserUncheckedCreateWithoutAgencyMembershipsInput>
     connectOrCreate?: UserCreateOrConnectWithoutAgencyMembershipsInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type PropertyCreateNestedManyWithoutAssignedAgentMemberInput = {
+    create?: XOR<PropertyCreateWithoutAssignedAgentMemberInput, PropertyUncheckedCreateWithoutAssignedAgentMemberInput> | PropertyCreateWithoutAssignedAgentMemberInput[] | PropertyUncheckedCreateWithoutAssignedAgentMemberInput[]
+    connectOrCreate?: PropertyCreateOrConnectWithoutAssignedAgentMemberInput | PropertyCreateOrConnectWithoutAssignedAgentMemberInput[]
+    createMany?: PropertyCreateManyAssignedAgentMemberInputEnvelope
+    connect?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+  }
+
+  export type PropertyUncheckedCreateNestedManyWithoutAssignedAgentMemberInput = {
+    create?: XOR<PropertyCreateWithoutAssignedAgentMemberInput, PropertyUncheckedCreateWithoutAssignedAgentMemberInput> | PropertyCreateWithoutAssignedAgentMemberInput[] | PropertyUncheckedCreateWithoutAssignedAgentMemberInput[]
+    connectOrCreate?: PropertyCreateOrConnectWithoutAssignedAgentMemberInput | PropertyCreateOrConnectWithoutAssignedAgentMemberInput[]
+    createMany?: PropertyCreateManyAssignedAgentMemberInputEnvelope
+    connect?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
   }
 
   export type EnumAgencyMemberRoleFieldUpdateOperationsInput = {
@@ -15819,6 +16145,34 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutAgencyMembershipsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAgencyMembershipsInput, UserUpdateWithoutAgencyMembershipsInput>, UserUncheckedUpdateWithoutAgencyMembershipsInput>
+  }
+
+  export type PropertyUpdateManyWithoutAssignedAgentMemberNestedInput = {
+    create?: XOR<PropertyCreateWithoutAssignedAgentMemberInput, PropertyUncheckedCreateWithoutAssignedAgentMemberInput> | PropertyCreateWithoutAssignedAgentMemberInput[] | PropertyUncheckedCreateWithoutAssignedAgentMemberInput[]
+    connectOrCreate?: PropertyCreateOrConnectWithoutAssignedAgentMemberInput | PropertyCreateOrConnectWithoutAssignedAgentMemberInput[]
+    upsert?: PropertyUpsertWithWhereUniqueWithoutAssignedAgentMemberInput | PropertyUpsertWithWhereUniqueWithoutAssignedAgentMemberInput[]
+    createMany?: PropertyCreateManyAssignedAgentMemberInputEnvelope
+    set?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+    disconnect?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+    delete?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+    connect?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+    update?: PropertyUpdateWithWhereUniqueWithoutAssignedAgentMemberInput | PropertyUpdateWithWhereUniqueWithoutAssignedAgentMemberInput[]
+    updateMany?: PropertyUpdateManyWithWhereWithoutAssignedAgentMemberInput | PropertyUpdateManyWithWhereWithoutAssignedAgentMemberInput[]
+    deleteMany?: PropertyScalarWhereInput | PropertyScalarWhereInput[]
+  }
+
+  export type PropertyUncheckedUpdateManyWithoutAssignedAgentMemberNestedInput = {
+    create?: XOR<PropertyCreateWithoutAssignedAgentMemberInput, PropertyUncheckedCreateWithoutAssignedAgentMemberInput> | PropertyCreateWithoutAssignedAgentMemberInput[] | PropertyUncheckedCreateWithoutAssignedAgentMemberInput[]
+    connectOrCreate?: PropertyCreateOrConnectWithoutAssignedAgentMemberInput | PropertyCreateOrConnectWithoutAssignedAgentMemberInput[]
+    upsert?: PropertyUpsertWithWhereUniqueWithoutAssignedAgentMemberInput | PropertyUpsertWithWhereUniqueWithoutAssignedAgentMemberInput[]
+    createMany?: PropertyCreateManyAssignedAgentMemberInputEnvelope
+    set?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+    disconnect?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+    delete?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+    connect?: PropertyWhereUniqueInput | PropertyWhereUniqueInput[]
+    update?: PropertyUpdateWithWhereUniqueWithoutAssignedAgentMemberInput | PropertyUpdateWithWhereUniqueWithoutAssignedAgentMemberInput[]
+    updateMany?: PropertyUpdateManyWithWhereWithoutAssignedAgentMemberInput | PropertyUpdateManyWithWhereWithoutAssignedAgentMemberInput[]
+    deleteMany?: PropertyScalarWhereInput | PropertyScalarWhereInput[]
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -16219,6 +16573,8 @@ export namespace Prisma {
     isPublished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    agency?: AgencyCreateNestedOneWithoutPropertyInput
+    assignedAgentMember?: AgencyMemberCreateNestedOneWithoutAssignedPropertiesInput
     application?: ApplicationCreateNestedManyWithoutPropertyInput
     media?: PropertyMediaCreateNestedManyWithoutPropertyInput
   }
@@ -16238,6 +16594,8 @@ export namespace Prisma {
     bathrooms?: number | null
     parkingSpaces?: number | null
     isPublished?: boolean
+    agencyId?: string | null
+    assignedAgentMemberId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     application?: ApplicationUncheckedCreateNestedManyWithoutPropertyInput
@@ -16382,6 +16740,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     agency: AgencyCreateNestedOneWithoutMembersInput
+    assignedProperties?: PropertyCreateNestedManyWithoutAssignedAgentMemberInput
   }
 
   export type AgencyMemberUncheckedCreateWithoutUserInput = {
@@ -16391,6 +16750,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    assignedProperties?: PropertyUncheckedCreateNestedManyWithoutAssignedAgentMemberInput
   }
 
   export type AgencyMemberCreateOrConnectWithoutUserInput = {
@@ -16438,6 +16798,8 @@ export namespace Prisma {
     parkingSpaces?: IntNullableFilter<"Property"> | number | null
     isPublished?: BoolFilter<"Property"> | boolean
     createdById?: StringFilter<"Property"> | string
+    agencyId?: StringNullableFilter<"Property"> | string | null
+    assignedAgentMemberId?: StringNullableFilter<"Property"> | string | null
     createdAt?: DateTimeFilter<"Property"> | Date | string
     updatedAt?: DateTimeFilter<"Property"> | Date | string
   }
@@ -16827,6 +17189,68 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutPropertiesInput, UserUncheckedCreateWithoutPropertiesInput>
   }
 
+  export type AgencyCreateWithoutPropertyInput = {
+    id?: string
+    name: string
+    slug: string
+    email: string
+    phone?: string | null
+    addressLine1?: string | null
+    suburb?: string | null
+    state?: string | null
+    postcode?: string | null
+    status?: $Enums.AgencyStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    members?: AgencyMemberCreateNestedManyWithoutAgencyInput
+  }
+
+  export type AgencyUncheckedCreateWithoutPropertyInput = {
+    id?: string
+    name: string
+    slug: string
+    email: string
+    phone?: string | null
+    addressLine1?: string | null
+    suburb?: string | null
+    state?: string | null
+    postcode?: string | null
+    status?: $Enums.AgencyStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    members?: AgencyMemberUncheckedCreateNestedManyWithoutAgencyInput
+  }
+
+  export type AgencyCreateOrConnectWithoutPropertyInput = {
+    where: AgencyWhereUniqueInput
+    create: XOR<AgencyCreateWithoutPropertyInput, AgencyUncheckedCreateWithoutPropertyInput>
+  }
+
+  export type AgencyMemberCreateWithoutAssignedPropertiesInput = {
+    id?: string
+    role: $Enums.AgencyMemberRole
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agency: AgencyCreateNestedOneWithoutMembersInput
+    user: UserCreateNestedOneWithoutAgencyMembershipsInput
+  }
+
+  export type AgencyMemberUncheckedCreateWithoutAssignedPropertiesInput = {
+    id?: string
+    agencyId: string
+    userId: string
+    role: $Enums.AgencyMemberRole
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AgencyMemberCreateOrConnectWithoutAssignedPropertiesInput = {
+    where: AgencyMemberWhereUniqueInput
+    create: XOR<AgencyMemberCreateWithoutAssignedPropertiesInput, AgencyMemberUncheckedCreateWithoutAssignedPropertiesInput>
+  }
+
   export type ApplicationCreateWithoutPropertyInput = {
     id?: string
     status?: $Enums.ApplicationStatus
@@ -16938,6 +17362,80 @@ export namespace Prisma {
     agencyMemberships?: AgencyMemberUncheckedUpdateManyWithoutUserNestedInput
   }
 
+  export type AgencyUpsertWithoutPropertyInput = {
+    update: XOR<AgencyUpdateWithoutPropertyInput, AgencyUncheckedUpdateWithoutPropertyInput>
+    create: XOR<AgencyCreateWithoutPropertyInput, AgencyUncheckedCreateWithoutPropertyInput>
+    where?: AgencyWhereInput
+  }
+
+  export type AgencyUpdateToOneWithWhereWithoutPropertyInput = {
+    where?: AgencyWhereInput
+    data: XOR<AgencyUpdateWithoutPropertyInput, AgencyUncheckedUpdateWithoutPropertyInput>
+  }
+
+  export type AgencyUpdateWithoutPropertyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
+    suburb?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postcode?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumAgencyStatusFieldUpdateOperationsInput | $Enums.AgencyStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: AgencyMemberUpdateManyWithoutAgencyNestedInput
+  }
+
+  export type AgencyUncheckedUpdateWithoutPropertyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    addressLine1?: NullableStringFieldUpdateOperationsInput | string | null
+    suburb?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postcode?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumAgencyStatusFieldUpdateOperationsInput | $Enums.AgencyStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: AgencyMemberUncheckedUpdateManyWithoutAgencyNestedInput
+  }
+
+  export type AgencyMemberUpsertWithoutAssignedPropertiesInput = {
+    update: XOR<AgencyMemberUpdateWithoutAssignedPropertiesInput, AgencyMemberUncheckedUpdateWithoutAssignedPropertiesInput>
+    create: XOR<AgencyMemberCreateWithoutAssignedPropertiesInput, AgencyMemberUncheckedCreateWithoutAssignedPropertiesInput>
+    where?: AgencyMemberWhereInput
+  }
+
+  export type AgencyMemberUpdateToOneWithWhereWithoutAssignedPropertiesInput = {
+    where?: AgencyMemberWhereInput
+    data: XOR<AgencyMemberUpdateWithoutAssignedPropertiesInput, AgencyMemberUncheckedUpdateWithoutAssignedPropertiesInput>
+  }
+
+  export type AgencyMemberUpdateWithoutAssignedPropertiesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    role?: EnumAgencyMemberRoleFieldUpdateOperationsInput | $Enums.AgencyMemberRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agency?: AgencyUpdateOneRequiredWithoutMembersNestedInput
+    user?: UserUpdateOneRequiredWithoutAgencyMembershipsNestedInput
+  }
+
+  export type AgencyMemberUncheckedUpdateWithoutAssignedPropertiesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    agencyId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    role?: EnumAgencyMemberRoleFieldUpdateOperationsInput | $Enums.AgencyMemberRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ApplicationUpsertWithWhereUniqueWithoutPropertyInput = {
     where: ApplicationWhereUniqueInput
     update: XOR<ApplicationUpdateWithoutPropertyInput, ApplicationUncheckedUpdateWithoutPropertyInput>
@@ -17004,6 +17502,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutPropertiesInput
+    agency?: AgencyCreateNestedOneWithoutPropertyInput
+    assignedAgentMember?: AgencyMemberCreateNestedOneWithoutAssignedPropertiesInput
     media?: PropertyMediaCreateNestedManyWithoutPropertyInput
   }
 
@@ -17023,6 +17523,8 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     createdById: string
+    agencyId?: string | null
+    assignedAgentMemberId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     media?: PropertyMediaUncheckedCreateNestedManyWithoutPropertyInput
@@ -17105,6 +17607,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutPropertiesNestedInput
+    agency?: AgencyUpdateOneWithoutPropertyNestedInput
+    assignedAgentMember?: AgencyMemberUpdateOneWithoutAssignedPropertiesNestedInput
     media?: PropertyMediaUpdateManyWithoutPropertyNestedInput
   }
 
@@ -17124,6 +17628,8 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
+    agencyId?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     media?: PropertyMediaUncheckedUpdateManyWithoutPropertyNestedInput
@@ -17288,6 +17794,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutPropertiesInput
+    agency?: AgencyCreateNestedOneWithoutPropertyInput
+    assignedAgentMember?: AgencyMemberCreateNestedOneWithoutAssignedPropertiesInput
     application?: ApplicationCreateNestedManyWithoutPropertyInput
   }
 
@@ -17307,6 +17815,8 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     createdById: string
+    agencyId?: string | null
+    assignedAgentMemberId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     application?: ApplicationUncheckedCreateNestedManyWithoutPropertyInput
@@ -17346,6 +17856,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutPropertiesNestedInput
+    agency?: AgencyUpdateOneWithoutPropertyNestedInput
+    assignedAgentMember?: AgencyMemberUpdateOneWithoutAssignedPropertiesNestedInput
     application?: ApplicationUpdateManyWithoutPropertyNestedInput
   }
 
@@ -17365,6 +17877,8 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
+    agencyId?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     application?: ApplicationUncheckedUpdateManyWithoutPropertyNestedInput
@@ -17377,6 +17891,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutAgencyMembershipsInput
+    assignedProperties?: PropertyCreateNestedManyWithoutAssignedAgentMemberInput
   }
 
   export type AgencyMemberUncheckedCreateWithoutAgencyInput = {
@@ -17386,6 +17901,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    assignedProperties?: PropertyUncheckedCreateNestedManyWithoutAssignedAgentMemberInput
   }
 
   export type AgencyMemberCreateOrConnectWithoutAgencyInput = {
@@ -17395,6 +17911,62 @@ export namespace Prisma {
 
   export type AgencyMemberCreateManyAgencyInputEnvelope = {
     data: AgencyMemberCreateManyAgencyInput | AgencyMemberCreateManyAgencyInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PropertyCreateWithoutAgencyInput = {
+    id?: string
+    title: string
+    description: string
+    listingType: $Enums.ListingType
+    propertyType: $Enums.PropertyType
+    price: Decimal | DecimalJsLike | number | string
+    addressLine1: string
+    suburb: string
+    state: string
+    postcode: string
+    bedrooms?: number | null
+    bathrooms?: number | null
+    parkingSpaces?: number | null
+    isPublished?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: UserCreateNestedOneWithoutPropertiesInput
+    assignedAgentMember?: AgencyMemberCreateNestedOneWithoutAssignedPropertiesInput
+    application?: ApplicationCreateNestedManyWithoutPropertyInput
+    media?: PropertyMediaCreateNestedManyWithoutPropertyInput
+  }
+
+  export type PropertyUncheckedCreateWithoutAgencyInput = {
+    id?: string
+    title: string
+    description: string
+    listingType: $Enums.ListingType
+    propertyType: $Enums.PropertyType
+    price: Decimal | DecimalJsLike | number | string
+    addressLine1: string
+    suburb: string
+    state: string
+    postcode: string
+    bedrooms?: number | null
+    bathrooms?: number | null
+    parkingSpaces?: number | null
+    isPublished?: boolean
+    createdById: string
+    assignedAgentMemberId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    application?: ApplicationUncheckedCreateNestedManyWithoutPropertyInput
+    media?: PropertyMediaUncheckedCreateNestedManyWithoutPropertyInput
+  }
+
+  export type PropertyCreateOrConnectWithoutAgencyInput = {
+    where: PropertyWhereUniqueInput
+    create: XOR<PropertyCreateWithoutAgencyInput, PropertyUncheckedCreateWithoutAgencyInput>
+  }
+
+  export type PropertyCreateManyAgencyInputEnvelope = {
+    data: PropertyCreateManyAgencyInput | PropertyCreateManyAgencyInput[]
     skipDuplicates?: boolean
   }
 
@@ -17414,6 +17986,22 @@ export namespace Prisma {
     data: XOR<AgencyMemberUpdateManyMutationInput, AgencyMemberUncheckedUpdateManyWithoutAgencyInput>
   }
 
+  export type PropertyUpsertWithWhereUniqueWithoutAgencyInput = {
+    where: PropertyWhereUniqueInput
+    update: XOR<PropertyUpdateWithoutAgencyInput, PropertyUncheckedUpdateWithoutAgencyInput>
+    create: XOR<PropertyCreateWithoutAgencyInput, PropertyUncheckedCreateWithoutAgencyInput>
+  }
+
+  export type PropertyUpdateWithWhereUniqueWithoutAgencyInput = {
+    where: PropertyWhereUniqueInput
+    data: XOR<PropertyUpdateWithoutAgencyInput, PropertyUncheckedUpdateWithoutAgencyInput>
+  }
+
+  export type PropertyUpdateManyWithWhereWithoutAgencyInput = {
+    where: PropertyScalarWhereInput
+    data: XOR<PropertyUpdateManyMutationInput, PropertyUncheckedUpdateManyWithoutAgencyInput>
+  }
+
   export type AgencyCreateWithoutMembersInput = {
     id?: string
     name: string
@@ -17427,6 +18015,7 @@ export namespace Prisma {
     status?: $Enums.AgencyStatus
     createdAt?: Date | string
     updatedAt?: Date | string
+    property?: PropertyCreateNestedManyWithoutAgencyInput
   }
 
   export type AgencyUncheckedCreateWithoutMembersInput = {
@@ -17442,6 +18031,7 @@ export namespace Prisma {
     status?: $Enums.AgencyStatus
     createdAt?: Date | string
     updatedAt?: Date | string
+    property?: PropertyUncheckedCreateNestedManyWithoutAgencyInput
   }
 
   export type AgencyCreateOrConnectWithoutMembersInput = {
@@ -17492,6 +18082,62 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutAgencyMembershipsInput, UserUncheckedCreateWithoutAgencyMembershipsInput>
   }
 
+  export type PropertyCreateWithoutAssignedAgentMemberInput = {
+    id?: string
+    title: string
+    description: string
+    listingType: $Enums.ListingType
+    propertyType: $Enums.PropertyType
+    price: Decimal | DecimalJsLike | number | string
+    addressLine1: string
+    suburb: string
+    state: string
+    postcode: string
+    bedrooms?: number | null
+    bathrooms?: number | null
+    parkingSpaces?: number | null
+    isPublished?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: UserCreateNestedOneWithoutPropertiesInput
+    agency?: AgencyCreateNestedOneWithoutPropertyInput
+    application?: ApplicationCreateNestedManyWithoutPropertyInput
+    media?: PropertyMediaCreateNestedManyWithoutPropertyInput
+  }
+
+  export type PropertyUncheckedCreateWithoutAssignedAgentMemberInput = {
+    id?: string
+    title: string
+    description: string
+    listingType: $Enums.ListingType
+    propertyType: $Enums.PropertyType
+    price: Decimal | DecimalJsLike | number | string
+    addressLine1: string
+    suburb: string
+    state: string
+    postcode: string
+    bedrooms?: number | null
+    bathrooms?: number | null
+    parkingSpaces?: number | null
+    isPublished?: boolean
+    createdById: string
+    agencyId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    application?: ApplicationUncheckedCreateNestedManyWithoutPropertyInput
+    media?: PropertyMediaUncheckedCreateNestedManyWithoutPropertyInput
+  }
+
+  export type PropertyCreateOrConnectWithoutAssignedAgentMemberInput = {
+    where: PropertyWhereUniqueInput
+    create: XOR<PropertyCreateWithoutAssignedAgentMemberInput, PropertyUncheckedCreateWithoutAssignedAgentMemberInput>
+  }
+
+  export type PropertyCreateManyAssignedAgentMemberInputEnvelope = {
+    data: PropertyCreateManyAssignedAgentMemberInput | PropertyCreateManyAssignedAgentMemberInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AgencyUpsertWithoutMembersInput = {
     update: XOR<AgencyUpdateWithoutMembersInput, AgencyUncheckedUpdateWithoutMembersInput>
     create: XOR<AgencyCreateWithoutMembersInput, AgencyUncheckedCreateWithoutMembersInput>
@@ -17516,6 +18162,7 @@ export namespace Prisma {
     status?: EnumAgencyStatusFieldUpdateOperationsInput | $Enums.AgencyStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    property?: PropertyUpdateManyWithoutAgencyNestedInput
   }
 
   export type AgencyUncheckedUpdateWithoutMembersInput = {
@@ -17531,6 +18178,7 @@ export namespace Prisma {
     status?: EnumAgencyStatusFieldUpdateOperationsInput | $Enums.AgencyStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    property?: PropertyUncheckedUpdateManyWithoutAgencyNestedInput
   }
 
   export type UserUpsertWithoutAgencyMembershipsInput = {
@@ -17582,6 +18230,22 @@ export namespace Prisma {
     media?: UserMediaUncheckedUpdateManyWithoutUserNestedInput
   }
 
+  export type PropertyUpsertWithWhereUniqueWithoutAssignedAgentMemberInput = {
+    where: PropertyWhereUniqueInput
+    update: XOR<PropertyUpdateWithoutAssignedAgentMemberInput, PropertyUncheckedUpdateWithoutAssignedAgentMemberInput>
+    create: XOR<PropertyCreateWithoutAssignedAgentMemberInput, PropertyUncheckedCreateWithoutAssignedAgentMemberInput>
+  }
+
+  export type PropertyUpdateWithWhereUniqueWithoutAssignedAgentMemberInput = {
+    where: PropertyWhereUniqueInput
+    data: XOR<PropertyUpdateWithoutAssignedAgentMemberInput, PropertyUncheckedUpdateWithoutAssignedAgentMemberInput>
+  }
+
+  export type PropertyUpdateManyWithWhereWithoutAssignedAgentMemberInput = {
+    where: PropertyScalarWhereInput
+    data: XOR<PropertyUpdateManyMutationInput, PropertyUncheckedUpdateManyWithoutAssignedAgentMemberInput>
+  }
+
   export type PropertyCreateManyCreatedByInput = {
     id?: string
     title: string
@@ -17597,6 +18261,8 @@ export namespace Prisma {
     bathrooms?: number | null
     parkingSpaces?: number | null
     isPublished?: boolean
+    agencyId?: string | null
+    assignedAgentMemberId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -17655,6 +18321,8 @@ export namespace Prisma {
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agency?: AgencyUpdateOneWithoutPropertyNestedInput
+    assignedAgentMember?: AgencyMemberUpdateOneWithoutAssignedPropertiesNestedInput
     application?: ApplicationUpdateManyWithoutPropertyNestedInput
     media?: PropertyMediaUpdateManyWithoutPropertyNestedInput
   }
@@ -17674,6 +18342,8 @@ export namespace Prisma {
     bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
+    agencyId?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     application?: ApplicationUncheckedUpdateManyWithoutPropertyNestedInput
@@ -17695,6 +18365,8 @@ export namespace Prisma {
     bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
+    agencyId?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17790,6 +18462,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     agency?: AgencyUpdateOneRequiredWithoutMembersNestedInput
+    assignedProperties?: PropertyUpdateManyWithoutAssignedAgentMemberNestedInput
   }
 
   export type AgencyMemberUncheckedUpdateWithoutUserInput = {
@@ -17799,6 +18472,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignedProperties?: PropertyUncheckedUpdateManyWithoutAssignedAgentMemberNestedInput
   }
 
   export type AgencyMemberUncheckedUpdateManyWithoutUserInput = {
@@ -17903,6 +18577,27 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type PropertyCreateManyAgencyInput = {
+    id?: string
+    title: string
+    description: string
+    listingType: $Enums.ListingType
+    propertyType: $Enums.PropertyType
+    price: Decimal | DecimalJsLike | number | string
+    addressLine1: string
+    suburb: string
+    state: string
+    postcode: string
+    bedrooms?: number | null
+    bathrooms?: number | null
+    parkingSpaces?: number | null
+    isPublished?: boolean
+    createdById: string
+    assignedAgentMemberId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type AgencyMemberUpdateWithoutAgencyInput = {
     id?: StringFieldUpdateOperationsInput | string
     role?: EnumAgencyMemberRoleFieldUpdateOperationsInput | $Enums.AgencyMemberRole
@@ -17910,6 +18605,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutAgencyMembershipsNestedInput
+    assignedProperties?: PropertyUpdateManyWithoutAssignedAgentMemberNestedInput
   }
 
   export type AgencyMemberUncheckedUpdateWithoutAgencyInput = {
@@ -17919,6 +18615,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignedProperties?: PropertyUncheckedUpdateManyWithoutAssignedAgentMemberNestedInput
   }
 
   export type AgencyMemberUncheckedUpdateManyWithoutAgencyInput = {
@@ -17926,6 +18623,161 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     role?: EnumAgencyMemberRoleFieldUpdateOperationsInput | $Enums.AgencyMemberRole
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PropertyUpdateWithoutAgencyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    listingType?: EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+    propertyType?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    addressLine1?: StringFieldUpdateOperationsInput | string
+    suburb?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    postcode?: StringFieldUpdateOperationsInput | string
+    bedrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneRequiredWithoutPropertiesNestedInput
+    assignedAgentMember?: AgencyMemberUpdateOneWithoutAssignedPropertiesNestedInput
+    application?: ApplicationUpdateManyWithoutPropertyNestedInput
+    media?: PropertyMediaUpdateManyWithoutPropertyNestedInput
+  }
+
+  export type PropertyUncheckedUpdateWithoutAgencyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    listingType?: EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+    propertyType?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    addressLine1?: StringFieldUpdateOperationsInput | string
+    suburb?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    postcode?: StringFieldUpdateOperationsInput | string
+    bedrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdById?: StringFieldUpdateOperationsInput | string
+    assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    application?: ApplicationUncheckedUpdateManyWithoutPropertyNestedInput
+    media?: PropertyMediaUncheckedUpdateManyWithoutPropertyNestedInput
+  }
+
+  export type PropertyUncheckedUpdateManyWithoutAgencyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    listingType?: EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+    propertyType?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    addressLine1?: StringFieldUpdateOperationsInput | string
+    suburb?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    postcode?: StringFieldUpdateOperationsInput | string
+    bedrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdById?: StringFieldUpdateOperationsInput | string
+    assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PropertyCreateManyAssignedAgentMemberInput = {
+    id?: string
+    title: string
+    description: string
+    listingType: $Enums.ListingType
+    propertyType: $Enums.PropertyType
+    price: Decimal | DecimalJsLike | number | string
+    addressLine1: string
+    suburb: string
+    state: string
+    postcode: string
+    bedrooms?: number | null
+    bathrooms?: number | null
+    parkingSpaces?: number | null
+    isPublished?: boolean
+    createdById: string
+    agencyId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PropertyUpdateWithoutAssignedAgentMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    listingType?: EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+    propertyType?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    addressLine1?: StringFieldUpdateOperationsInput | string
+    suburb?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    postcode?: StringFieldUpdateOperationsInput | string
+    bedrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneRequiredWithoutPropertiesNestedInput
+    agency?: AgencyUpdateOneWithoutPropertyNestedInput
+    application?: ApplicationUpdateManyWithoutPropertyNestedInput
+    media?: PropertyMediaUpdateManyWithoutPropertyNestedInput
+  }
+
+  export type PropertyUncheckedUpdateWithoutAssignedAgentMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    listingType?: EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+    propertyType?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    addressLine1?: StringFieldUpdateOperationsInput | string
+    suburb?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    postcode?: StringFieldUpdateOperationsInput | string
+    bedrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdById?: StringFieldUpdateOperationsInput | string
+    agencyId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    application?: ApplicationUncheckedUpdateManyWithoutPropertyNestedInput
+    media?: PropertyMediaUncheckedUpdateManyWithoutPropertyNestedInput
+  }
+
+  export type PropertyUncheckedUpdateManyWithoutAssignedAgentMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    listingType?: EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+    propertyType?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    addressLine1?: StringFieldUpdateOperationsInput | string
+    suburb?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    postcode?: StringFieldUpdateOperationsInput | string
+    bedrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdById?: StringFieldUpdateOperationsInput | string
+    agencyId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -1,8 +1,5 @@
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
-import { Roles } from 'src/common/decorators/roles.decorator';
-import { RolesGuard } from 'src/common/guards/roles.guard';
 import { UploadedImageFile } from 'src/common/types/uploaded-image-file.type';
-import { UserRole } from 'src/generated/prisma';
 
 import {
   Body,
@@ -34,8 +31,7 @@ export class PropertiesController {
   constructor(private readonly propertyService: PropertiesService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.AGENT)
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new property' })
   create(@Body() createPropertyDto: CreatePropertyDto, @CurrentUser() currentUser: AuthenticatedUser) {
@@ -43,8 +39,7 @@ export class PropertiesController {
   }
 
   @Post(':propertyId/media')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.AGENT)
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(FilesInterceptor('files', 10)) // Allow up to 10 files
   @ApiBearerAuth()
   @ApiConsumes('multipart/form-data')
@@ -71,34 +66,40 @@ export class PropertiesController {
     @Param('propertyId') propertyId: string,
     @UploadedFiles() files: UploadedImageFile[],
     @Body() dto: UploadPropertyMediaDto,
+    @CurrentUser() currentUser: AuthenticatedUser,
   ) {
-    return this.propertyService.uploadMedia(propertyId, files, dto);
+    return this.propertyService.uploadMedia(propertyId, files, dto, currentUser);
   }
 
   @Patch(':propertyId/media/:mediaId/primary')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.AGENT)
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Set a property media item as the primary image' })
-  setPrimaryImage(@Param('propertyId') propertyId: string, @Param('mediaId') mediaId: string) {
-    return this.propertyService.setPrimaryImage(propertyId, mediaId);
+  setPrimaryImage(
+    @Param('propertyId') propertyId: string,
+    @Param('mediaId') mediaId: string,
+    @CurrentUser() currentUser: AuthenticatedUser,
+  ) {
+    return this.propertyService.setPrimaryImage(propertyId, mediaId, currentUser);
   }
 
   @Delete(':propertyId/media/:mediaId')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.AGENT)
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a property media item' })
-  deleteMedia(@Param('propertyId') propertyId: string, @Param('mediaId') mediaId: string) {
-    return this.propertyService.deleteMedia(propertyId, mediaId);
+  deleteMedia(
+    @Param('propertyId') propertyId: string,
+    @Param('mediaId') mediaId: string,
+    @CurrentUser() currentUser: AuthenticatedUser,
+  ) {
+    return this.propertyService.deleteMedia(propertyId, mediaId, currentUser);
   }
 
   @Get(':propertyId/applications')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.AGENT)
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get applications for a property' })
-  getApplicationsForProperty(@Param('propertyId') propertyId: string) {
-    return this.propertyService.getApplicationsForProperty(propertyId);
+  getApplicationsForProperty(@Param('propertyId') propertyId: string, @CurrentUser() currentUser: AuthenticatedUser) {
+    return this.propertyService.getApplicationsForProperty(propertyId, currentUser);
   }
 }

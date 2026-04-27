@@ -3,15 +3,10 @@ import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { PaginatedResponse } from 'src/common/types/paginated-response.type';
 import { PropertyMediaItem, UploadedImageFile } from 'src/common/types/uploaded-image-file.type';
 
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 
 import { PrismaService } from '../../database/prisma.service';
-import {
-  ListingType as PrismaListingType,
-  MediaVisibility,
-  PropertyMediaType,
-  PropertyType as PrismaPropertyType,
-} from '../../generated/prisma';
+import { AgencyStatus, MediaVisibility, PropertyMediaType, UserRole } from '../../generated/prisma';
 import { AuthenticatedUser } from '../auth/types/authenticated-user.type';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UploadPropertyMediaDto } from './dto/upload-property-media.dto';
@@ -23,23 +18,80 @@ export class PropertiesService {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
+  private async ensureCanManageProperty(currentUser: AuthenticatedUser, propertyId: string) {
+    // Get Property
+    const property = await this.prisma.property.findUnique({
+      where: { id: propertyId },
+      select: {
+        id: true,
+        agencyId: true,
+        createdById: true,
+      },
+    });
+
+    if (!property) {
+      throw new ForbiddenException('Property not found');
+    }
+
+    // ADMIN can do everything
+    if (currentUser.role === UserRole.ADMIN) {
+      return property;
+    }
+
+    // Find user's agency membership
+    const membership = await this.prisma.agencyMember.findFirst({
+      where: {
+        userId: currentUser.id,
+        isActive: true,
+        agency: {
+          status: AgencyStatus.APPROVED,
+        },
+      },
+      select: {
+        agencyId: true,
+        role: true,
+      },
+    });
+
+    // Validate ownership
+    if (!membership || property.agencyId !== membership.agencyId) {
+      throw new ForbiddenException('Your are not allowed to manage this property');
+    }
+
+    return property;
+  }
+
   async create(createPropertyDto: CreatePropertyDto, currentUser: AuthenticatedUser) {
+    const membership = await this.prisma.agencyMember.findFirst({
+      where: {
+        userId: currentUser.id,
+        isActive: true,
+      },
+      select: {
+        agencyId: true,
+        agency: {
+          select: {
+            status: true,
+          },
+        },
+      },
+    });
+
+    if (currentUser.role !== UserRole.ADMIN) {
+      if (!membership) {
+        throw new ForbiddenException('You must belong to an agency to create property');
+      }
+
+      if (membership.agency.status !== AgencyStatus.APPROVED) {
+        throw new ForbiddenException('Agency must be approved');
+      }
+    }
+
     const property = await this.prisma.property.create({
       data: {
-        title: createPropertyDto.title,
-        description: createPropertyDto.description,
-        listingType: createPropertyDto.listingType as PrismaListingType,
-        propertyType: createPropertyDto.propertyType as PrismaPropertyType,
-        price: createPropertyDto.price,
-        addressLine1: createPropertyDto.addressLine1,
-        suburb: createPropertyDto.suburb,
-        state: createPropertyDto.state,
-        postcode: createPropertyDto.postcode,
-        bedrooms: createPropertyDto.bedrooms,
-        bathrooms: createPropertyDto.bathrooms,
-        parkingSpaces: createPropertyDto.parkingSpaces,
-        isPublished: createPropertyDto.isPublished ?? false,
+        ...createPropertyDto,
         createdById: currentUser.id,
+        agencyId: membership?.agencyId,
       },
       select: {
         id: true,
@@ -248,7 +300,14 @@ export class PropertiesService {
     return property;
   }
 
-  async uploadMedia(propertyId: string, files: UploadedImageFile[], dto: UploadPropertyMediaDto) {
+  async uploadMedia(
+    propertyId: string,
+    files: UploadedImageFile[],
+    dto: UploadPropertyMediaDto,
+    currentUser: AuthenticatedUser,
+  ) {
+    await this.ensureCanManageProperty(currentUser, propertyId);
+
     if (!files || files.length === 0) {
       throw new BadRequestException('At least one image file is required');
     }
@@ -320,7 +379,9 @@ export class PropertiesService {
     };
   }
 
-  async setPrimaryImage(propertyId: string, mediaId: string) {
+  async setPrimaryImage(propertyId: string, mediaId: string, currentUser: AuthenticatedUser) {
+    await this.ensureCanManageProperty(currentUser, propertyId);
+
     const media = await this.prisma.propertyMedia.findFirst({
       where: {
         id: mediaId,
@@ -355,7 +416,9 @@ export class PropertiesService {
     };
   }
 
-  async deleteMedia(propertyId: string, mediaId: string) {
+  async deleteMedia(propertyId: string, mediaId: string, currentUser: AuthenticatedUser) {
+    await this.ensureCanManageProperty(currentUser, propertyId);
+
     const media = await this.prisma.propertyMedia.findFirst({
       where: {
         id: mediaId,
@@ -392,7 +455,9 @@ export class PropertiesService {
     };
   }
 
-  async getApplicationsForProperty(propertyId: string) {
+  async getApplicationsForProperty(propertyId: string, currentUser: AuthenticatedUser) {
+    await this.ensureCanManageProperty(currentUser, propertyId);
+
     const property = await this.prisma.property.findUnique({
       where: { id: propertyId },
       select: {
