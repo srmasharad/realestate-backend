@@ -84,6 +84,7 @@ model User {
   emailVerificationTokens EmailVerificationToken[]
   media                   UserMedia[]
   agencyMemberships       AgencyMember[]
+  passwordResetTokens     PasswordResetToken[]
 }
 
 model UserMedia {
@@ -223,4 +224,15 @@ model AgencyMember {
   assignedProperties Property[] @relation("AssignedPropertyAgent")
 
   @@unique([agencyId, userId])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(uuid())
+  userId    String
+  token     String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

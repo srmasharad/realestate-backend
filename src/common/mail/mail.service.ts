@@ -1,10 +1,6 @@
 import { Resend } from 'resend';
 
-import {
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-} from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 
 @Injectable()
 export class MailService {
@@ -258,6 +254,29 @@ export class MailService {
 
     if (error) {
       throw new InternalServerErrorException('Failed to send property removal email');
+    }
+  }
+
+  async sendPasswordResetEmail(to: string, fullName: string, resetUrl: string) {
+    const recipient = process.env.NODE_ENV === 'development' ? (process.env.MAIL_DEV_TO ?? 'delivered@resend.dev') : to;
+
+    const { error } = await this.resend.emails.send({
+      from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
+      to: [recipient],
+      subject: 'Reset your password',
+      html: `
+      <h2>Password Reset Request</h2>
+      <p>Hello ${fullName},</p>
+      <p>We received a request to reset your password.</p>
+      <p>Click the link below to reset your password:</p>
+      <p><a href="${resetUrl}">Reset Password</a></p>
+      <p>This link will expire soon.</p>
+      <p>If you did not request this, you can ignore this email.</p>
+    `,
+    });
+
+    if (error) {
+      throw new InternalServerErrorException('Failed to send password reset email');
     }
   }
 }

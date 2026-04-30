@@ -1,22 +1,8 @@
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Query,
-  UseGuards,
-} from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiQuery,
-  ApiTags,
-} from '@nestjs/swagger';
+import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import { UpdateApplicationStatusDto } from '../applications/dto/update-application-status.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';

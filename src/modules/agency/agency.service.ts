@@ -2,17 +2,9 @@ import * as bcrypt from 'bcrypt';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { MailService } from 'src/common/mail/mail.service';
 import { PrismaService } from 'src/database/prisma.service';
-import {
-  AgencyMemberRole,
-  AgencyStatus,
-} from 'src/generated/prisma';
+import { AgencyMemberRole, AgencyStatus } from 'src/generated/prisma';
 
-import {
-  BadRequestException,
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 
 import { UpdateApplicationStatusDto } from '../applications/dto/update-application-status.dto';
 import { AuthenticatedUser } from '../auth/types/authenticated-user.type';

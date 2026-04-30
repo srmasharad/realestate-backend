@@ -241,6 +241,15 @@ exports.Prisma.AgencyMemberScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PasswordResetTokenScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  token: 'token',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -316,7 +325,8 @@ exports.Prisma.ModelName = {
   EmailVerificationToken: 'EmailVerificationToken',
   PropertyMedia: 'PropertyMedia',
   Agency: 'Agency',
-  AgencyMember: 'AgencyMember'
+  AgencyMember: 'AgencyMember',
+  PasswordResetToken: 'PasswordResetToken'
 };
 
 /**
