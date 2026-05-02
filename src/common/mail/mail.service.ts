@@ -7,6 +7,12 @@ export class MailService {
   private readonly logger = new Logger(MailService.name);
   private readonly resend = new Resend(process.env.RESEND_API_KEY);
 
+  constructor() {
+    if (!process.env.RESEND_API_KEY) {
+      throw new Error('RESEND_API_KEY is missing');
+    }
+  }
+
   async sendVerificationEmail(to: string, token: string) {
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
     const verifyUrl = `${frontendUrl}/verify-email?token=${token}`;
@@ -30,7 +36,7 @@ export class MailService {
       throw new InternalServerErrorException('Failed to send verification email');
     }
 
-    this.logger.log(`Verification email sent successfully. Email ID: ${data.id ?? 'unknown'}`);
+    this.logger.log(`Verification email sent successfully. Email ID: ${data?.id ?? 'unknown'}`);
 
     if (process.env.NODE_ENV === 'development') {
       /****** ONLY FOR DEVELOPMENT MODE TO SEE TEST THE TOKEN *****/
