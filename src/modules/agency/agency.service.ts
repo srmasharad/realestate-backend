@@ -2,7 +2,7 @@ import * as bcrypt from 'bcrypt';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { MailService } from 'src/common/mail/mail.service';
 import { PrismaService } from 'src/database/prisma.service';
-import { AgencyMemberRole, AgencyStatus } from 'src/generated/prisma';
+import { AgencyMemberRole, AgencyStatus, ApplicationStatus, OfferStatus } from 'src/generated/prisma';
 
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 
@@ -11,6 +11,7 @@ import { AuthenticatedUser } from '../auth/types/authenticated-user.type';
 import { AddAgencyMemberDto } from './dto/add-agency-member.dto';
 import { AssignAgentDto } from './dto/assign-agent.dto';
 import { CreateAgencyOnboardingDto } from './dto/create-agency-onboarding.dto';
+import { CreateOfferDto } from './dto/create-offer.dto';
 
 type ApplicationDecisionResult = {
   id: string;
@@ -46,12 +47,94 @@ type PropertyWithAssignedAgent = {
   } | null;
 };
 
+type CurrentAgencyMembership = {
+  id: string;
+  role: AgencyMemberRole;
+  agencyId: string;
+  agency: {
+    id: string;
+    name: string;
+    status: AgencyStatus;
+  };
+};
+
+type ApprovedApplicationForOffer = {
+  id: string;
+  propertyId: string;
+  applicantId: string;
+  status: ApplicationStatus;
+  applicant: {
+    email: string;
+    fullName: string;
+  };
+  property: {
+    id: string;
+    title: string;
+    isLocked: boolean;
+  };
+  offer: {
+    id: string;
+  } | null;
+};
+
+type CreatedOfferResult = {
+  id: string;
+  status: OfferStatus;
+  message: string | null;
+  expiresAt: Date | null;
+  createdAt: Date;
+  application: {
+    id: string;
+    status: ApplicationStatus;
+  };
+  property: {
+    id: string;
+    title: string;
+  };
+  applicant: {
+    id: string;
+    fullName: string;
+    email: string;
+  };
+};
+
 @Injectable()
 export class AgencyService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly mailService: MailService,
   ) {}
+
+  private async getApprovedAgencyMembership(currentUser: AuthenticatedUser): Promise<CurrentAgencyMembership> {
+    const membership = await this.prisma.agencyMember.findFirst({
+      where: {
+        userId: currentUser.id,
+        isActive: true,
+      },
+      select: {
+        id: true,
+        role: true,
+        agencyId: true,
+        agency: {
+          select: {
+            id: true,
+            name: true,
+            status: true,
+          },
+        },
+      },
+    });
+
+    if (!membership) {
+      throw new ForbiddenException('You are not part of any agency');
+    }
+
+    if (membership.agency.status !== AgencyStatus.APPROVED) {
+      throw new ForbiddenException('Agency is not approved');
+    }
+
+    return membership;
+  }
 
   async createOnboarding(dto: CreateAgencyOnboardingDto) {
     const existingAgencyBySlug = await this.prisma.agency.findUnique({
@@ -464,36 +547,22 @@ export class AgencyService {
   }
 
   async getAgencyProperties(currentUser: AuthenticatedUser, query: PaginationQueryDto) {
-    const membership = await this.prisma.agencyMember.findFirst({
-      where: {
-        userId: currentUser.id,
-        isActive: true,
-      },
-      select: {
-        agencyId: true,
-        agency: {
-          select: {
-            status: true,
-          },
-        },
-      },
-    });
-
-    if (!membership) {
-      throw new ForbiddenException('You are not part of any agency');
-    }
-
-    if (membership.agency.status !== AgencyStatus.APPROVED) {
-      throw new ForbiddenException('Agency is not approved');
-    }
+    const membership = await this.getApprovedAgencyMembership(currentUser);
 
     const page = query.page ?? 1;
     const limit = query.limit ?? 10;
     const search = query.search;
     const skip = (page - 1) * limit;
 
+    const isAgent = membership.role === AgencyMemberRole.AGENT;
+
     const where = {
       agencyId: membership.agencyId,
+      ...(isAgent
+        ? {
+            assignedAgentMemberId: membership.id,
+          }
+        : {}),
       ...(search
         ? {
             OR: [
@@ -573,37 +642,23 @@ export class AgencyService {
   }
 
   async getAgencyApplications(currentUser: AuthenticatedUser, query: PaginationQueryDto) {
-    const membership = await this.prisma.agencyMember.findFirst({
-      where: {
-        userId: currentUser.id,
-        isActive: true,
-      },
-      select: {
-        agencyId: true,
-        agency: {
-          select: {
-            status: true,
-          },
-        },
-      },
-    });
-
-    if (!membership) {
-      throw new ForbiddenException('You are not part of any agency');
-    }
-
-    if (membership.agency.status !== AgencyStatus.APPROVED) {
-      throw new ForbiddenException('Agency is not approved');
-    }
+    const membership = await this.getApprovedAgencyMembership(currentUser);
 
     const page = query.page ?? 1;
     const limit = query.limit ?? 10;
     const search = query.search;
     const skip = (page - 1) * limit;
 
+    const isAgent = membership.role === AgencyMemberRole.AGENT;
+
     const where = {
       property: {
         agencyId: membership.agencyId,
+        ...(isAgent
+          ? {
+              assignedAgentMemberId: membership.id,
+            }
+          : {}),
       },
       ...(search
         ? {
@@ -685,36 +740,20 @@ export class AgencyService {
     applicationId: string,
     dto: UpdateApplicationStatusDto,
   ) {
-    const membership = await this.prisma.agencyMember.findFirst({
-      where: {
-        userId: currentUser.id,
-        isActive: true,
-      },
-      select: {
-        agencyId: true,
-        agency: {
-          select: {
-            id: true,
-            name: true,
-            status: true,
-          },
-        },
-      },
-    });
+    const membership = await this.getApprovedAgencyMembership(currentUser);
 
-    if (!membership) {
-      throw new ForbiddenException('You are not part of any agency');
-    }
-
-    if (membership.agency.status !== AgencyStatus.APPROVED) {
-      throw new ForbiddenException('Agency is not approved');
-    }
+    const isAgent = membership.role === AgencyMemberRole.AGENT;
 
     const application = await this.prisma.application.findFirst({
       where: {
         id: applicationId,
         property: {
           agencyId: membership.agencyId,
+          ...(isAgent
+            ? {
+                assignedAgentMemberId: membership.id,
+              }
+            : {}),
         },
       },
       select: {
@@ -739,6 +778,14 @@ export class AgencyService {
 
     if (!application) {
       throw new NotFoundException('Application not found for this agency');
+    }
+
+    if (application.status === dto.status) {
+      throw new BadRequestException(`Application is already ${dto.status}`);
+    }
+
+    if (application.status === 'REJECTED' && dto.status === 'REJECTED') {
+      throw new BadRequestException('Application already rejected');
     }
 
     let updatedApplication: ApplicationDecisionResult;
@@ -872,31 +919,7 @@ export class AgencyService {
 
   async assignAgentToProperty(currentUser: AuthenticatedUser, propertyId: string, dto: AssignAgentDto) {
     // Get current user's agency membership
-    const membership = await this.prisma.agencyMember.findFirst({
-      where: {
-        userId: currentUser.id,
-        isActive: true,
-      },
-      select: {
-        id: true,
-        role: true,
-        agencyId: true,
-        agency: {
-          select: {
-            name: true,
-            status: true,
-          },
-        },
-      },
-    });
-
-    if (!membership) {
-      throw new ForbiddenException('You are not part of any agency');
-    }
-
-    if (membership.agency.status !== 'APPROVED') {
-      throw new ForbiddenException('Agency is not approved');
-    }
+    const membership = await this.getApprovedAgencyMembership(currentUser);
 
     if (!['AGENCY_OWNER', 'AGENCY_ADMIN'].includes(membership.role)) {
       throw new ForbiddenException('You are not allowed to assign agents');
@@ -935,7 +958,7 @@ export class AgencyService {
         agencyId: membership.agencyId,
         isActive: true,
         role: {
-          in: ['AGENT', 'AGENCY_ADMIN'],
+          in: [AgencyMemberRole.AGENT, AgencyMemberRole.AGENCY_ADMIN],
         },
       },
       select: {
@@ -951,6 +974,10 @@ export class AgencyService {
 
     if (!targetMember) {
       throw new BadRequestException('Invalid agency member');
+    }
+
+    if (property.assignedAgentMember?.user?.email === targetMember.user.email) {
+      throw new BadRequestException('Agent is already assigned to this property');
     }
 
     // Assign agent
@@ -1006,6 +1033,284 @@ export class AgencyService {
     return {
       message: 'Agent assigned successfully',
       property: updatedProperty,
+    };
+  }
+
+  async removeAssignedAgentFromProperty(currentUser: AuthenticatedUser, propertyId: string) {
+    const membership = await this.getApprovedAgencyMembership(currentUser);
+
+    if (membership.role !== AgencyMemberRole.AGENCY_OWNER && membership.role !== AgencyMemberRole.AGENCY_ADMIN) {
+      throw new ForbiddenException('You are not allowed to remove assigned agents');
+    }
+
+    const property = await this.prisma.property.findFirst({
+      where: {
+        id: propertyId,
+        agencyId: membership.agencyId,
+      },
+      select: {
+        id: true,
+        title: true,
+        assignedAgentMemberId: true,
+        assignedAgentMember: {
+          select: {
+            user: {
+              select: {
+                fullName: true,
+                email: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!property) {
+      throw new NotFoundException('Property not found for your agency');
+    }
+
+    if (!property.assignedAgentMemberId) {
+      throw new BadRequestException('No agent is assigned to this property');
+    }
+
+    const removedAgent = property.assignedAgentMember?.user ?? null;
+
+    const updatedProperty = await this.prisma.property.update({
+      where: {
+        id: propertyId,
+      },
+      data: {
+        assignedAgentMemberId: null,
+      },
+      select: {
+        id: true,
+        title: true,
+        assignedAgentMemberId: true,
+      },
+    });
+
+    if (removedAgent) {
+      try {
+        await this.mailService.sendAgentRemovedFromPropertyEmail(
+          removedAgent.email,
+          removedAgent.fullName,
+          property.title,
+          membership.agency.name,
+        );
+      } catch (error) {
+        console.error('Failed to send agent removal email', error);
+      }
+    }
+
+    return {
+      message: 'Assigned agent removed successfully',
+      property: updatedProperty,
+    };
+  }
+
+  async deactivateAgencyMember(currentUser: AuthenticatedUser, memberId: string) {
+    const membership = await this.getApprovedAgencyMembership(currentUser);
+
+    // Only OWNER / ADMIN allowed
+    if (membership.role !== AgencyMemberRole.AGENCY_OWNER && membership.role !== AgencyMemberRole.AGENCY_ADMIN) {
+      throw new ForbiddenException('You are not allowed to deactivate members');
+    }
+
+    // Find target member
+    const targetMember = await this.prisma.agencyMember.findFirst({
+      where: {
+        id: memberId,
+        agencyId: membership.agencyId,
+      },
+      select: {
+        id: true,
+        role: true,
+        isActive: true,
+        userId: true,
+        user: {
+          select: {
+            fullName: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    if (!targetMember) {
+      throw new NotFoundException('Agency member not found');
+    }
+
+    // Prevent self-deactivation
+    if (targetMember.userId === currentUser.id) {
+      throw new BadRequestException('You cannot deactivate yourself');
+    }
+
+    // Prevent deactivating owner
+    if (targetMember.role === AgencyMemberRole.AGENCY_OWNER) {
+      throw new BadRequestException('Cannot deactivate agency owner');
+    }
+
+    if (!targetMember.isActive) {
+      throw new BadRequestException('Member is already inactive');
+    }
+
+    // Transaction
+    const result = await this.prisma.$transaction(async (tx) => {
+      // Deactivate member
+      const updatedMember = await tx.agencyMember.update({
+        where: { id: memberId },
+        data: {
+          isActive: false,
+        },
+        select: {
+          id: true,
+          role: true,
+          isActive: true,
+          user: {
+            select: {
+              fullName: true,
+              email: true,
+            },
+          },
+        },
+      });
+
+      // Remove from all assigned properties
+      await tx.property.updateMany({
+        where: {
+          assignedAgentMemberId: memberId,
+        },
+        data: {
+          assignedAgentMemberId: null,
+        },
+      });
+
+      return updatedMember;
+    });
+
+    // Email notification
+    try {
+      await this.mailService.sendAgencyMemberDeactivatedEmail(
+        result.user.email,
+        result.user.fullName,
+        membership.agency.name,
+      );
+    } catch (error) {
+      console.error('Failed to send member deactivation email', error);
+    }
+
+    return {
+      message: 'Agency member deactivated successfully',
+      member: result,
+    };
+  }
+
+  async createOfferForApplication(currentUser: AuthenticatedUser, applicationId: string, dto: CreateOfferDto) {
+    const membership = await this.getApprovedAgencyMembership(currentUser);
+
+    const isAgent = membership.role === AgencyMemberRole.AGENT;
+
+    const application: ApprovedApplicationForOffer | null = await this.prisma.application.findFirst({
+      where: {
+        id: applicationId,
+        status: ApplicationStatus.APPROVED,
+        property: {
+          agencyId: membership.agencyId,
+          ...(isAgent
+            ? {
+                assignedAgentMemberId: membership.id,
+              }
+            : {}),
+        },
+      },
+      select: {
+        id: true,
+        propertyId: true,
+        applicantId: true,
+        status: true,
+        applicant: {
+          select: {
+            email: true,
+            fullName: true,
+          },
+        },
+        property: {
+          select: {
+            id: true,
+            title: true,
+            isLocked: true,
+          },
+        },
+        offer: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    if (!application) {
+      throw new NotFoundException('Approved application not found for this agency');
+    }
+
+    if (application.property.isLocked) {
+      throw new BadRequestException('Property is already locked');
+    }
+
+    if (application.offer) {
+      throw new BadRequestException('Offer already exists for this application');
+    }
+
+    const offer: CreatedOfferResult = await this.prisma.offer.create({
+      data: {
+        applicationId: application.id,
+        propertyId: application.propertyId,
+        applicantId: application.applicantId,
+        status: OfferStatus.PENDING,
+        message: dto.message,
+        expiresAt: dto.expiresAt ? new Date(dto.expiresAt) : undefined,
+      },
+      select: {
+        id: true,
+        status: true,
+        message: true,
+        expiresAt: true,
+        createdAt: true,
+        application: {
+          select: {
+            id: true,
+            status: true,
+          },
+        },
+        property: {
+          select: {
+            id: true,
+            title: true,
+          },
+        },
+        applicant: {
+          select: {
+            id: true,
+            fullName: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    try {
+      await this.mailService.sendOfferCreatedEmail(
+        application.applicant.email,
+        application.applicant.fullName,
+        application.property.title,
+      );
+    } catch (error) {
+      console.error('Failed to send offer created email', error);
+    }
+
+    return {
+      message: 'Offer created successfully',
+      offer,
     };
   }
 }

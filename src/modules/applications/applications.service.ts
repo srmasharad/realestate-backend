@@ -84,6 +84,20 @@ export class ApplicationsService {
       throw new NotFoundException('Property not found');
     }
 
+    const approvedApplication = await this.prisma.application.findFirst({
+      where: {
+        propertyId: dto.propertyId,
+        status: ApplicationStatus.APPROVED,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (approvedApplication) {
+      throw new BadRequestException('This property already has an approved applicant');
+    }
+
     const existingApplication = await this.prisma.application.findUnique({
       where: {
         propertyId_applicantId: {

@@ -63,6 +63,11 @@ export type AgencyMember = $Result.DefaultSelection<Prisma.$AgencyMemberPayload>
  * 
  */
 export type PasswordResetToken = $Result.DefaultSelection<Prisma.$PasswordResetTokenPayload>
+/**
+ * Model Offer
+ * 
+ */
+export type Offer = $Result.DefaultSelection<Prisma.$OfferPayload>
 
 /**
  * Enums
@@ -146,6 +151,16 @@ export const AgencyMemberRole: {
 
 export type AgencyMemberRole = (typeof AgencyMemberRole)[keyof typeof AgencyMemberRole]
 
+
+export const OfferStatus: {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED'
+};
+
+export type OfferStatus = (typeof OfferStatus)[keyof typeof OfferStatus]
+
 }
 
 export type UserRole = $Enums.UserRole
@@ -183,6 +198,10 @@ export const AgencyStatus: typeof $Enums.AgencyStatus
 export type AgencyMemberRole = $Enums.AgencyMemberRole
 
 export const AgencyMemberRole: typeof $Enums.AgencyMemberRole
+
+export type OfferStatus = $Enums.OfferStatus
+
+export const OfferStatus: typeof $Enums.OfferStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -404,6 +423,16 @@ export class PrismaClient<
     * ```
     */
   get passwordResetToken(): Prisma.PasswordResetTokenDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.offer`: Exposes CRUD operations for the **Offer** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Offers
+    * const offers = await prisma.offer.findMany()
+    * ```
+    */
+  get offer(): Prisma.OfferDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -847,7 +876,8 @@ export namespace Prisma {
     PropertyMedia: 'PropertyMedia',
     Agency: 'Agency',
     AgencyMember: 'AgencyMember',
-    PasswordResetToken: 'PasswordResetToken'
+    PasswordResetToken: 'PasswordResetToken',
+    Offer: 'Offer'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -863,7 +893,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "userMedia" | "personProfile" | "property" | "application" | "emailVerificationToken" | "propertyMedia" | "agency" | "agencyMember" | "passwordResetToken"
+      modelProps: "user" | "userMedia" | "personProfile" | "property" | "application" | "emailVerificationToken" | "propertyMedia" | "agency" | "agencyMember" | "passwordResetToken" | "offer"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1607,6 +1637,80 @@ export namespace Prisma {
           }
         }
       }
+      Offer: {
+        payload: Prisma.$OfferPayload<ExtArgs>
+        fields: Prisma.OfferFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.OfferFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfferPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.OfferFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfferPayload>
+          }
+          findFirst: {
+            args: Prisma.OfferFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfferPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.OfferFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfferPayload>
+          }
+          findMany: {
+            args: Prisma.OfferFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfferPayload>[]
+          }
+          create: {
+            args: Prisma.OfferCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfferPayload>
+          }
+          createMany: {
+            args: Prisma.OfferCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.OfferCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfferPayload>[]
+          }
+          delete: {
+            args: Prisma.OfferDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfferPayload>
+          }
+          update: {
+            args: Prisma.OfferUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfferPayload>
+          }
+          deleteMany: {
+            args: Prisma.OfferDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.OfferUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.OfferUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfferPayload>[]
+          }
+          upsert: {
+            args: Prisma.OfferUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OfferPayload>
+          }
+          aggregate: {
+            args: Prisma.OfferAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOffer>
+          }
+          groupBy: {
+            args: Prisma.OfferGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OfferGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.OfferCountArgs<ExtArgs>
+            result: $Utils.Optional<OfferCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1725,6 +1829,7 @@ export namespace Prisma {
     agency?: AgencyOmit
     agencyMember?: AgencyMemberOmit
     passwordResetToken?: PasswordResetTokenOmit
+    offer?: OfferOmit
   }
 
   /* Types for Logging */
@@ -1811,6 +1916,7 @@ export namespace Prisma {
     media: number
     agencyMemberships: number
     passwordResetTokens: number
+    offers: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1820,6 +1926,7 @@ export namespace Prisma {
     media?: boolean | UserCountOutputTypeCountMediaArgs
     agencyMemberships?: boolean | UserCountOutputTypeCountAgencyMembershipsArgs
     passwordResetTokens?: boolean | UserCountOutputTypeCountPasswordResetTokensArgs
+    offers?: boolean | UserCountOutputTypeCountOffersArgs
   }
 
   // Custom InputTypes
@@ -1875,6 +1982,13 @@ export namespace Prisma {
     where?: PasswordResetTokenWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountOffersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OfferWhereInput
+  }
+
 
   /**
    * Count Type PropertyCountOutputType
@@ -1883,11 +1997,13 @@ export namespace Prisma {
   export type PropertyCountOutputType = {
     application: number
     media: number
+    offers: number
   }
 
   export type PropertyCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     application?: boolean | PropertyCountOutputTypeCountApplicationArgs
     media?: boolean | PropertyCountOutputTypeCountMediaArgs
+    offers?: boolean | PropertyCountOutputTypeCountOffersArgs
   }
 
   // Custom InputTypes
@@ -1913,6 +2029,13 @@ export namespace Prisma {
    */
   export type PropertyCountOutputTypeCountMediaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PropertyMediaWhereInput
+  }
+
+  /**
+   * PropertyCountOutputType without action
+   */
+  export type PropertyCountOutputTypeCountOffersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OfferWhereInput
   }
 
 
@@ -2210,6 +2333,7 @@ export namespace Prisma {
     media?: boolean | User$mediaArgs<ExtArgs>
     agencyMemberships?: boolean | User$agencyMembershipsArgs<ExtArgs>
     passwordResetTokens?: boolean | User$passwordResetTokensArgs<ExtArgs>
+    offers?: boolean | User$offersArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2264,6 +2388,7 @@ export namespace Prisma {
     media?: boolean | User$mediaArgs<ExtArgs>
     agencyMemberships?: boolean | User$agencyMembershipsArgs<ExtArgs>
     passwordResetTokens?: boolean | User$passwordResetTokensArgs<ExtArgs>
+    offers?: boolean | User$offersArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2279,6 +2404,7 @@ export namespace Prisma {
       media: Prisma.$UserMediaPayload<ExtArgs>[]
       agencyMemberships: Prisma.$AgencyMemberPayload<ExtArgs>[]
       passwordResetTokens: Prisma.$PasswordResetTokenPayload<ExtArgs>[]
+      offers: Prisma.$OfferPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2693,6 +2819,7 @@ export namespace Prisma {
     media<T extends User$mediaArgs<ExtArgs> = {}>(args?: Subset<T, User$mediaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserMediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     agencyMemberships<T extends User$agencyMembershipsArgs<ExtArgs> = {}>(args?: Subset<T, User$agencyMembershipsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgencyMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     passwordResetTokens<T extends User$passwordResetTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$passwordResetTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    offers<T extends User$offersArgs<ExtArgs> = {}>(args?: Subset<T, User$offersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OfferPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3286,6 +3413,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PasswordResetTokenScalarFieldEnum | PasswordResetTokenScalarFieldEnum[]
+  }
+
+  /**
+   * User.offers
+   */
+  export type User$offersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Offer
+     */
+    select?: OfferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Offer
+     */
+    omit?: OfferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfferInclude<ExtArgs> | null
+    where?: OfferWhereInput
+    orderBy?: OfferOrderByWithRelationInput | OfferOrderByWithRelationInput[]
+    cursor?: OfferWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OfferScalarFieldEnum | OfferScalarFieldEnum[]
   }
 
   /**
@@ -5668,6 +5819,7 @@ export namespace Prisma {
     bathrooms: number | null
     parkingSpaces: number | null
     isPublished: boolean | null
+    isLocked: boolean | null
     createdById: string | null
     agencyId: string | null
     assignedAgentMemberId: string | null
@@ -5690,6 +5842,7 @@ export namespace Prisma {
     bathrooms: number | null
     parkingSpaces: number | null
     isPublished: boolean | null
+    isLocked: boolean | null
     createdById: string | null
     agencyId: string | null
     assignedAgentMemberId: string | null
@@ -5712,6 +5865,7 @@ export namespace Prisma {
     bathrooms: number
     parkingSpaces: number
     isPublished: number
+    isLocked: number
     createdById: number
     agencyId: number
     assignedAgentMemberId: number
@@ -5750,6 +5904,7 @@ export namespace Prisma {
     bathrooms?: true
     parkingSpaces?: true
     isPublished?: true
+    isLocked?: true
     createdById?: true
     agencyId?: true
     assignedAgentMemberId?: true
@@ -5772,6 +5927,7 @@ export namespace Prisma {
     bathrooms?: true
     parkingSpaces?: true
     isPublished?: true
+    isLocked?: true
     createdById?: true
     agencyId?: true
     assignedAgentMemberId?: true
@@ -5794,6 +5950,7 @@ export namespace Prisma {
     bathrooms?: true
     parkingSpaces?: true
     isPublished?: true
+    isLocked?: true
     createdById?: true
     agencyId?: true
     assignedAgentMemberId?: true
@@ -5903,6 +6060,7 @@ export namespace Prisma {
     bathrooms: number | null
     parkingSpaces: number | null
     isPublished: boolean
+    isLocked: boolean
     createdById: string
     agencyId: string | null
     assignedAgentMemberId: string | null
@@ -5944,6 +6102,7 @@ export namespace Prisma {
     bathrooms?: boolean
     parkingSpaces?: boolean
     isPublished?: boolean
+    isLocked?: boolean
     createdById?: boolean
     agencyId?: boolean
     assignedAgentMemberId?: boolean
@@ -5954,6 +6113,7 @@ export namespace Prisma {
     assignedAgentMember?: boolean | Property$assignedAgentMemberArgs<ExtArgs>
     application?: boolean | Property$applicationArgs<ExtArgs>
     media?: boolean | Property$mediaArgs<ExtArgs>
+    offers?: boolean | Property$offersArgs<ExtArgs>
     _count?: boolean | PropertyCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["property"]>
 
@@ -5972,6 +6132,7 @@ export namespace Prisma {
     bathrooms?: boolean
     parkingSpaces?: boolean
     isPublished?: boolean
+    isLocked?: boolean
     createdById?: boolean
     agencyId?: boolean
     assignedAgentMemberId?: boolean
@@ -5997,6 +6158,7 @@ export namespace Prisma {
     bathrooms?: boolean
     parkingSpaces?: boolean
     isPublished?: boolean
+    isLocked?: boolean
     createdById?: boolean
     agencyId?: boolean
     assignedAgentMemberId?: boolean
@@ -6022,6 +6184,7 @@ export namespace Prisma {
     bathrooms?: boolean
     parkingSpaces?: boolean
     isPublished?: boolean
+    isLocked?: boolean
     createdById?: boolean
     agencyId?: boolean
     assignedAgentMemberId?: boolean
@@ -6029,13 +6192,14 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type PropertyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "listingType" | "propertyType" | "price" | "addressLine1" | "suburb" | "state" | "postcode" | "bedrooms" | "bathrooms" | "parkingSpaces" | "isPublished" | "createdById" | "agencyId" | "assignedAgentMemberId" | "createdAt" | "updatedAt", ExtArgs["result"]["property"]>
+  export type PropertyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "listingType" | "propertyType" | "price" | "addressLine1" | "suburb" | "state" | "postcode" | "bedrooms" | "bathrooms" | "parkingSpaces" | "isPublished" | "isLocked" | "createdById" | "agencyId" | "assignedAgentMemberId" | "createdAt" | "updatedAt", ExtArgs["result"]["property"]>
   export type PropertyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     agency?: boolean | Property$agencyArgs<ExtArgs>
     assignedAgentMember?: boolean | Property$assignedAgentMemberArgs<ExtArgs>
     application?: boolean | Property$applicationArgs<ExtArgs>
     media?: boolean | Property$mediaArgs<ExtArgs>
+    offers?: boolean | Property$offersArgs<ExtArgs>
     _count?: boolean | PropertyCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PropertyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6057,6 +6221,7 @@ export namespace Prisma {
       assignedAgentMember: Prisma.$AgencyMemberPayload<ExtArgs> | null
       application: Prisma.$ApplicationPayload<ExtArgs>[]
       media: Prisma.$PropertyMediaPayload<ExtArgs>[]
+      offers: Prisma.$OfferPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6073,6 +6238,7 @@ export namespace Prisma {
       bathrooms: number | null
       parkingSpaces: number | null
       isPublished: boolean
+      isLocked: boolean
       createdById: string
       agencyId: string | null
       assignedAgentMemberId: string | null
@@ -6477,6 +6643,7 @@ export namespace Prisma {
     assignedAgentMember<T extends Property$assignedAgentMemberArgs<ExtArgs> = {}>(args?: Subset<T, Property$assignedAgentMemberArgs<ExtArgs>>): Prisma__AgencyMemberClient<$Result.GetResult<Prisma.$AgencyMemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     application<T extends Property$applicationArgs<ExtArgs> = {}>(args?: Subset<T, Property$applicationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     media<T extends Property$mediaArgs<ExtArgs> = {}>(args?: Subset<T, Property$mediaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyMediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    offers<T extends Property$offersArgs<ExtArgs> = {}>(args?: Subset<T, Property$offersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OfferPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6520,6 +6687,7 @@ export namespace Prisma {
     readonly bathrooms: FieldRef<"Property", 'Int'>
     readonly parkingSpaces: FieldRef<"Property", 'Int'>
     readonly isPublished: FieldRef<"Property", 'Boolean'>
+    readonly isLocked: FieldRef<"Property", 'Boolean'>
     readonly createdById: FieldRef<"Property", 'String'>
     readonly agencyId: FieldRef<"Property", 'String'>
     readonly assignedAgentMemberId: FieldRef<"Property", 'String'>
@@ -7012,6 +7180,30 @@ export namespace Prisma {
   }
 
   /**
+   * Property.offers
+   */
+  export type Property$offersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Offer
+     */
+    select?: OfferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Offer
+     */
+    omit?: OfferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfferInclude<ExtArgs> | null
+    where?: OfferWhereInput
+    orderBy?: OfferOrderByWithRelationInput | OfferOrderByWithRelationInput[]
+    cursor?: OfferWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OfferScalarFieldEnum | OfferScalarFieldEnum[]
+  }
+
+  /**
    * Property without action
    */
   export type PropertyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7212,6 +7404,7 @@ export namespace Prisma {
     updatedAt?: boolean
     property?: boolean | PropertyDefaultArgs<ExtArgs>
     applicant?: boolean | UserDefaultArgs<ExtArgs>
+    offer?: boolean | Application$offerArgs<ExtArgs>
   }, ExtArgs["result"]["application"]>
 
   export type ApplicationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -7252,6 +7445,7 @@ export namespace Prisma {
   export type ApplicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     property?: boolean | PropertyDefaultArgs<ExtArgs>
     applicant?: boolean | UserDefaultArgs<ExtArgs>
+    offer?: boolean | Application$offerArgs<ExtArgs>
   }
   export type ApplicationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     property?: boolean | PropertyDefaultArgs<ExtArgs>
@@ -7267,6 +7461,7 @@ export namespace Prisma {
     objects: {
       property: Prisma.$PropertyPayload<ExtArgs>
       applicant: Prisma.$UserPayload<ExtArgs>
+      offer: Prisma.$OfferPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7672,6 +7867,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     property<T extends PropertyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PropertyDefaultArgs<ExtArgs>>): Prisma__PropertyClient<$Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     applicant<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    offer<T extends Application$offerArgs<ExtArgs> = {}>(args?: Subset<T, Application$offerArgs<ExtArgs>>): Prisma__OfferClient<$Result.GetResult<Prisma.$OfferPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8106,6 +8302,25 @@ export namespace Prisma {
      * Limit how many Applications to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Application.offer
+   */
+  export type Application$offerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Offer
+     */
+    select?: OfferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Offer
+     */
+    omit?: OfferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfferInclude<ExtArgs> | null
+    where?: OfferWhereInput
   }
 
   /**
@@ -13763,6 +13978,1137 @@ export namespace Prisma {
 
 
   /**
+   * Model Offer
+   */
+
+  export type AggregateOffer = {
+    _count: OfferCountAggregateOutputType | null
+    _min: OfferMinAggregateOutputType | null
+    _max: OfferMaxAggregateOutputType | null
+  }
+
+  export type OfferMinAggregateOutputType = {
+    id: string | null
+    applicationId: string | null
+    propertyId: string | null
+    applicantId: string | null
+    status: $Enums.OfferStatus | null
+    message: string | null
+    expiresAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OfferMaxAggregateOutputType = {
+    id: string | null
+    applicationId: string | null
+    propertyId: string | null
+    applicantId: string | null
+    status: $Enums.OfferStatus | null
+    message: string | null
+    expiresAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OfferCountAggregateOutputType = {
+    id: number
+    applicationId: number
+    propertyId: number
+    applicantId: number
+    status: number
+    message: number
+    expiresAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type OfferMinAggregateInputType = {
+    id?: true
+    applicationId?: true
+    propertyId?: true
+    applicantId?: true
+    status?: true
+    message?: true
+    expiresAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OfferMaxAggregateInputType = {
+    id?: true
+    applicationId?: true
+    propertyId?: true
+    applicantId?: true
+    status?: true
+    message?: true
+    expiresAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OfferCountAggregateInputType = {
+    id?: true
+    applicationId?: true
+    propertyId?: true
+    applicantId?: true
+    status?: true
+    message?: true
+    expiresAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type OfferAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Offer to aggregate.
+     */
+    where?: OfferWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Offers to fetch.
+     */
+    orderBy?: OfferOrderByWithRelationInput | OfferOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OfferWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Offers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Offers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Offers
+    **/
+    _count?: true | OfferCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OfferMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OfferMaxAggregateInputType
+  }
+
+  export type GetOfferAggregateType<T extends OfferAggregateArgs> = {
+        [P in keyof T & keyof AggregateOffer]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOffer[P]>
+      : GetScalarType<T[P], AggregateOffer[P]>
+  }
+
+
+
+
+  export type OfferGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OfferWhereInput
+    orderBy?: OfferOrderByWithAggregationInput | OfferOrderByWithAggregationInput[]
+    by: OfferScalarFieldEnum[] | OfferScalarFieldEnum
+    having?: OfferScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OfferCountAggregateInputType | true
+    _min?: OfferMinAggregateInputType
+    _max?: OfferMaxAggregateInputType
+  }
+
+  export type OfferGroupByOutputType = {
+    id: string
+    applicationId: string
+    propertyId: string
+    applicantId: string
+    status: $Enums.OfferStatus
+    message: string | null
+    expiresAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: OfferCountAggregateOutputType | null
+    _min: OfferMinAggregateOutputType | null
+    _max: OfferMaxAggregateOutputType | null
+  }
+
+  type GetOfferGroupByPayload<T extends OfferGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<OfferGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OfferGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OfferGroupByOutputType[P]>
+            : GetScalarType<T[P], OfferGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OfferSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    applicationId?: boolean
+    propertyId?: boolean
+    applicantId?: boolean
+    status?: boolean
+    message?: boolean
+    expiresAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    application?: boolean | ApplicationDefaultArgs<ExtArgs>
+    property?: boolean | PropertyDefaultArgs<ExtArgs>
+    applicant?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["offer"]>
+
+  export type OfferSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    applicationId?: boolean
+    propertyId?: boolean
+    applicantId?: boolean
+    status?: boolean
+    message?: boolean
+    expiresAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    application?: boolean | ApplicationDefaultArgs<ExtArgs>
+    property?: boolean | PropertyDefaultArgs<ExtArgs>
+    applicant?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["offer"]>
+
+  export type OfferSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    applicationId?: boolean
+    propertyId?: boolean
+    applicantId?: boolean
+    status?: boolean
+    message?: boolean
+    expiresAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    application?: boolean | ApplicationDefaultArgs<ExtArgs>
+    property?: boolean | PropertyDefaultArgs<ExtArgs>
+    applicant?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["offer"]>
+
+  export type OfferSelectScalar = {
+    id?: boolean
+    applicationId?: boolean
+    propertyId?: boolean
+    applicantId?: boolean
+    status?: boolean
+    message?: boolean
+    expiresAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type OfferOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "applicationId" | "propertyId" | "applicantId" | "status" | "message" | "expiresAt" | "createdAt" | "updatedAt", ExtArgs["result"]["offer"]>
+  export type OfferInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    application?: boolean | ApplicationDefaultArgs<ExtArgs>
+    property?: boolean | PropertyDefaultArgs<ExtArgs>
+    applicant?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type OfferIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    application?: boolean | ApplicationDefaultArgs<ExtArgs>
+    property?: boolean | PropertyDefaultArgs<ExtArgs>
+    applicant?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type OfferIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    application?: boolean | ApplicationDefaultArgs<ExtArgs>
+    property?: boolean | PropertyDefaultArgs<ExtArgs>
+    applicant?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $OfferPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Offer"
+    objects: {
+      application: Prisma.$ApplicationPayload<ExtArgs>
+      property: Prisma.$PropertyPayload<ExtArgs>
+      applicant: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      applicationId: string
+      propertyId: string
+      applicantId: string
+      status: $Enums.OfferStatus
+      message: string | null
+      expiresAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["offer"]>
+    composites: {}
+  }
+
+  type OfferGetPayload<S extends boolean | null | undefined | OfferDefaultArgs> = $Result.GetResult<Prisma.$OfferPayload, S>
+
+  type OfferCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<OfferFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: OfferCountAggregateInputType | true
+    }
+
+  export interface OfferDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Offer'], meta: { name: 'Offer' } }
+    /**
+     * Find zero or one Offer that matches the filter.
+     * @param {OfferFindUniqueArgs} args - Arguments to find a Offer
+     * @example
+     * // Get one Offer
+     * const offer = await prisma.offer.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends OfferFindUniqueArgs>(args: SelectSubset<T, OfferFindUniqueArgs<ExtArgs>>): Prisma__OfferClient<$Result.GetResult<Prisma.$OfferPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Offer that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {OfferFindUniqueOrThrowArgs} args - Arguments to find a Offer
+     * @example
+     * // Get one Offer
+     * const offer = await prisma.offer.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends OfferFindUniqueOrThrowArgs>(args: SelectSubset<T, OfferFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OfferClient<$Result.GetResult<Prisma.$OfferPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Offer that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OfferFindFirstArgs} args - Arguments to find a Offer
+     * @example
+     * // Get one Offer
+     * const offer = await prisma.offer.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends OfferFindFirstArgs>(args?: SelectSubset<T, OfferFindFirstArgs<ExtArgs>>): Prisma__OfferClient<$Result.GetResult<Prisma.$OfferPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Offer that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OfferFindFirstOrThrowArgs} args - Arguments to find a Offer
+     * @example
+     * // Get one Offer
+     * const offer = await prisma.offer.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends OfferFindFirstOrThrowArgs>(args?: SelectSubset<T, OfferFindFirstOrThrowArgs<ExtArgs>>): Prisma__OfferClient<$Result.GetResult<Prisma.$OfferPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Offers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OfferFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Offers
+     * const offers = await prisma.offer.findMany()
+     * 
+     * // Get first 10 Offers
+     * const offers = await prisma.offer.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const offerWithIdOnly = await prisma.offer.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends OfferFindManyArgs>(args?: SelectSubset<T, OfferFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OfferPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Offer.
+     * @param {OfferCreateArgs} args - Arguments to create a Offer.
+     * @example
+     * // Create one Offer
+     * const Offer = await prisma.offer.create({
+     *   data: {
+     *     // ... data to create a Offer
+     *   }
+     * })
+     * 
+     */
+    create<T extends OfferCreateArgs>(args: SelectSubset<T, OfferCreateArgs<ExtArgs>>): Prisma__OfferClient<$Result.GetResult<Prisma.$OfferPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Offers.
+     * @param {OfferCreateManyArgs} args - Arguments to create many Offers.
+     * @example
+     * // Create many Offers
+     * const offer = await prisma.offer.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends OfferCreateManyArgs>(args?: SelectSubset<T, OfferCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Offers and returns the data saved in the database.
+     * @param {OfferCreateManyAndReturnArgs} args - Arguments to create many Offers.
+     * @example
+     * // Create many Offers
+     * const offer = await prisma.offer.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Offers and only return the `id`
+     * const offerWithIdOnly = await prisma.offer.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends OfferCreateManyAndReturnArgs>(args?: SelectSubset<T, OfferCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OfferPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Offer.
+     * @param {OfferDeleteArgs} args - Arguments to delete one Offer.
+     * @example
+     * // Delete one Offer
+     * const Offer = await prisma.offer.delete({
+     *   where: {
+     *     // ... filter to delete one Offer
+     *   }
+     * })
+     * 
+     */
+    delete<T extends OfferDeleteArgs>(args: SelectSubset<T, OfferDeleteArgs<ExtArgs>>): Prisma__OfferClient<$Result.GetResult<Prisma.$OfferPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Offer.
+     * @param {OfferUpdateArgs} args - Arguments to update one Offer.
+     * @example
+     * // Update one Offer
+     * const offer = await prisma.offer.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends OfferUpdateArgs>(args: SelectSubset<T, OfferUpdateArgs<ExtArgs>>): Prisma__OfferClient<$Result.GetResult<Prisma.$OfferPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Offers.
+     * @param {OfferDeleteManyArgs} args - Arguments to filter Offers to delete.
+     * @example
+     * // Delete a few Offers
+     * const { count } = await prisma.offer.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends OfferDeleteManyArgs>(args?: SelectSubset<T, OfferDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Offers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OfferUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Offers
+     * const offer = await prisma.offer.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends OfferUpdateManyArgs>(args: SelectSubset<T, OfferUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Offers and returns the data updated in the database.
+     * @param {OfferUpdateManyAndReturnArgs} args - Arguments to update many Offers.
+     * @example
+     * // Update many Offers
+     * const offer = await prisma.offer.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Offers and only return the `id`
+     * const offerWithIdOnly = await prisma.offer.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends OfferUpdateManyAndReturnArgs>(args: SelectSubset<T, OfferUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OfferPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Offer.
+     * @param {OfferUpsertArgs} args - Arguments to update or create a Offer.
+     * @example
+     * // Update or create a Offer
+     * const offer = await prisma.offer.upsert({
+     *   create: {
+     *     // ... data to create a Offer
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Offer we want to update
+     *   }
+     * })
+     */
+    upsert<T extends OfferUpsertArgs>(args: SelectSubset<T, OfferUpsertArgs<ExtArgs>>): Prisma__OfferClient<$Result.GetResult<Prisma.$OfferPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Offers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OfferCountArgs} args - Arguments to filter Offers to count.
+     * @example
+     * // Count the number of Offers
+     * const count = await prisma.offer.count({
+     *   where: {
+     *     // ... the filter for the Offers we want to count
+     *   }
+     * })
+    **/
+    count<T extends OfferCountArgs>(
+      args?: Subset<T, OfferCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OfferCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Offer.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OfferAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OfferAggregateArgs>(args: Subset<T, OfferAggregateArgs>): Prisma.PrismaPromise<GetOfferAggregateType<T>>
+
+    /**
+     * Group by Offer.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OfferGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OfferGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OfferGroupByArgs['orderBy'] }
+        : { orderBy?: OfferGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OfferGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOfferGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Offer model
+   */
+  readonly fields: OfferFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Offer.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__OfferClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    application<T extends ApplicationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ApplicationDefaultArgs<ExtArgs>>): Prisma__ApplicationClient<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    property<T extends PropertyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PropertyDefaultArgs<ExtArgs>>): Prisma__PropertyClient<$Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    applicant<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Offer model
+   */
+  interface OfferFieldRefs {
+    readonly id: FieldRef<"Offer", 'String'>
+    readonly applicationId: FieldRef<"Offer", 'String'>
+    readonly propertyId: FieldRef<"Offer", 'String'>
+    readonly applicantId: FieldRef<"Offer", 'String'>
+    readonly status: FieldRef<"Offer", 'OfferStatus'>
+    readonly message: FieldRef<"Offer", 'String'>
+    readonly expiresAt: FieldRef<"Offer", 'DateTime'>
+    readonly createdAt: FieldRef<"Offer", 'DateTime'>
+    readonly updatedAt: FieldRef<"Offer", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Offer findUnique
+   */
+  export type OfferFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Offer
+     */
+    select?: OfferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Offer
+     */
+    omit?: OfferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfferInclude<ExtArgs> | null
+    /**
+     * Filter, which Offer to fetch.
+     */
+    where: OfferWhereUniqueInput
+  }
+
+  /**
+   * Offer findUniqueOrThrow
+   */
+  export type OfferFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Offer
+     */
+    select?: OfferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Offer
+     */
+    omit?: OfferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfferInclude<ExtArgs> | null
+    /**
+     * Filter, which Offer to fetch.
+     */
+    where: OfferWhereUniqueInput
+  }
+
+  /**
+   * Offer findFirst
+   */
+  export type OfferFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Offer
+     */
+    select?: OfferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Offer
+     */
+    omit?: OfferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfferInclude<ExtArgs> | null
+    /**
+     * Filter, which Offer to fetch.
+     */
+    where?: OfferWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Offers to fetch.
+     */
+    orderBy?: OfferOrderByWithRelationInput | OfferOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Offers.
+     */
+    cursor?: OfferWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Offers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Offers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Offers.
+     */
+    distinct?: OfferScalarFieldEnum | OfferScalarFieldEnum[]
+  }
+
+  /**
+   * Offer findFirstOrThrow
+   */
+  export type OfferFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Offer
+     */
+    select?: OfferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Offer
+     */
+    omit?: OfferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfferInclude<ExtArgs> | null
+    /**
+     * Filter, which Offer to fetch.
+     */
+    where?: OfferWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Offers to fetch.
+     */
+    orderBy?: OfferOrderByWithRelationInput | OfferOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Offers.
+     */
+    cursor?: OfferWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Offers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Offers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Offers.
+     */
+    distinct?: OfferScalarFieldEnum | OfferScalarFieldEnum[]
+  }
+
+  /**
+   * Offer findMany
+   */
+  export type OfferFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Offer
+     */
+    select?: OfferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Offer
+     */
+    omit?: OfferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfferInclude<ExtArgs> | null
+    /**
+     * Filter, which Offers to fetch.
+     */
+    where?: OfferWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Offers to fetch.
+     */
+    orderBy?: OfferOrderByWithRelationInput | OfferOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Offers.
+     */
+    cursor?: OfferWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Offers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Offers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Offers.
+     */
+    distinct?: OfferScalarFieldEnum | OfferScalarFieldEnum[]
+  }
+
+  /**
+   * Offer create
+   */
+  export type OfferCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Offer
+     */
+    select?: OfferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Offer
+     */
+    omit?: OfferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfferInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Offer.
+     */
+    data: XOR<OfferCreateInput, OfferUncheckedCreateInput>
+  }
+
+  /**
+   * Offer createMany
+   */
+  export type OfferCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Offers.
+     */
+    data: OfferCreateManyInput | OfferCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Offer createManyAndReturn
+   */
+  export type OfferCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Offer
+     */
+    select?: OfferSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Offer
+     */
+    omit?: OfferOmit<ExtArgs> | null
+    /**
+     * The data used to create many Offers.
+     */
+    data: OfferCreateManyInput | OfferCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfferIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Offer update
+   */
+  export type OfferUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Offer
+     */
+    select?: OfferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Offer
+     */
+    omit?: OfferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfferInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Offer.
+     */
+    data: XOR<OfferUpdateInput, OfferUncheckedUpdateInput>
+    /**
+     * Choose, which Offer to update.
+     */
+    where: OfferWhereUniqueInput
+  }
+
+  /**
+   * Offer updateMany
+   */
+  export type OfferUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Offers.
+     */
+    data: XOR<OfferUpdateManyMutationInput, OfferUncheckedUpdateManyInput>
+    /**
+     * Filter which Offers to update
+     */
+    where?: OfferWhereInput
+    /**
+     * Limit how many Offers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Offer updateManyAndReturn
+   */
+  export type OfferUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Offer
+     */
+    select?: OfferSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Offer
+     */
+    omit?: OfferOmit<ExtArgs> | null
+    /**
+     * The data used to update Offers.
+     */
+    data: XOR<OfferUpdateManyMutationInput, OfferUncheckedUpdateManyInput>
+    /**
+     * Filter which Offers to update
+     */
+    where?: OfferWhereInput
+    /**
+     * Limit how many Offers to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfferIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Offer upsert
+   */
+  export type OfferUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Offer
+     */
+    select?: OfferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Offer
+     */
+    omit?: OfferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfferInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Offer to update in case it exists.
+     */
+    where: OfferWhereUniqueInput
+    /**
+     * In case the Offer found by the `where` argument doesn't exist, create a new Offer with this data.
+     */
+    create: XOR<OfferCreateInput, OfferUncheckedCreateInput>
+    /**
+     * In case the Offer was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OfferUpdateInput, OfferUncheckedUpdateInput>
+  }
+
+  /**
+   * Offer delete
+   */
+  export type OfferDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Offer
+     */
+    select?: OfferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Offer
+     */
+    omit?: OfferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfferInclude<ExtArgs> | null
+    /**
+     * Filter which Offer to delete.
+     */
+    where: OfferWhereUniqueInput
+  }
+
+  /**
+   * Offer deleteMany
+   */
+  export type OfferDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Offers to delete
+     */
+    where?: OfferWhereInput
+    /**
+     * Limit how many Offers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Offer without action
+   */
+  export type OfferDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Offer
+     */
+    select?: OfferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Offer
+     */
+    omit?: OfferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OfferInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -13842,6 +15188,7 @@ export namespace Prisma {
     bathrooms: 'bathrooms',
     parkingSpaces: 'parkingSpaces',
     isPublished: 'isPublished',
+    isLocked: 'isLocked',
     createdById: 'createdById',
     agencyId: 'agencyId',
     assignedAgentMemberId: 'assignedAgentMemberId',
@@ -13934,6 +15281,21 @@ export namespace Prisma {
   };
 
   export type PasswordResetTokenScalarFieldEnum = (typeof PasswordResetTokenScalarFieldEnum)[keyof typeof PasswordResetTokenScalarFieldEnum]
+
+
+  export const OfferScalarFieldEnum: {
+    id: 'id',
+    applicationId: 'applicationId',
+    propertyId: 'propertyId',
+    applicantId: 'applicantId',
+    status: 'status',
+    message: 'message',
+    expiresAt: 'expiresAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type OfferScalarFieldEnum = (typeof OfferScalarFieldEnum)[keyof typeof OfferScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -14155,6 +15517,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'OfferStatus'
+   */
+  export type EnumOfferStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OfferStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'OfferStatus[]'
+   */
+  export type ListEnumOfferStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OfferStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -14193,6 +15569,7 @@ export namespace Prisma {
     media?: UserMediaListRelationFilter
     agencyMemberships?: AgencyMemberListRelationFilter
     passwordResetTokens?: PasswordResetTokenListRelationFilter
+    offers?: OfferListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -14214,6 +15591,7 @@ export namespace Prisma {
     media?: UserMediaOrderByRelationAggregateInput
     agencyMemberships?: AgencyMemberOrderByRelationAggregateInput
     passwordResetTokens?: PasswordResetTokenOrderByRelationAggregateInput
+    offers?: OfferOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -14238,6 +15616,7 @@ export namespace Prisma {
     media?: UserMediaListRelationFilter
     agencyMemberships?: AgencyMemberListRelationFilter
     passwordResetTokens?: PasswordResetTokenListRelationFilter
+    offers?: OfferListRelationFilter
   }, "id" | "email" | "phone" | "googleId">
 
   export type UserOrderByWithAggregationInput = {
@@ -14464,6 +15843,7 @@ export namespace Prisma {
     bathrooms?: IntNullableFilter<"Property"> | number | null
     parkingSpaces?: IntNullableFilter<"Property"> | number | null
     isPublished?: BoolFilter<"Property"> | boolean
+    isLocked?: BoolFilter<"Property"> | boolean
     createdById?: StringFilter<"Property"> | string
     agencyId?: StringNullableFilter<"Property"> | string | null
     assignedAgentMemberId?: StringNullableFilter<"Property"> | string | null
@@ -14474,6 +15854,7 @@ export namespace Prisma {
     assignedAgentMember?: XOR<AgencyMemberNullableScalarRelationFilter, AgencyMemberWhereInput> | null
     application?: ApplicationListRelationFilter
     media?: PropertyMediaListRelationFilter
+    offers?: OfferListRelationFilter
   }
 
   export type PropertyOrderByWithRelationInput = {
@@ -14491,6 +15872,7 @@ export namespace Prisma {
     bathrooms?: SortOrderInput | SortOrder
     parkingSpaces?: SortOrderInput | SortOrder
     isPublished?: SortOrder
+    isLocked?: SortOrder
     createdById?: SortOrder
     agencyId?: SortOrderInput | SortOrder
     assignedAgentMemberId?: SortOrderInput | SortOrder
@@ -14501,6 +15883,7 @@ export namespace Prisma {
     assignedAgentMember?: AgencyMemberOrderByWithRelationInput
     application?: ApplicationOrderByRelationAggregateInput
     media?: PropertyMediaOrderByRelationAggregateInput
+    offers?: OfferOrderByRelationAggregateInput
   }
 
   export type PropertyWhereUniqueInput = Prisma.AtLeast<{
@@ -14521,6 +15904,7 @@ export namespace Prisma {
     bathrooms?: IntNullableFilter<"Property"> | number | null
     parkingSpaces?: IntNullableFilter<"Property"> | number | null
     isPublished?: BoolFilter<"Property"> | boolean
+    isLocked?: BoolFilter<"Property"> | boolean
     createdById?: StringFilter<"Property"> | string
     agencyId?: StringNullableFilter<"Property"> | string | null
     assignedAgentMemberId?: StringNullableFilter<"Property"> | string | null
@@ -14531,6 +15915,7 @@ export namespace Prisma {
     assignedAgentMember?: XOR<AgencyMemberNullableScalarRelationFilter, AgencyMemberWhereInput> | null
     application?: ApplicationListRelationFilter
     media?: PropertyMediaListRelationFilter
+    offers?: OfferListRelationFilter
   }, "id">
 
   export type PropertyOrderByWithAggregationInput = {
@@ -14548,6 +15933,7 @@ export namespace Prisma {
     bathrooms?: SortOrderInput | SortOrder
     parkingSpaces?: SortOrderInput | SortOrder
     isPublished?: SortOrder
+    isLocked?: SortOrder
     createdById?: SortOrder
     agencyId?: SortOrderInput | SortOrder
     assignedAgentMemberId?: SortOrderInput | SortOrder
@@ -14578,6 +15964,7 @@ export namespace Prisma {
     bathrooms?: IntNullableWithAggregatesFilter<"Property"> | number | null
     parkingSpaces?: IntNullableWithAggregatesFilter<"Property"> | number | null
     isPublished?: BoolWithAggregatesFilter<"Property"> | boolean
+    isLocked?: BoolWithAggregatesFilter<"Property"> | boolean
     createdById?: StringWithAggregatesFilter<"Property"> | string
     agencyId?: StringNullableWithAggregatesFilter<"Property"> | string | null
     assignedAgentMemberId?: StringNullableWithAggregatesFilter<"Property"> | string | null
@@ -14598,6 +15985,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Application"> | Date | string
     property?: XOR<PropertyScalarRelationFilter, PropertyWhereInput>
     applicant?: XOR<UserScalarRelationFilter, UserWhereInput>
+    offer?: XOR<OfferNullableScalarRelationFilter, OfferWhereInput> | null
   }
 
   export type ApplicationOrderByWithRelationInput = {
@@ -14610,6 +15998,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     property?: PropertyOrderByWithRelationInput
     applicant?: UserOrderByWithRelationInput
+    offer?: OfferOrderByWithRelationInput
   }
 
   export type ApplicationWhereUniqueInput = Prisma.AtLeast<{
@@ -14626,6 +16015,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Application"> | Date | string
     property?: XOR<PropertyScalarRelationFilter, PropertyWhereInput>
     applicant?: XOR<UserScalarRelationFilter, UserWhereInput>
+    offer?: XOR<OfferNullableScalarRelationFilter, OfferWhereInput> | null
   }, "id" | "propertyId_applicantId">
 
   export type ApplicationOrderByWithAggregationInput = {
@@ -15021,6 +16411,87 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"PasswordResetToken"> | Date | string
   }
 
+  export type OfferWhereInput = {
+    AND?: OfferWhereInput | OfferWhereInput[]
+    OR?: OfferWhereInput[]
+    NOT?: OfferWhereInput | OfferWhereInput[]
+    id?: StringFilter<"Offer"> | string
+    applicationId?: StringFilter<"Offer"> | string
+    propertyId?: StringFilter<"Offer"> | string
+    applicantId?: StringFilter<"Offer"> | string
+    status?: EnumOfferStatusFilter<"Offer"> | $Enums.OfferStatus
+    message?: StringNullableFilter<"Offer"> | string | null
+    expiresAt?: DateTimeNullableFilter<"Offer"> | Date | string | null
+    createdAt?: DateTimeFilter<"Offer"> | Date | string
+    updatedAt?: DateTimeFilter<"Offer"> | Date | string
+    application?: XOR<ApplicationScalarRelationFilter, ApplicationWhereInput>
+    property?: XOR<PropertyScalarRelationFilter, PropertyWhereInput>
+    applicant?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type OfferOrderByWithRelationInput = {
+    id?: SortOrder
+    applicationId?: SortOrder
+    propertyId?: SortOrder
+    applicantId?: SortOrder
+    status?: SortOrder
+    message?: SortOrderInput | SortOrder
+    expiresAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    application?: ApplicationOrderByWithRelationInput
+    property?: PropertyOrderByWithRelationInput
+    applicant?: UserOrderByWithRelationInput
+  }
+
+  export type OfferWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    applicationId?: string
+    AND?: OfferWhereInput | OfferWhereInput[]
+    OR?: OfferWhereInput[]
+    NOT?: OfferWhereInput | OfferWhereInput[]
+    propertyId?: StringFilter<"Offer"> | string
+    applicantId?: StringFilter<"Offer"> | string
+    status?: EnumOfferStatusFilter<"Offer"> | $Enums.OfferStatus
+    message?: StringNullableFilter<"Offer"> | string | null
+    expiresAt?: DateTimeNullableFilter<"Offer"> | Date | string | null
+    createdAt?: DateTimeFilter<"Offer"> | Date | string
+    updatedAt?: DateTimeFilter<"Offer"> | Date | string
+    application?: XOR<ApplicationScalarRelationFilter, ApplicationWhereInput>
+    property?: XOR<PropertyScalarRelationFilter, PropertyWhereInput>
+    applicant?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "applicationId">
+
+  export type OfferOrderByWithAggregationInput = {
+    id?: SortOrder
+    applicationId?: SortOrder
+    propertyId?: SortOrder
+    applicantId?: SortOrder
+    status?: SortOrder
+    message?: SortOrderInput | SortOrder
+    expiresAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: OfferCountOrderByAggregateInput
+    _max?: OfferMaxOrderByAggregateInput
+    _min?: OfferMinOrderByAggregateInput
+  }
+
+  export type OfferScalarWhereWithAggregatesInput = {
+    AND?: OfferScalarWhereWithAggregatesInput | OfferScalarWhereWithAggregatesInput[]
+    OR?: OfferScalarWhereWithAggregatesInput[]
+    NOT?: OfferScalarWhereWithAggregatesInput | OfferScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Offer"> | string
+    applicationId?: StringWithAggregatesFilter<"Offer"> | string
+    propertyId?: StringWithAggregatesFilter<"Offer"> | string
+    applicantId?: StringWithAggregatesFilter<"Offer"> | string
+    status?: EnumOfferStatusWithAggregatesFilter<"Offer"> | $Enums.OfferStatus
+    message?: StringNullableWithAggregatesFilter<"Offer"> | string | null
+    expiresAt?: DateTimeNullableWithAggregatesFilter<"Offer"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Offer"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Offer"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     email: string
@@ -15040,6 +16511,7 @@ export namespace Prisma {
     media?: UserMediaCreateNestedManyWithoutUserInput
     agencyMemberships?: AgencyMemberCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
+    offers?: OfferCreateNestedManyWithoutApplicantInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -15061,6 +16533,7 @@ export namespace Prisma {
     media?: UserMediaUncheckedCreateNestedManyWithoutUserInput
     agencyMemberships?: AgencyMemberUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+    offers?: OfferUncheckedCreateNestedManyWithoutApplicantInput
   }
 
   export type UserUpdateInput = {
@@ -15082,6 +16555,7 @@ export namespace Prisma {
     media?: UserMediaUpdateManyWithoutUserNestedInput
     agencyMemberships?: AgencyMemberUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
+    offers?: OfferUpdateManyWithoutApplicantNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -15103,6 +16577,7 @@ export namespace Prisma {
     media?: UserMediaUncheckedUpdateManyWithoutUserNestedInput
     agencyMemberships?: AgencyMemberUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+    offers?: OfferUncheckedUpdateManyWithoutApplicantNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -15356,6 +16831,7 @@ export namespace Prisma {
     bathrooms?: number | null
     parkingSpaces?: number | null
     isPublished?: boolean
+    isLocked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutPropertiesInput
@@ -15363,6 +16839,7 @@ export namespace Prisma {
     assignedAgentMember?: AgencyMemberCreateNestedOneWithoutAssignedPropertiesInput
     application?: ApplicationCreateNestedManyWithoutPropertyInput
     media?: PropertyMediaCreateNestedManyWithoutPropertyInput
+    offers?: OfferCreateNestedManyWithoutPropertyInput
   }
 
   export type PropertyUncheckedCreateInput = {
@@ -15380,6 +16857,7 @@ export namespace Prisma {
     bathrooms?: number | null
     parkingSpaces?: number | null
     isPublished?: boolean
+    isLocked?: boolean
     createdById: string
     agencyId?: string | null
     assignedAgentMemberId?: string | null
@@ -15387,6 +16865,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     application?: ApplicationUncheckedCreateNestedManyWithoutPropertyInput
     media?: PropertyMediaUncheckedCreateNestedManyWithoutPropertyInput
+    offers?: OfferUncheckedCreateNestedManyWithoutPropertyInput
   }
 
   export type PropertyUpdateInput = {
@@ -15404,6 +16883,7 @@ export namespace Prisma {
     bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutPropertiesNestedInput
@@ -15411,6 +16891,7 @@ export namespace Prisma {
     assignedAgentMember?: AgencyMemberUpdateOneWithoutAssignedPropertiesNestedInput
     application?: ApplicationUpdateManyWithoutPropertyNestedInput
     media?: PropertyMediaUpdateManyWithoutPropertyNestedInput
+    offers?: OfferUpdateManyWithoutPropertyNestedInput
   }
 
   export type PropertyUncheckedUpdateInput = {
@@ -15428,6 +16909,7 @@ export namespace Prisma {
     bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     agencyId?: NullableStringFieldUpdateOperationsInput | string | null
     assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15435,6 +16917,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     application?: ApplicationUncheckedUpdateManyWithoutPropertyNestedInput
     media?: PropertyMediaUncheckedUpdateManyWithoutPropertyNestedInput
+    offers?: OfferUncheckedUpdateManyWithoutPropertyNestedInput
   }
 
   export type PropertyCreateManyInput = {
@@ -15452,6 +16935,7 @@ export namespace Prisma {
     bathrooms?: number | null
     parkingSpaces?: number | null
     isPublished?: boolean
+    isLocked?: boolean
     createdById: string
     agencyId?: string | null
     assignedAgentMemberId?: string | null
@@ -15474,6 +16958,7 @@ export namespace Prisma {
     bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15493,6 +16978,7 @@ export namespace Prisma {
     bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     agencyId?: NullableStringFieldUpdateOperationsInput | string | null
     assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15508,6 +16994,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     property: PropertyCreateNestedOneWithoutApplicationInput
     applicant: UserCreateNestedOneWithoutApplicationsInput
+    offer?: OfferCreateNestedOneWithoutApplicationInput
   }
 
   export type ApplicationUncheckedCreateInput = {
@@ -15518,6 +17005,7 @@ export namespace Prisma {
     message?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    offer?: OfferUncheckedCreateNestedOneWithoutApplicationInput
   }
 
   export type ApplicationUpdateInput = {
@@ -15528,6 +17016,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     property?: PropertyUpdateOneRequiredWithoutApplicationNestedInput
     applicant?: UserUpdateOneRequiredWithoutApplicationsNestedInput
+    offer?: OfferUpdateOneWithoutApplicationNestedInput
   }
 
   export type ApplicationUncheckedUpdateInput = {
@@ -15538,6 +17027,7 @@ export namespace Prisma {
     message?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    offer?: OfferUncheckedUpdateOneWithoutApplicationNestedInput
   }
 
   export type ApplicationCreateManyInput = {
@@ -15967,6 +17457,87 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type OfferCreateInput = {
+    id?: string
+    status?: $Enums.OfferStatus
+    message?: string | null
+    expiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    application: ApplicationCreateNestedOneWithoutOfferInput
+    property: PropertyCreateNestedOneWithoutOffersInput
+    applicant: UserCreateNestedOneWithoutOffersInput
+  }
+
+  export type OfferUncheckedCreateInput = {
+    id?: string
+    applicationId: string
+    propertyId: string
+    applicantId: string
+    status?: $Enums.OfferStatus
+    message?: string | null
+    expiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OfferUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumOfferStatusFieldUpdateOperationsInput | $Enums.OfferStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    application?: ApplicationUpdateOneRequiredWithoutOfferNestedInput
+    property?: PropertyUpdateOneRequiredWithoutOffersNestedInput
+    applicant?: UserUpdateOneRequiredWithoutOffersNestedInput
+  }
+
+  export type OfferUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    applicationId?: StringFieldUpdateOperationsInput | string
+    propertyId?: StringFieldUpdateOperationsInput | string
+    applicantId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOfferStatusFieldUpdateOperationsInput | $Enums.OfferStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OfferCreateManyInput = {
+    id?: string
+    applicationId: string
+    propertyId: string
+    applicantId: string
+    status?: $Enums.OfferStatus
+    message?: string | null
+    expiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OfferUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumOfferStatusFieldUpdateOperationsInput | $Enums.OfferStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OfferUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    applicationId?: StringFieldUpdateOperationsInput | string
+    propertyId?: StringFieldUpdateOperationsInput | string
+    applicantId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOfferStatusFieldUpdateOperationsInput | $Enums.OfferStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -16061,6 +17632,12 @@ export namespace Prisma {
     none?: PasswordResetTokenWhereInput
   }
 
+  export type OfferListRelationFilter = {
+    every?: OfferWhereInput
+    some?: OfferWhereInput
+    none?: OfferWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -16087,6 +17664,10 @@ export namespace Prisma {
   }
 
   export type PasswordResetTokenOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type OfferOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -16447,6 +18028,7 @@ export namespace Prisma {
     bathrooms?: SortOrder
     parkingSpaces?: SortOrder
     isPublished?: SortOrder
+    isLocked?: SortOrder
     createdById?: SortOrder
     agencyId?: SortOrder
     assignedAgentMemberId?: SortOrder
@@ -16476,6 +18058,7 @@ export namespace Prisma {
     bathrooms?: SortOrder
     parkingSpaces?: SortOrder
     isPublished?: SortOrder
+    isLocked?: SortOrder
     createdById?: SortOrder
     agencyId?: SortOrder
     assignedAgentMemberId?: SortOrder
@@ -16498,6 +18081,7 @@ export namespace Prisma {
     bathrooms?: SortOrder
     parkingSpaces?: SortOrder
     isPublished?: SortOrder
+    isLocked?: SortOrder
     createdById?: SortOrder
     agencyId?: SortOrder
     assignedAgentMemberId?: SortOrder
@@ -16558,6 +18142,11 @@ export namespace Prisma {
   export type PropertyScalarRelationFilter = {
     is?: PropertyWhereInput
     isNot?: PropertyWhereInput
+  }
+
+  export type OfferNullableScalarRelationFilter = {
+    is?: OfferWhereInput | null
+    isNot?: OfferWhereInput | null
   }
 
   export type ApplicationPropertyIdApplicantIdCompoundUniqueInput = {
@@ -16867,6 +18456,64 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type EnumOfferStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.OfferStatus | EnumOfferStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OfferStatus[] | ListEnumOfferStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OfferStatus[] | ListEnumOfferStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumOfferStatusFilter<$PrismaModel> | $Enums.OfferStatus
+  }
+
+  export type ApplicationScalarRelationFilter = {
+    is?: ApplicationWhereInput
+    isNot?: ApplicationWhereInput
+  }
+
+  export type OfferCountOrderByAggregateInput = {
+    id?: SortOrder
+    applicationId?: SortOrder
+    propertyId?: SortOrder
+    applicantId?: SortOrder
+    status?: SortOrder
+    message?: SortOrder
+    expiresAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OfferMaxOrderByAggregateInput = {
+    id?: SortOrder
+    applicationId?: SortOrder
+    propertyId?: SortOrder
+    applicantId?: SortOrder
+    status?: SortOrder
+    message?: SortOrder
+    expiresAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OfferMinOrderByAggregateInput = {
+    id?: SortOrder
+    applicationId?: SortOrder
+    propertyId?: SortOrder
+    applicantId?: SortOrder
+    status?: SortOrder
+    message?: SortOrder
+    expiresAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumOfferStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OfferStatus | EnumOfferStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OfferStatus[] | ListEnumOfferStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OfferStatus[] | ListEnumOfferStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumOfferStatusWithAggregatesFilter<$PrismaModel> | $Enums.OfferStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOfferStatusFilter<$PrismaModel>
+    _max?: NestedEnumOfferStatusFilter<$PrismaModel>
+  }
+
   export type PropertyCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<PropertyCreateWithoutCreatedByInput, PropertyUncheckedCreateWithoutCreatedByInput> | PropertyCreateWithoutCreatedByInput[] | PropertyUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: PropertyCreateOrConnectWithoutCreatedByInput | PropertyCreateOrConnectWithoutCreatedByInput[]
@@ -16915,6 +18562,13 @@ export namespace Prisma {
     connect?: PasswordResetTokenWhereUniqueInput | PasswordResetTokenWhereUniqueInput[]
   }
 
+  export type OfferCreateNestedManyWithoutApplicantInput = {
+    create?: XOR<OfferCreateWithoutApplicantInput, OfferUncheckedCreateWithoutApplicantInput> | OfferCreateWithoutApplicantInput[] | OfferUncheckedCreateWithoutApplicantInput[]
+    connectOrCreate?: OfferCreateOrConnectWithoutApplicantInput | OfferCreateOrConnectWithoutApplicantInput[]
+    createMany?: OfferCreateManyApplicantInputEnvelope
+    connect?: OfferWhereUniqueInput | OfferWhereUniqueInput[]
+  }
+
   export type PropertyUncheckedCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<PropertyCreateWithoutCreatedByInput, PropertyUncheckedCreateWithoutCreatedByInput> | PropertyCreateWithoutCreatedByInput[] | PropertyUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: PropertyCreateOrConnectWithoutCreatedByInput | PropertyCreateOrConnectWithoutCreatedByInput[]
@@ -16961,6 +18615,13 @@ export namespace Prisma {
     connectOrCreate?: PasswordResetTokenCreateOrConnectWithoutUserInput | PasswordResetTokenCreateOrConnectWithoutUserInput[]
     createMany?: PasswordResetTokenCreateManyUserInputEnvelope
     connect?: PasswordResetTokenWhereUniqueInput | PasswordResetTokenWhereUniqueInput[]
+  }
+
+  export type OfferUncheckedCreateNestedManyWithoutApplicantInput = {
+    create?: XOR<OfferCreateWithoutApplicantInput, OfferUncheckedCreateWithoutApplicantInput> | OfferCreateWithoutApplicantInput[] | OfferUncheckedCreateWithoutApplicantInput[]
+    connectOrCreate?: OfferCreateOrConnectWithoutApplicantInput | OfferCreateOrConnectWithoutApplicantInput[]
+    createMany?: OfferCreateManyApplicantInputEnvelope
+    connect?: OfferWhereUniqueInput | OfferWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -17077,6 +18738,20 @@ export namespace Prisma {
     deleteMany?: PasswordResetTokenScalarWhereInput | PasswordResetTokenScalarWhereInput[]
   }
 
+  export type OfferUpdateManyWithoutApplicantNestedInput = {
+    create?: XOR<OfferCreateWithoutApplicantInput, OfferUncheckedCreateWithoutApplicantInput> | OfferCreateWithoutApplicantInput[] | OfferUncheckedCreateWithoutApplicantInput[]
+    connectOrCreate?: OfferCreateOrConnectWithoutApplicantInput | OfferCreateOrConnectWithoutApplicantInput[]
+    upsert?: OfferUpsertWithWhereUniqueWithoutApplicantInput | OfferUpsertWithWhereUniqueWithoutApplicantInput[]
+    createMany?: OfferCreateManyApplicantInputEnvelope
+    set?: OfferWhereUniqueInput | OfferWhereUniqueInput[]
+    disconnect?: OfferWhereUniqueInput | OfferWhereUniqueInput[]
+    delete?: OfferWhereUniqueInput | OfferWhereUniqueInput[]
+    connect?: OfferWhereUniqueInput | OfferWhereUniqueInput[]
+    update?: OfferUpdateWithWhereUniqueWithoutApplicantInput | OfferUpdateWithWhereUniqueWithoutApplicantInput[]
+    updateMany?: OfferUpdateManyWithWhereWithoutApplicantInput | OfferUpdateManyWithWhereWithoutApplicantInput[]
+    deleteMany?: OfferScalarWhereInput | OfferScalarWhereInput[]
+  }
+
   export type PropertyUncheckedUpdateManyWithoutCreatedByNestedInput = {
     create?: XOR<PropertyCreateWithoutCreatedByInput, PropertyUncheckedCreateWithoutCreatedByInput> | PropertyCreateWithoutCreatedByInput[] | PropertyUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: PropertyCreateOrConnectWithoutCreatedByInput | PropertyCreateOrConnectWithoutCreatedByInput[]
@@ -17171,6 +18846,20 @@ export namespace Prisma {
     deleteMany?: PasswordResetTokenScalarWhereInput | PasswordResetTokenScalarWhereInput[]
   }
 
+  export type OfferUncheckedUpdateManyWithoutApplicantNestedInput = {
+    create?: XOR<OfferCreateWithoutApplicantInput, OfferUncheckedCreateWithoutApplicantInput> | OfferCreateWithoutApplicantInput[] | OfferUncheckedCreateWithoutApplicantInput[]
+    connectOrCreate?: OfferCreateOrConnectWithoutApplicantInput | OfferCreateOrConnectWithoutApplicantInput[]
+    upsert?: OfferUpsertWithWhereUniqueWithoutApplicantInput | OfferUpsertWithWhereUniqueWithoutApplicantInput[]
+    createMany?: OfferCreateManyApplicantInputEnvelope
+    set?: OfferWhereUniqueInput | OfferWhereUniqueInput[]
+    disconnect?: OfferWhereUniqueInput | OfferWhereUniqueInput[]
+    delete?: OfferWhereUniqueInput | OfferWhereUniqueInput[]
+    connect?: OfferWhereUniqueInput | OfferWhereUniqueInput[]
+    update?: OfferUpdateWithWhereUniqueWithoutApplicantInput | OfferUpdateWithWhereUniqueWithoutApplicantInput[]
+    updateMany?: OfferUpdateManyWithWhereWithoutApplicantInput | OfferUpdateManyWithWhereWithoutApplicantInput[]
+    deleteMany?: OfferScalarWhereInput | OfferScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutMediaInput = {
     create?: XOR<UserCreateWithoutMediaInput, UserUncheckedCreateWithoutMediaInput>
     connectOrCreate?: UserCreateOrConnectWithoutMediaInput
@@ -17255,6 +18944,13 @@ export namespace Prisma {
     connect?: PropertyMediaWhereUniqueInput | PropertyMediaWhereUniqueInput[]
   }
 
+  export type OfferCreateNestedManyWithoutPropertyInput = {
+    create?: XOR<OfferCreateWithoutPropertyInput, OfferUncheckedCreateWithoutPropertyInput> | OfferCreateWithoutPropertyInput[] | OfferUncheckedCreateWithoutPropertyInput[]
+    connectOrCreate?: OfferCreateOrConnectWithoutPropertyInput | OfferCreateOrConnectWithoutPropertyInput[]
+    createMany?: OfferCreateManyPropertyInputEnvelope
+    connect?: OfferWhereUniqueInput | OfferWhereUniqueInput[]
+  }
+
   export type ApplicationUncheckedCreateNestedManyWithoutPropertyInput = {
     create?: XOR<ApplicationCreateWithoutPropertyInput, ApplicationUncheckedCreateWithoutPropertyInput> | ApplicationCreateWithoutPropertyInput[] | ApplicationUncheckedCreateWithoutPropertyInput[]
     connectOrCreate?: ApplicationCreateOrConnectWithoutPropertyInput | ApplicationCreateOrConnectWithoutPropertyInput[]
@@ -17267,6 +18963,13 @@ export namespace Prisma {
     connectOrCreate?: PropertyMediaCreateOrConnectWithoutPropertyInput | PropertyMediaCreateOrConnectWithoutPropertyInput[]
     createMany?: PropertyMediaCreateManyPropertyInputEnvelope
     connect?: PropertyMediaWhereUniqueInput | PropertyMediaWhereUniqueInput[]
+  }
+
+  export type OfferUncheckedCreateNestedManyWithoutPropertyInput = {
+    create?: XOR<OfferCreateWithoutPropertyInput, OfferUncheckedCreateWithoutPropertyInput> | OfferCreateWithoutPropertyInput[] | OfferUncheckedCreateWithoutPropertyInput[]
+    connectOrCreate?: OfferCreateOrConnectWithoutPropertyInput | OfferCreateOrConnectWithoutPropertyInput[]
+    createMany?: OfferCreateManyPropertyInputEnvelope
+    connect?: OfferWhereUniqueInput | OfferWhereUniqueInput[]
   }
 
   export type EnumListingTypeFieldUpdateOperationsInput = {
@@ -17341,6 +19044,20 @@ export namespace Prisma {
     deleteMany?: PropertyMediaScalarWhereInput | PropertyMediaScalarWhereInput[]
   }
 
+  export type OfferUpdateManyWithoutPropertyNestedInput = {
+    create?: XOR<OfferCreateWithoutPropertyInput, OfferUncheckedCreateWithoutPropertyInput> | OfferCreateWithoutPropertyInput[] | OfferUncheckedCreateWithoutPropertyInput[]
+    connectOrCreate?: OfferCreateOrConnectWithoutPropertyInput | OfferCreateOrConnectWithoutPropertyInput[]
+    upsert?: OfferUpsertWithWhereUniqueWithoutPropertyInput | OfferUpsertWithWhereUniqueWithoutPropertyInput[]
+    createMany?: OfferCreateManyPropertyInputEnvelope
+    set?: OfferWhereUniqueInput | OfferWhereUniqueInput[]
+    disconnect?: OfferWhereUniqueInput | OfferWhereUniqueInput[]
+    delete?: OfferWhereUniqueInput | OfferWhereUniqueInput[]
+    connect?: OfferWhereUniqueInput | OfferWhereUniqueInput[]
+    update?: OfferUpdateWithWhereUniqueWithoutPropertyInput | OfferUpdateWithWhereUniqueWithoutPropertyInput[]
+    updateMany?: OfferUpdateManyWithWhereWithoutPropertyInput | OfferUpdateManyWithWhereWithoutPropertyInput[]
+    deleteMany?: OfferScalarWhereInput | OfferScalarWhereInput[]
+  }
+
   export type ApplicationUncheckedUpdateManyWithoutPropertyNestedInput = {
     create?: XOR<ApplicationCreateWithoutPropertyInput, ApplicationUncheckedCreateWithoutPropertyInput> | ApplicationCreateWithoutPropertyInput[] | ApplicationUncheckedCreateWithoutPropertyInput[]
     connectOrCreate?: ApplicationCreateOrConnectWithoutPropertyInput | ApplicationCreateOrConnectWithoutPropertyInput[]
@@ -17369,6 +19086,20 @@ export namespace Prisma {
     deleteMany?: PropertyMediaScalarWhereInput | PropertyMediaScalarWhereInput[]
   }
 
+  export type OfferUncheckedUpdateManyWithoutPropertyNestedInput = {
+    create?: XOR<OfferCreateWithoutPropertyInput, OfferUncheckedCreateWithoutPropertyInput> | OfferCreateWithoutPropertyInput[] | OfferUncheckedCreateWithoutPropertyInput[]
+    connectOrCreate?: OfferCreateOrConnectWithoutPropertyInput | OfferCreateOrConnectWithoutPropertyInput[]
+    upsert?: OfferUpsertWithWhereUniqueWithoutPropertyInput | OfferUpsertWithWhereUniqueWithoutPropertyInput[]
+    createMany?: OfferCreateManyPropertyInputEnvelope
+    set?: OfferWhereUniqueInput | OfferWhereUniqueInput[]
+    disconnect?: OfferWhereUniqueInput | OfferWhereUniqueInput[]
+    delete?: OfferWhereUniqueInput | OfferWhereUniqueInput[]
+    connect?: OfferWhereUniqueInput | OfferWhereUniqueInput[]
+    update?: OfferUpdateWithWhereUniqueWithoutPropertyInput | OfferUpdateWithWhereUniqueWithoutPropertyInput[]
+    updateMany?: OfferUpdateManyWithWhereWithoutPropertyInput | OfferUpdateManyWithWhereWithoutPropertyInput[]
+    deleteMany?: OfferScalarWhereInput | OfferScalarWhereInput[]
+  }
+
   export type PropertyCreateNestedOneWithoutApplicationInput = {
     create?: XOR<PropertyCreateWithoutApplicationInput, PropertyUncheckedCreateWithoutApplicationInput>
     connectOrCreate?: PropertyCreateOrConnectWithoutApplicationInput
@@ -17379,6 +19110,18 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutApplicationsInput, UserUncheckedCreateWithoutApplicationsInput>
     connectOrCreate?: UserCreateOrConnectWithoutApplicationsInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type OfferCreateNestedOneWithoutApplicationInput = {
+    create?: XOR<OfferCreateWithoutApplicationInput, OfferUncheckedCreateWithoutApplicationInput>
+    connectOrCreate?: OfferCreateOrConnectWithoutApplicationInput
+    connect?: OfferWhereUniqueInput
+  }
+
+  export type OfferUncheckedCreateNestedOneWithoutApplicationInput = {
+    create?: XOR<OfferCreateWithoutApplicationInput, OfferUncheckedCreateWithoutApplicationInput>
+    connectOrCreate?: OfferCreateOrConnectWithoutApplicationInput
+    connect?: OfferWhereUniqueInput
   }
 
   export type EnumApplicationStatusFieldUpdateOperationsInput = {
@@ -17399,6 +19142,26 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutApplicationsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutApplicationsInput, UserUpdateWithoutApplicationsInput>, UserUncheckedUpdateWithoutApplicationsInput>
+  }
+
+  export type OfferUpdateOneWithoutApplicationNestedInput = {
+    create?: XOR<OfferCreateWithoutApplicationInput, OfferUncheckedCreateWithoutApplicationInput>
+    connectOrCreate?: OfferCreateOrConnectWithoutApplicationInput
+    upsert?: OfferUpsertWithoutApplicationInput
+    disconnect?: OfferWhereInput | boolean
+    delete?: OfferWhereInput | boolean
+    connect?: OfferWhereUniqueInput
+    update?: XOR<XOR<OfferUpdateToOneWithWhereWithoutApplicationInput, OfferUpdateWithoutApplicationInput>, OfferUncheckedUpdateWithoutApplicationInput>
+  }
+
+  export type OfferUncheckedUpdateOneWithoutApplicationNestedInput = {
+    create?: XOR<OfferCreateWithoutApplicationInput, OfferUncheckedCreateWithoutApplicationInput>
+    connectOrCreate?: OfferCreateOrConnectWithoutApplicationInput
+    upsert?: OfferUpsertWithoutApplicationInput
+    disconnect?: OfferWhereInput | boolean
+    delete?: OfferWhereInput | boolean
+    connect?: OfferWhereUniqueInput
+    update?: XOR<XOR<OfferUpdateToOneWithWhereWithoutApplicationInput, OfferUpdateWithoutApplicationInput>, OfferUncheckedUpdateWithoutApplicationInput>
   }
 
   export type UserCreateNestedOneWithoutEmailVerificationTokensInput = {
@@ -17611,6 +19374,52 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutPasswordResetTokensInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPasswordResetTokensInput, UserUpdateWithoutPasswordResetTokensInput>, UserUncheckedUpdateWithoutPasswordResetTokensInput>
+  }
+
+  export type ApplicationCreateNestedOneWithoutOfferInput = {
+    create?: XOR<ApplicationCreateWithoutOfferInput, ApplicationUncheckedCreateWithoutOfferInput>
+    connectOrCreate?: ApplicationCreateOrConnectWithoutOfferInput
+    connect?: ApplicationWhereUniqueInput
+  }
+
+  export type PropertyCreateNestedOneWithoutOffersInput = {
+    create?: XOR<PropertyCreateWithoutOffersInput, PropertyUncheckedCreateWithoutOffersInput>
+    connectOrCreate?: PropertyCreateOrConnectWithoutOffersInput
+    connect?: PropertyWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutOffersInput = {
+    create?: XOR<UserCreateWithoutOffersInput, UserUncheckedCreateWithoutOffersInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOffersInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumOfferStatusFieldUpdateOperationsInput = {
+    set?: $Enums.OfferStatus
+  }
+
+  export type ApplicationUpdateOneRequiredWithoutOfferNestedInput = {
+    create?: XOR<ApplicationCreateWithoutOfferInput, ApplicationUncheckedCreateWithoutOfferInput>
+    connectOrCreate?: ApplicationCreateOrConnectWithoutOfferInput
+    upsert?: ApplicationUpsertWithoutOfferInput
+    connect?: ApplicationWhereUniqueInput
+    update?: XOR<XOR<ApplicationUpdateToOneWithWhereWithoutOfferInput, ApplicationUpdateWithoutOfferInput>, ApplicationUncheckedUpdateWithoutOfferInput>
+  }
+
+  export type PropertyUpdateOneRequiredWithoutOffersNestedInput = {
+    create?: XOR<PropertyCreateWithoutOffersInput, PropertyUncheckedCreateWithoutOffersInput>
+    connectOrCreate?: PropertyCreateOrConnectWithoutOffersInput
+    upsert?: PropertyUpsertWithoutOffersInput
+    connect?: PropertyWhereUniqueInput
+    update?: XOR<XOR<PropertyUpdateToOneWithWhereWithoutOffersInput, PropertyUpdateWithoutOffersInput>, PropertyUncheckedUpdateWithoutOffersInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutOffersNestedInput = {
+    create?: XOR<UserCreateWithoutOffersInput, UserUncheckedCreateWithoutOffersInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOffersInput
+    upsert?: UserUpsertWithoutOffersInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOffersInput, UserUpdateWithoutOffersInput>, UserUncheckedUpdateWithoutOffersInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -17994,6 +19803,23 @@ export namespace Prisma {
     _max?: NestedEnumAgencyMemberRoleFilter<$PrismaModel>
   }
 
+  export type NestedEnumOfferStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.OfferStatus | EnumOfferStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OfferStatus[] | ListEnumOfferStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OfferStatus[] | ListEnumOfferStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumOfferStatusFilter<$PrismaModel> | $Enums.OfferStatus
+  }
+
+  export type NestedEnumOfferStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OfferStatus | EnumOfferStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OfferStatus[] | ListEnumOfferStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OfferStatus[] | ListEnumOfferStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumOfferStatusWithAggregatesFilter<$PrismaModel> | $Enums.OfferStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOfferStatusFilter<$PrismaModel>
+    _max?: NestedEnumOfferStatusFilter<$PrismaModel>
+  }
+
   export type PropertyCreateWithoutCreatedByInput = {
     id?: string
     title: string
@@ -18009,12 +19835,14 @@ export namespace Prisma {
     bathrooms?: number | null
     parkingSpaces?: number | null
     isPublished?: boolean
+    isLocked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     agency?: AgencyCreateNestedOneWithoutPropertyInput
     assignedAgentMember?: AgencyMemberCreateNestedOneWithoutAssignedPropertiesInput
     application?: ApplicationCreateNestedManyWithoutPropertyInput
     media?: PropertyMediaCreateNestedManyWithoutPropertyInput
+    offers?: OfferCreateNestedManyWithoutPropertyInput
   }
 
   export type PropertyUncheckedCreateWithoutCreatedByInput = {
@@ -18032,12 +19860,14 @@ export namespace Prisma {
     bathrooms?: number | null
     parkingSpaces?: number | null
     isPublished?: boolean
+    isLocked?: boolean
     agencyId?: string | null
     assignedAgentMemberId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     application?: ApplicationUncheckedCreateNestedManyWithoutPropertyInput
     media?: PropertyMediaUncheckedCreateNestedManyWithoutPropertyInput
+    offers?: OfferUncheckedCreateNestedManyWithoutPropertyInput
   }
 
   export type PropertyCreateOrConnectWithoutCreatedByInput = {
@@ -18092,6 +19922,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     property: PropertyCreateNestedOneWithoutApplicationInput
+    offer?: OfferCreateNestedOneWithoutApplicationInput
   }
 
   export type ApplicationUncheckedCreateWithoutApplicantInput = {
@@ -18101,6 +19932,7 @@ export namespace Prisma {
     message?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    offer?: OfferUncheckedCreateNestedOneWithoutApplicationInput
   }
 
   export type ApplicationCreateOrConnectWithoutApplicantInput = {
@@ -18227,6 +20059,38 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type OfferCreateWithoutApplicantInput = {
+    id?: string
+    status?: $Enums.OfferStatus
+    message?: string | null
+    expiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    application: ApplicationCreateNestedOneWithoutOfferInput
+    property: PropertyCreateNestedOneWithoutOffersInput
+  }
+
+  export type OfferUncheckedCreateWithoutApplicantInput = {
+    id?: string
+    applicationId: string
+    propertyId: string
+    status?: $Enums.OfferStatus
+    message?: string | null
+    expiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OfferCreateOrConnectWithoutApplicantInput = {
+    where: OfferWhereUniqueInput
+    create: XOR<OfferCreateWithoutApplicantInput, OfferUncheckedCreateWithoutApplicantInput>
+  }
+
+  export type OfferCreateManyApplicantInputEnvelope = {
+    data: OfferCreateManyApplicantInput | OfferCreateManyApplicantInput[]
+    skipDuplicates?: boolean
+  }
+
   export type PropertyUpsertWithWhereUniqueWithoutCreatedByInput = {
     where: PropertyWhereUniqueInput
     update: XOR<PropertyUpdateWithoutCreatedByInput, PropertyUncheckedUpdateWithoutCreatedByInput>
@@ -18261,6 +20125,7 @@ export namespace Prisma {
     bathrooms?: IntNullableFilter<"Property"> | number | null
     parkingSpaces?: IntNullableFilter<"Property"> | number | null
     isPublished?: BoolFilter<"Property"> | boolean
+    isLocked?: BoolFilter<"Property"> | boolean
     createdById?: StringFilter<"Property"> | string
     agencyId?: StringNullableFilter<"Property"> | string | null
     assignedAgentMemberId?: StringNullableFilter<"Property"> | string | null
@@ -18454,6 +20319,37 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"PasswordResetToken"> | Date | string
   }
 
+  export type OfferUpsertWithWhereUniqueWithoutApplicantInput = {
+    where: OfferWhereUniqueInput
+    update: XOR<OfferUpdateWithoutApplicantInput, OfferUncheckedUpdateWithoutApplicantInput>
+    create: XOR<OfferCreateWithoutApplicantInput, OfferUncheckedCreateWithoutApplicantInput>
+  }
+
+  export type OfferUpdateWithWhereUniqueWithoutApplicantInput = {
+    where: OfferWhereUniqueInput
+    data: XOR<OfferUpdateWithoutApplicantInput, OfferUncheckedUpdateWithoutApplicantInput>
+  }
+
+  export type OfferUpdateManyWithWhereWithoutApplicantInput = {
+    where: OfferScalarWhereInput
+    data: XOR<OfferUpdateManyMutationInput, OfferUncheckedUpdateManyWithoutApplicantInput>
+  }
+
+  export type OfferScalarWhereInput = {
+    AND?: OfferScalarWhereInput | OfferScalarWhereInput[]
+    OR?: OfferScalarWhereInput[]
+    NOT?: OfferScalarWhereInput | OfferScalarWhereInput[]
+    id?: StringFilter<"Offer"> | string
+    applicationId?: StringFilter<"Offer"> | string
+    propertyId?: StringFilter<"Offer"> | string
+    applicantId?: StringFilter<"Offer"> | string
+    status?: EnumOfferStatusFilter<"Offer"> | $Enums.OfferStatus
+    message?: StringNullableFilter<"Offer"> | string | null
+    expiresAt?: DateTimeNullableFilter<"Offer"> | Date | string | null
+    createdAt?: DateTimeFilter<"Offer"> | Date | string
+    updatedAt?: DateTimeFilter<"Offer"> | Date | string
+  }
+
   export type UserCreateWithoutMediaInput = {
     id?: string
     email: string
@@ -18472,6 +20368,7 @@ export namespace Prisma {
     emailVerificationTokens?: EmailVerificationTokenCreateNestedManyWithoutUserInput
     agencyMemberships?: AgencyMemberCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
+    offers?: OfferCreateNestedManyWithoutApplicantInput
   }
 
   export type UserUncheckedCreateWithoutMediaInput = {
@@ -18492,6 +20389,7 @@ export namespace Prisma {
     emailVerificationTokens?: EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
     agencyMemberships?: AgencyMemberUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+    offers?: OfferUncheckedCreateNestedManyWithoutApplicantInput
   }
 
   export type UserCreateOrConnectWithoutMediaInput = {
@@ -18528,6 +20426,7 @@ export namespace Prisma {
     emailVerificationTokens?: EmailVerificationTokenUpdateManyWithoutUserNestedInput
     agencyMemberships?: AgencyMemberUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
+    offers?: OfferUpdateManyWithoutApplicantNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMediaInput = {
@@ -18548,6 +20447,7 @@ export namespace Prisma {
     emailVerificationTokens?: EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
     agencyMemberships?: AgencyMemberUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+    offers?: OfferUncheckedUpdateManyWithoutApplicantNestedInput
   }
 
   export type UserCreateWithoutProfileInput = {
@@ -18568,6 +20468,7 @@ export namespace Prisma {
     media?: UserMediaCreateNestedManyWithoutUserInput
     agencyMemberships?: AgencyMemberCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
+    offers?: OfferCreateNestedManyWithoutApplicantInput
   }
 
   export type UserUncheckedCreateWithoutProfileInput = {
@@ -18588,6 +20489,7 @@ export namespace Prisma {
     media?: UserMediaUncheckedCreateNestedManyWithoutUserInput
     agencyMemberships?: AgencyMemberUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+    offers?: OfferUncheckedCreateNestedManyWithoutApplicantInput
   }
 
   export type UserCreateOrConnectWithoutProfileInput = {
@@ -18624,6 +20526,7 @@ export namespace Prisma {
     media?: UserMediaUpdateManyWithoutUserNestedInput
     agencyMemberships?: AgencyMemberUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
+    offers?: OfferUpdateManyWithoutApplicantNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProfileInput = {
@@ -18644,6 +20547,7 @@ export namespace Prisma {
     media?: UserMediaUncheckedUpdateManyWithoutUserNestedInput
     agencyMemberships?: AgencyMemberUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+    offers?: OfferUncheckedUpdateManyWithoutApplicantNestedInput
   }
 
   export type UserCreateWithoutPropertiesInput = {
@@ -18664,6 +20568,7 @@ export namespace Prisma {
     media?: UserMediaCreateNestedManyWithoutUserInput
     agencyMemberships?: AgencyMemberCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
+    offers?: OfferCreateNestedManyWithoutApplicantInput
   }
 
   export type UserUncheckedCreateWithoutPropertiesInput = {
@@ -18684,6 +20589,7 @@ export namespace Prisma {
     media?: UserMediaUncheckedCreateNestedManyWithoutUserInput
     agencyMemberships?: AgencyMemberUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+    offers?: OfferUncheckedCreateNestedManyWithoutApplicantInput
   }
 
   export type UserCreateOrConnectWithoutPropertiesInput = {
@@ -18760,6 +20666,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     applicant: UserCreateNestedOneWithoutApplicationsInput
+    offer?: OfferCreateNestedOneWithoutApplicationInput
   }
 
   export type ApplicationUncheckedCreateWithoutPropertyInput = {
@@ -18769,6 +20676,7 @@ export namespace Prisma {
     message?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    offer?: OfferUncheckedCreateNestedOneWithoutApplicationInput
   }
 
   export type ApplicationCreateOrConnectWithoutPropertyInput = {
@@ -18815,6 +20723,38 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type OfferCreateWithoutPropertyInput = {
+    id?: string
+    status?: $Enums.OfferStatus
+    message?: string | null
+    expiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    application: ApplicationCreateNestedOneWithoutOfferInput
+    applicant: UserCreateNestedOneWithoutOffersInput
+  }
+
+  export type OfferUncheckedCreateWithoutPropertyInput = {
+    id?: string
+    applicationId: string
+    applicantId: string
+    status?: $Enums.OfferStatus
+    message?: string | null
+    expiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OfferCreateOrConnectWithoutPropertyInput = {
+    where: OfferWhereUniqueInput
+    create: XOR<OfferCreateWithoutPropertyInput, OfferUncheckedCreateWithoutPropertyInput>
+  }
+
+  export type OfferCreateManyPropertyInputEnvelope = {
+    data: OfferCreateManyPropertyInput | OfferCreateManyPropertyInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutPropertiesInput = {
     update: XOR<UserUpdateWithoutPropertiesInput, UserUncheckedUpdateWithoutPropertiesInput>
     create: XOR<UserCreateWithoutPropertiesInput, UserUncheckedCreateWithoutPropertiesInput>
@@ -18844,6 +20784,7 @@ export namespace Prisma {
     media?: UserMediaUpdateManyWithoutUserNestedInput
     agencyMemberships?: AgencyMemberUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
+    offers?: OfferUpdateManyWithoutApplicantNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPropertiesInput = {
@@ -18864,6 +20805,7 @@ export namespace Prisma {
     media?: UserMediaUncheckedUpdateManyWithoutUserNestedInput
     agencyMemberships?: AgencyMemberUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+    offers?: OfferUncheckedUpdateManyWithoutApplicantNestedInput
   }
 
   export type AgencyUpsertWithoutPropertyInput = {
@@ -18988,6 +20930,22 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"PropertyMedia"> | Date | string
   }
 
+  export type OfferUpsertWithWhereUniqueWithoutPropertyInput = {
+    where: OfferWhereUniqueInput
+    update: XOR<OfferUpdateWithoutPropertyInput, OfferUncheckedUpdateWithoutPropertyInput>
+    create: XOR<OfferCreateWithoutPropertyInput, OfferUncheckedCreateWithoutPropertyInput>
+  }
+
+  export type OfferUpdateWithWhereUniqueWithoutPropertyInput = {
+    where: OfferWhereUniqueInput
+    data: XOR<OfferUpdateWithoutPropertyInput, OfferUncheckedUpdateWithoutPropertyInput>
+  }
+
+  export type OfferUpdateManyWithWhereWithoutPropertyInput = {
+    where: OfferScalarWhereInput
+    data: XOR<OfferUpdateManyMutationInput, OfferUncheckedUpdateManyWithoutPropertyInput>
+  }
+
   export type PropertyCreateWithoutApplicationInput = {
     id?: string
     title: string
@@ -19003,12 +20961,14 @@ export namespace Prisma {
     bathrooms?: number | null
     parkingSpaces?: number | null
     isPublished?: boolean
+    isLocked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutPropertiesInput
     agency?: AgencyCreateNestedOneWithoutPropertyInput
     assignedAgentMember?: AgencyMemberCreateNestedOneWithoutAssignedPropertiesInput
     media?: PropertyMediaCreateNestedManyWithoutPropertyInput
+    offers?: OfferCreateNestedManyWithoutPropertyInput
   }
 
   export type PropertyUncheckedCreateWithoutApplicationInput = {
@@ -19026,12 +20986,14 @@ export namespace Prisma {
     bathrooms?: number | null
     parkingSpaces?: number | null
     isPublished?: boolean
+    isLocked?: boolean
     createdById: string
     agencyId?: string | null
     assignedAgentMemberId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     media?: PropertyMediaUncheckedCreateNestedManyWithoutPropertyInput
+    offers?: OfferUncheckedCreateNestedManyWithoutPropertyInput
   }
 
   export type PropertyCreateOrConnectWithoutApplicationInput = {
@@ -19057,6 +21019,7 @@ export namespace Prisma {
     media?: UserMediaCreateNestedManyWithoutUserInput
     agencyMemberships?: AgencyMemberCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
+    offers?: OfferCreateNestedManyWithoutApplicantInput
   }
 
   export type UserUncheckedCreateWithoutApplicationsInput = {
@@ -19077,11 +21040,39 @@ export namespace Prisma {
     media?: UserMediaUncheckedCreateNestedManyWithoutUserInput
     agencyMemberships?: AgencyMemberUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+    offers?: OfferUncheckedCreateNestedManyWithoutApplicantInput
   }
 
   export type UserCreateOrConnectWithoutApplicationsInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutApplicationsInput, UserUncheckedCreateWithoutApplicationsInput>
+  }
+
+  export type OfferCreateWithoutApplicationInput = {
+    id?: string
+    status?: $Enums.OfferStatus
+    message?: string | null
+    expiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    property: PropertyCreateNestedOneWithoutOffersInput
+    applicant: UserCreateNestedOneWithoutOffersInput
+  }
+
+  export type OfferUncheckedCreateWithoutApplicationInput = {
+    id?: string
+    propertyId: string
+    applicantId: string
+    status?: $Enums.OfferStatus
+    message?: string | null
+    expiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OfferCreateOrConnectWithoutApplicationInput = {
+    where: OfferWhereUniqueInput
+    create: XOR<OfferCreateWithoutApplicationInput, OfferUncheckedCreateWithoutApplicationInput>
   }
 
   export type PropertyUpsertWithoutApplicationInput = {
@@ -19110,12 +21101,14 @@ export namespace Prisma {
     bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutPropertiesNestedInput
     agency?: AgencyUpdateOneWithoutPropertyNestedInput
     assignedAgentMember?: AgencyMemberUpdateOneWithoutAssignedPropertiesNestedInput
     media?: PropertyMediaUpdateManyWithoutPropertyNestedInput
+    offers?: OfferUpdateManyWithoutPropertyNestedInput
   }
 
   export type PropertyUncheckedUpdateWithoutApplicationInput = {
@@ -19133,12 +21126,14 @@ export namespace Prisma {
     bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     agencyId?: NullableStringFieldUpdateOperationsInput | string | null
     assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     media?: PropertyMediaUncheckedUpdateManyWithoutPropertyNestedInput
+    offers?: OfferUncheckedUpdateManyWithoutPropertyNestedInput
   }
 
   export type UserUpsertWithoutApplicationsInput = {
@@ -19170,6 +21165,7 @@ export namespace Prisma {
     media?: UserMediaUpdateManyWithoutUserNestedInput
     agencyMemberships?: AgencyMemberUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
+    offers?: OfferUpdateManyWithoutApplicantNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApplicationsInput = {
@@ -19190,6 +21186,40 @@ export namespace Prisma {
     media?: UserMediaUncheckedUpdateManyWithoutUserNestedInput
     agencyMemberships?: AgencyMemberUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+    offers?: OfferUncheckedUpdateManyWithoutApplicantNestedInput
+  }
+
+  export type OfferUpsertWithoutApplicationInput = {
+    update: XOR<OfferUpdateWithoutApplicationInput, OfferUncheckedUpdateWithoutApplicationInput>
+    create: XOR<OfferCreateWithoutApplicationInput, OfferUncheckedCreateWithoutApplicationInput>
+    where?: OfferWhereInput
+  }
+
+  export type OfferUpdateToOneWithWhereWithoutApplicationInput = {
+    where?: OfferWhereInput
+    data: XOR<OfferUpdateWithoutApplicationInput, OfferUncheckedUpdateWithoutApplicationInput>
+  }
+
+  export type OfferUpdateWithoutApplicationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumOfferStatusFieldUpdateOperationsInput | $Enums.OfferStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    property?: PropertyUpdateOneRequiredWithoutOffersNestedInput
+    applicant?: UserUpdateOneRequiredWithoutOffersNestedInput
+  }
+
+  export type OfferUncheckedUpdateWithoutApplicationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    propertyId?: StringFieldUpdateOperationsInput | string
+    applicantId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOfferStatusFieldUpdateOperationsInput | $Enums.OfferStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserCreateWithoutEmailVerificationTokensInput = {
@@ -19210,6 +21240,7 @@ export namespace Prisma {
     media?: UserMediaCreateNestedManyWithoutUserInput
     agencyMemberships?: AgencyMemberCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
+    offers?: OfferCreateNestedManyWithoutApplicantInput
   }
 
   export type UserUncheckedCreateWithoutEmailVerificationTokensInput = {
@@ -19230,6 +21261,7 @@ export namespace Prisma {
     media?: UserMediaUncheckedCreateNestedManyWithoutUserInput
     agencyMemberships?: AgencyMemberUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+    offers?: OfferUncheckedCreateNestedManyWithoutApplicantInput
   }
 
   export type UserCreateOrConnectWithoutEmailVerificationTokensInput = {
@@ -19266,6 +21298,7 @@ export namespace Prisma {
     media?: UserMediaUpdateManyWithoutUserNestedInput
     agencyMemberships?: AgencyMemberUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
+    offers?: OfferUpdateManyWithoutApplicantNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmailVerificationTokensInput = {
@@ -19286,6 +21319,7 @@ export namespace Prisma {
     media?: UserMediaUncheckedUpdateManyWithoutUserNestedInput
     agencyMemberships?: AgencyMemberUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+    offers?: OfferUncheckedUpdateManyWithoutApplicantNestedInput
   }
 
   export type PropertyCreateWithoutMediaInput = {
@@ -19303,12 +21337,14 @@ export namespace Prisma {
     bathrooms?: number | null
     parkingSpaces?: number | null
     isPublished?: boolean
+    isLocked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutPropertiesInput
     agency?: AgencyCreateNestedOneWithoutPropertyInput
     assignedAgentMember?: AgencyMemberCreateNestedOneWithoutAssignedPropertiesInput
     application?: ApplicationCreateNestedManyWithoutPropertyInput
+    offers?: OfferCreateNestedManyWithoutPropertyInput
   }
 
   export type PropertyUncheckedCreateWithoutMediaInput = {
@@ -19326,12 +21362,14 @@ export namespace Prisma {
     bathrooms?: number | null
     parkingSpaces?: number | null
     isPublished?: boolean
+    isLocked?: boolean
     createdById: string
     agencyId?: string | null
     assignedAgentMemberId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     application?: ApplicationUncheckedCreateNestedManyWithoutPropertyInput
+    offers?: OfferUncheckedCreateNestedManyWithoutPropertyInput
   }
 
   export type PropertyCreateOrConnectWithoutMediaInput = {
@@ -19365,12 +21403,14 @@ export namespace Prisma {
     bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutPropertiesNestedInput
     agency?: AgencyUpdateOneWithoutPropertyNestedInput
     assignedAgentMember?: AgencyMemberUpdateOneWithoutAssignedPropertiesNestedInput
     application?: ApplicationUpdateManyWithoutPropertyNestedInput
+    offers?: OfferUpdateManyWithoutPropertyNestedInput
   }
 
   export type PropertyUncheckedUpdateWithoutMediaInput = {
@@ -19388,12 +21428,14 @@ export namespace Prisma {
     bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     agencyId?: NullableStringFieldUpdateOperationsInput | string | null
     assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     application?: ApplicationUncheckedUpdateManyWithoutPropertyNestedInput
+    offers?: OfferUncheckedUpdateManyWithoutPropertyNestedInput
   }
 
   export type AgencyMemberCreateWithoutAgencyInput = {
@@ -19441,12 +21483,14 @@ export namespace Prisma {
     bathrooms?: number | null
     parkingSpaces?: number | null
     isPublished?: boolean
+    isLocked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutPropertiesInput
     assignedAgentMember?: AgencyMemberCreateNestedOneWithoutAssignedPropertiesInput
     application?: ApplicationCreateNestedManyWithoutPropertyInput
     media?: PropertyMediaCreateNestedManyWithoutPropertyInput
+    offers?: OfferCreateNestedManyWithoutPropertyInput
   }
 
   export type PropertyUncheckedCreateWithoutAgencyInput = {
@@ -19464,12 +21508,14 @@ export namespace Prisma {
     bathrooms?: number | null
     parkingSpaces?: number | null
     isPublished?: boolean
+    isLocked?: boolean
     createdById: string
     assignedAgentMemberId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     application?: ApplicationUncheckedCreateNestedManyWithoutPropertyInput
     media?: PropertyMediaUncheckedCreateNestedManyWithoutPropertyInput
+    offers?: OfferUncheckedCreateNestedManyWithoutPropertyInput
   }
 
   export type PropertyCreateOrConnectWithoutAgencyInput = {
@@ -19569,6 +21615,7 @@ export namespace Prisma {
     emailVerificationTokens?: EmailVerificationTokenCreateNestedManyWithoutUserInput
     media?: UserMediaCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
+    offers?: OfferCreateNestedManyWithoutApplicantInput
   }
 
   export type UserUncheckedCreateWithoutAgencyMembershipsInput = {
@@ -19589,6 +21636,7 @@ export namespace Prisma {
     emailVerificationTokens?: EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
     media?: UserMediaUncheckedCreateNestedManyWithoutUserInput
     passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+    offers?: OfferUncheckedCreateNestedManyWithoutApplicantInput
   }
 
   export type UserCreateOrConnectWithoutAgencyMembershipsInput = {
@@ -19611,12 +21659,14 @@ export namespace Prisma {
     bathrooms?: number | null
     parkingSpaces?: number | null
     isPublished?: boolean
+    isLocked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutPropertiesInput
     agency?: AgencyCreateNestedOneWithoutPropertyInput
     application?: ApplicationCreateNestedManyWithoutPropertyInput
     media?: PropertyMediaCreateNestedManyWithoutPropertyInput
+    offers?: OfferCreateNestedManyWithoutPropertyInput
   }
 
   export type PropertyUncheckedCreateWithoutAssignedAgentMemberInput = {
@@ -19634,12 +21684,14 @@ export namespace Prisma {
     bathrooms?: number | null
     parkingSpaces?: number | null
     isPublished?: boolean
+    isLocked?: boolean
     createdById: string
     agencyId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     application?: ApplicationUncheckedCreateNestedManyWithoutPropertyInput
     media?: PropertyMediaUncheckedCreateNestedManyWithoutPropertyInput
+    offers?: OfferUncheckedCreateNestedManyWithoutPropertyInput
   }
 
   export type PropertyCreateOrConnectWithoutAssignedAgentMemberInput = {
@@ -19724,6 +21776,7 @@ export namespace Prisma {
     emailVerificationTokens?: EmailVerificationTokenUpdateManyWithoutUserNestedInput
     media?: UserMediaUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
+    offers?: OfferUpdateManyWithoutApplicantNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAgencyMembershipsInput = {
@@ -19744,6 +21797,7 @@ export namespace Prisma {
     emailVerificationTokens?: EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
     media?: UserMediaUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+    offers?: OfferUncheckedUpdateManyWithoutApplicantNestedInput
   }
 
   export type PropertyUpsertWithWhereUniqueWithoutAssignedAgentMemberInput = {
@@ -19780,6 +21834,7 @@ export namespace Prisma {
     emailVerificationTokens?: EmailVerificationTokenCreateNestedManyWithoutUserInput
     media?: UserMediaCreateNestedManyWithoutUserInput
     agencyMemberships?: AgencyMemberCreateNestedManyWithoutUserInput
+    offers?: OfferCreateNestedManyWithoutApplicantInput
   }
 
   export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
@@ -19800,6 +21855,7 @@ export namespace Prisma {
     emailVerificationTokens?: EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
     media?: UserMediaUncheckedCreateNestedManyWithoutUserInput
     agencyMemberships?: AgencyMemberUncheckedCreateNestedManyWithoutUserInput
+    offers?: OfferUncheckedCreateNestedManyWithoutApplicantInput
   }
 
   export type UserCreateOrConnectWithoutPasswordResetTokensInput = {
@@ -19836,6 +21892,7 @@ export namespace Prisma {
     emailVerificationTokens?: EmailVerificationTokenUpdateManyWithoutUserNestedInput
     media?: UserMediaUpdateManyWithoutUserNestedInput
     agencyMemberships?: AgencyMemberUpdateManyWithoutUserNestedInput
+    offers?: OfferUpdateManyWithoutApplicantNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
@@ -19856,6 +21913,279 @@ export namespace Prisma {
     emailVerificationTokens?: EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
     media?: UserMediaUncheckedUpdateManyWithoutUserNestedInput
     agencyMemberships?: AgencyMemberUncheckedUpdateManyWithoutUserNestedInput
+    offers?: OfferUncheckedUpdateManyWithoutApplicantNestedInput
+  }
+
+  export type ApplicationCreateWithoutOfferInput = {
+    id?: string
+    status?: $Enums.ApplicationStatus
+    message?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    property: PropertyCreateNestedOneWithoutApplicationInput
+    applicant: UserCreateNestedOneWithoutApplicationsInput
+  }
+
+  export type ApplicationUncheckedCreateWithoutOfferInput = {
+    id?: string
+    propertyId: string
+    applicantId: string
+    status?: $Enums.ApplicationStatus
+    message?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ApplicationCreateOrConnectWithoutOfferInput = {
+    where: ApplicationWhereUniqueInput
+    create: XOR<ApplicationCreateWithoutOfferInput, ApplicationUncheckedCreateWithoutOfferInput>
+  }
+
+  export type PropertyCreateWithoutOffersInput = {
+    id?: string
+    title: string
+    description: string
+    listingType: $Enums.ListingType
+    propertyType: $Enums.PropertyType
+    price: Decimal | DecimalJsLike | number | string
+    addressLine1: string
+    suburb: string
+    state: string
+    postcode: string
+    bedrooms?: number | null
+    bathrooms?: number | null
+    parkingSpaces?: number | null
+    isPublished?: boolean
+    isLocked?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: UserCreateNestedOneWithoutPropertiesInput
+    agency?: AgencyCreateNestedOneWithoutPropertyInput
+    assignedAgentMember?: AgencyMemberCreateNestedOneWithoutAssignedPropertiesInput
+    application?: ApplicationCreateNestedManyWithoutPropertyInput
+    media?: PropertyMediaCreateNestedManyWithoutPropertyInput
+  }
+
+  export type PropertyUncheckedCreateWithoutOffersInput = {
+    id?: string
+    title: string
+    description: string
+    listingType: $Enums.ListingType
+    propertyType: $Enums.PropertyType
+    price: Decimal | DecimalJsLike | number | string
+    addressLine1: string
+    suburb: string
+    state: string
+    postcode: string
+    bedrooms?: number | null
+    bathrooms?: number | null
+    parkingSpaces?: number | null
+    isPublished?: boolean
+    isLocked?: boolean
+    createdById: string
+    agencyId?: string | null
+    assignedAgentMemberId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    application?: ApplicationUncheckedCreateNestedManyWithoutPropertyInput
+    media?: PropertyMediaUncheckedCreateNestedManyWithoutPropertyInput
+  }
+
+  export type PropertyCreateOrConnectWithoutOffersInput = {
+    where: PropertyWhereUniqueInput
+    create: XOR<PropertyCreateWithoutOffersInput, PropertyUncheckedCreateWithoutOffersInput>
+  }
+
+  export type UserCreateWithoutOffersInput = {
+    id?: string
+    email: string
+    fullName: string
+    passwordHash?: string | null
+    phone?: string | null
+    googleId?: string | null
+    role?: $Enums.UserRole
+    isActive?: boolean
+    isEmailVerified?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    properties?: PropertyCreateNestedManyWithoutCreatedByInput
+    profile?: PersonProfileCreateNestedOneWithoutUserInput
+    applications?: ApplicationCreateNestedManyWithoutApplicantInput
+    emailVerificationTokens?: EmailVerificationTokenCreateNestedManyWithoutUserInput
+    media?: UserMediaCreateNestedManyWithoutUserInput
+    agencyMemberships?: AgencyMemberCreateNestedManyWithoutUserInput
+    passwordResetTokens?: PasswordResetTokenCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutOffersInput = {
+    id?: string
+    email: string
+    fullName: string
+    passwordHash?: string | null
+    phone?: string | null
+    googleId?: string | null
+    role?: $Enums.UserRole
+    isActive?: boolean
+    isEmailVerified?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    properties?: PropertyUncheckedCreateNestedManyWithoutCreatedByInput
+    profile?: PersonProfileUncheckedCreateNestedOneWithoutUserInput
+    applications?: ApplicationUncheckedCreateNestedManyWithoutApplicantInput
+    emailVerificationTokens?: EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    media?: UserMediaUncheckedCreateNestedManyWithoutUserInput
+    agencyMemberships?: AgencyMemberUncheckedCreateNestedManyWithoutUserInput
+    passwordResetTokens?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutOffersInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutOffersInput, UserUncheckedCreateWithoutOffersInput>
+  }
+
+  export type ApplicationUpsertWithoutOfferInput = {
+    update: XOR<ApplicationUpdateWithoutOfferInput, ApplicationUncheckedUpdateWithoutOfferInput>
+    create: XOR<ApplicationCreateWithoutOfferInput, ApplicationUncheckedCreateWithoutOfferInput>
+    where?: ApplicationWhereInput
+  }
+
+  export type ApplicationUpdateToOneWithWhereWithoutOfferInput = {
+    where?: ApplicationWhereInput
+    data: XOR<ApplicationUpdateWithoutOfferInput, ApplicationUncheckedUpdateWithoutOfferInput>
+  }
+
+  export type ApplicationUpdateWithoutOfferInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    property?: PropertyUpdateOneRequiredWithoutApplicationNestedInput
+    applicant?: UserUpdateOneRequiredWithoutApplicationsNestedInput
+  }
+
+  export type ApplicationUncheckedUpdateWithoutOfferInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    propertyId?: StringFieldUpdateOperationsInput | string
+    applicantId?: StringFieldUpdateOperationsInput | string
+    status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PropertyUpsertWithoutOffersInput = {
+    update: XOR<PropertyUpdateWithoutOffersInput, PropertyUncheckedUpdateWithoutOffersInput>
+    create: XOR<PropertyCreateWithoutOffersInput, PropertyUncheckedCreateWithoutOffersInput>
+    where?: PropertyWhereInput
+  }
+
+  export type PropertyUpdateToOneWithWhereWithoutOffersInput = {
+    where?: PropertyWhereInput
+    data: XOR<PropertyUpdateWithoutOffersInput, PropertyUncheckedUpdateWithoutOffersInput>
+  }
+
+  export type PropertyUpdateWithoutOffersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    listingType?: EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+    propertyType?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    addressLine1?: StringFieldUpdateOperationsInput | string
+    suburb?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    postcode?: StringFieldUpdateOperationsInput | string
+    bedrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneRequiredWithoutPropertiesNestedInput
+    agency?: AgencyUpdateOneWithoutPropertyNestedInput
+    assignedAgentMember?: AgencyMemberUpdateOneWithoutAssignedPropertiesNestedInput
+    application?: ApplicationUpdateManyWithoutPropertyNestedInput
+    media?: PropertyMediaUpdateManyWithoutPropertyNestedInput
+  }
+
+  export type PropertyUncheckedUpdateWithoutOffersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    listingType?: EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+    propertyType?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    addressLine1?: StringFieldUpdateOperationsInput | string
+    suburb?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    postcode?: StringFieldUpdateOperationsInput | string
+    bedrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
+    parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    createdById?: StringFieldUpdateOperationsInput | string
+    agencyId?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    application?: ApplicationUncheckedUpdateManyWithoutPropertyNestedInput
+    media?: PropertyMediaUncheckedUpdateManyWithoutPropertyNestedInput
+  }
+
+  export type UserUpsertWithoutOffersInput = {
+    update: XOR<UserUpdateWithoutOffersInput, UserUncheckedUpdateWithoutOffersInput>
+    create: XOR<UserCreateWithoutOffersInput, UserUncheckedCreateWithoutOffersInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutOffersInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutOffersInput, UserUncheckedUpdateWithoutOffersInput>
+  }
+
+  export type UserUpdateWithoutOffersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    properties?: PropertyUpdateManyWithoutCreatedByNestedInput
+    profile?: PersonProfileUpdateOneWithoutUserNestedInput
+    applications?: ApplicationUpdateManyWithoutApplicantNestedInput
+    emailVerificationTokens?: EmailVerificationTokenUpdateManyWithoutUserNestedInput
+    media?: UserMediaUpdateManyWithoutUserNestedInput
+    agencyMemberships?: AgencyMemberUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: PasswordResetTokenUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutOffersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    properties?: PropertyUncheckedUpdateManyWithoutCreatedByNestedInput
+    profile?: PersonProfileUncheckedUpdateOneWithoutUserNestedInput
+    applications?: ApplicationUncheckedUpdateManyWithoutApplicantNestedInput
+    emailVerificationTokens?: EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    media?: UserMediaUncheckedUpdateManyWithoutUserNestedInput
+    agencyMemberships?: AgencyMemberUncheckedUpdateManyWithoutUserNestedInput
+    passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PropertyCreateManyCreatedByInput = {
@@ -19873,6 +22203,7 @@ export namespace Prisma {
     bathrooms?: number | null
     parkingSpaces?: number | null
     isPublished?: boolean
+    isLocked?: boolean
     agencyId?: string | null
     assignedAgentMemberId?: string | null
     createdAt?: Date | string
@@ -19924,6 +22255,17 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type OfferCreateManyApplicantInput = {
+    id?: string
+    applicationId: string
+    propertyId: string
+    status?: $Enums.OfferStatus
+    message?: string | null
+    expiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type PropertyUpdateWithoutCreatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -19939,12 +22281,14 @@ export namespace Prisma {
     bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     agency?: AgencyUpdateOneWithoutPropertyNestedInput
     assignedAgentMember?: AgencyMemberUpdateOneWithoutAssignedPropertiesNestedInput
     application?: ApplicationUpdateManyWithoutPropertyNestedInput
     media?: PropertyMediaUpdateManyWithoutPropertyNestedInput
+    offers?: OfferUpdateManyWithoutPropertyNestedInput
   }
 
   export type PropertyUncheckedUpdateWithoutCreatedByInput = {
@@ -19962,12 +22306,14 @@ export namespace Prisma {
     bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     agencyId?: NullableStringFieldUpdateOperationsInput | string | null
     assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     application?: ApplicationUncheckedUpdateManyWithoutPropertyNestedInput
     media?: PropertyMediaUncheckedUpdateManyWithoutPropertyNestedInput
+    offers?: OfferUncheckedUpdateManyWithoutPropertyNestedInput
   }
 
   export type PropertyUncheckedUpdateManyWithoutCreatedByInput = {
@@ -19985,6 +22331,7 @@ export namespace Prisma {
     bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     agencyId?: NullableStringFieldUpdateOperationsInput | string | null
     assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19998,6 +22345,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     property?: PropertyUpdateOneRequiredWithoutApplicationNestedInput
+    offer?: OfferUpdateOneWithoutApplicationNestedInput
   }
 
   export type ApplicationUncheckedUpdateWithoutApplicantInput = {
@@ -20007,6 +22355,7 @@ export namespace Prisma {
     message?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    offer?: OfferUncheckedUpdateOneWithoutApplicationNestedInput
   }
 
   export type ApplicationUncheckedUpdateManyWithoutApplicantInput = {
@@ -20128,6 +22477,39 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type OfferUpdateWithoutApplicantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumOfferStatusFieldUpdateOperationsInput | $Enums.OfferStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    application?: ApplicationUpdateOneRequiredWithoutOfferNestedInput
+    property?: PropertyUpdateOneRequiredWithoutOffersNestedInput
+  }
+
+  export type OfferUncheckedUpdateWithoutApplicantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    applicationId?: StringFieldUpdateOperationsInput | string
+    propertyId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOfferStatusFieldUpdateOperationsInput | $Enums.OfferStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OfferUncheckedUpdateManyWithoutApplicantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    applicationId?: StringFieldUpdateOperationsInput | string
+    propertyId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOfferStatusFieldUpdateOperationsInput | $Enums.OfferStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ApplicationCreateManyPropertyInput = {
     id?: string
     applicantId: string
@@ -20149,6 +22531,17 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type OfferCreateManyPropertyInput = {
+    id?: string
+    applicationId: string
+    applicantId: string
+    status?: $Enums.OfferStatus
+    message?: string | null
+    expiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type ApplicationUpdateWithoutPropertyInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
@@ -20156,6 +22549,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applicant?: UserUpdateOneRequiredWithoutApplicationsNestedInput
+    offer?: OfferUpdateOneWithoutApplicationNestedInput
   }
 
   export type ApplicationUncheckedUpdateWithoutPropertyInput = {
@@ -20165,6 +22559,7 @@ export namespace Prisma {
     message?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    offer?: OfferUncheckedUpdateOneWithoutApplicationNestedInput
   }
 
   export type ApplicationUncheckedUpdateManyWithoutPropertyInput = {
@@ -20212,6 +22607,39 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type OfferUpdateWithoutPropertyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumOfferStatusFieldUpdateOperationsInput | $Enums.OfferStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    application?: ApplicationUpdateOneRequiredWithoutOfferNestedInput
+    applicant?: UserUpdateOneRequiredWithoutOffersNestedInput
+  }
+
+  export type OfferUncheckedUpdateWithoutPropertyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    applicationId?: StringFieldUpdateOperationsInput | string
+    applicantId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOfferStatusFieldUpdateOperationsInput | $Enums.OfferStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OfferUncheckedUpdateManyWithoutPropertyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    applicationId?: StringFieldUpdateOperationsInput | string
+    applicantId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOfferStatusFieldUpdateOperationsInput | $Enums.OfferStatus
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type AgencyMemberCreateManyAgencyInput = {
     id?: string
     userId: string
@@ -20236,6 +22664,7 @@ export namespace Prisma {
     bathrooms?: number | null
     parkingSpaces?: number | null
     isPublished?: boolean
+    isLocked?: boolean
     createdById: string
     assignedAgentMemberId?: string | null
     createdAt?: Date | string
@@ -20286,12 +22715,14 @@ export namespace Prisma {
     bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutPropertiesNestedInput
     assignedAgentMember?: AgencyMemberUpdateOneWithoutAssignedPropertiesNestedInput
     application?: ApplicationUpdateManyWithoutPropertyNestedInput
     media?: PropertyMediaUpdateManyWithoutPropertyNestedInput
+    offers?: OfferUpdateManyWithoutPropertyNestedInput
   }
 
   export type PropertyUncheckedUpdateWithoutAgencyInput = {
@@ -20309,12 +22740,14 @@ export namespace Prisma {
     bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     application?: ApplicationUncheckedUpdateManyWithoutPropertyNestedInput
     media?: PropertyMediaUncheckedUpdateManyWithoutPropertyNestedInput
+    offers?: OfferUncheckedUpdateManyWithoutPropertyNestedInput
   }
 
   export type PropertyUncheckedUpdateManyWithoutAgencyInput = {
@@ -20332,6 +22765,7 @@ export namespace Prisma {
     bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20353,6 +22787,7 @@ export namespace Prisma {
     bathrooms?: number | null
     parkingSpaces?: number | null
     isPublished?: boolean
+    isLocked?: boolean
     createdById: string
     agencyId?: string | null
     createdAt?: Date | string
@@ -20374,12 +22809,14 @@ export namespace Prisma {
     bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutPropertiesNestedInput
     agency?: AgencyUpdateOneWithoutPropertyNestedInput
     application?: ApplicationUpdateManyWithoutPropertyNestedInput
     media?: PropertyMediaUpdateManyWithoutPropertyNestedInput
+    offers?: OfferUpdateManyWithoutPropertyNestedInput
   }
 
   export type PropertyUncheckedUpdateWithoutAssignedAgentMemberInput = {
@@ -20397,12 +22834,14 @@ export namespace Prisma {
     bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     agencyId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     application?: ApplicationUncheckedUpdateManyWithoutPropertyNestedInput
     media?: PropertyMediaUncheckedUpdateManyWithoutPropertyNestedInput
+    offers?: OfferUncheckedUpdateManyWithoutPropertyNestedInput
   }
 
   export type PropertyUncheckedUpdateManyWithoutAssignedAgentMemberInput = {
@@ -20420,6 +22859,7 @@ export namespace Prisma {
     bathrooms?: NullableIntFieldUpdateOperationsInput | number | null
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     agencyId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

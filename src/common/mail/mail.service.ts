@@ -285,4 +285,46 @@ export class MailService {
       throw new InternalServerErrorException('Failed to send password reset email');
     }
   }
+
+  async sendAgencyMemberDeactivatedEmail(to: string, fullName: string, agencyName: string) {
+    const recipient = process.env.NODE_ENV === 'development' ? (process.env.MAIL_DEV_TO ?? 'delivered@resend.dev') : to;
+
+    const { error } = await this.resend.emails.send({
+      from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
+      to: [recipient],
+      subject: 'You have been removed from the agency',
+      html: `
+      <div style="font-family: Arial, sans-serif;">
+        <h2>Hello ${fullName},</h2>
+        <p>You have been removed from <strong>${agencyName}</strong>.</p>
+        <p>If you believe this was a mistake, please contact the agency.</p>
+      </div>
+    `,
+    });
+
+    if (error) {
+      throw new InternalServerErrorException('Failed to send agency member deactivated email');
+    }
+  }
+
+  async sendOfferCreatedEmail(to: string, fullName: string, propertyTitle: string) {
+    const recipient = process.env.NODE_ENV === 'development' ? (process.env.MAIL_DEV_TO ?? 'delivered@resend.dev') : to;
+
+    const { error } = await this.resend.emails.send({
+      from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
+      to: [recipient],
+      replyTo: process.env.MAIL_REPLY_TO,
+      subject: 'You have received a rental offer',
+      html: `
+      <h2>Rental Offer Received</h2>
+      <p>Hello ${fullName},</p>
+      <p>You have received a rental offer for <strong>${propertyTitle}</strong>.</p>
+      <p>Please log in to your account to review and respond to the offer.</p>
+    `,
+    });
+
+    if (error) {
+      throw new InternalServerErrorException('Failed to send offer email');
+    }
+  }
 }

@@ -177,6 +177,7 @@ exports.Prisma.PropertyScalarFieldEnum = {
   bathrooms: 'bathrooms',
   parkingSpaces: 'parkingSpaces',
   isPublished: 'isPublished',
+  isLocked: 'isLocked',
   createdById: 'createdById',
   agencyId: 'agencyId',
   assignedAgentMemberId: 'assignedAgentMemberId',
@@ -250,6 +251,18 @@ exports.Prisma.PasswordResetTokenScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.OfferScalarFieldEnum = {
+  id: 'id',
+  applicationId: 'applicationId',
+  propertyId: 'propertyId',
+  applicantId: 'applicantId',
+  status: 'status',
+  message: 'message',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -316,6 +329,13 @@ exports.AgencyMemberRole = exports.$Enums.AgencyMemberRole = {
   AGENT: 'AGENT'
 };
 
+exports.OfferStatus = exports.$Enums.OfferStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   UserMedia: 'UserMedia',
@@ -326,7 +346,8 @@ exports.Prisma.ModelName = {
   PropertyMedia: 'PropertyMedia',
   Agency: 'Agency',
   AgencyMember: 'AgencyMember',
-  PasswordResetToken: 'PasswordResetToken'
+  PasswordResetToken: 'PasswordResetToken',
+  Offer: 'Offer'
 };
 
 /**

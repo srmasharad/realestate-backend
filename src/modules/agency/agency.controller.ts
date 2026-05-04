@@ -1,7 +1,7 @@
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 
-import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import { UpdateApplicationStatusDto } from '../applications/dto/update-application-status.dto';
@@ -11,6 +11,7 @@ import { AgencyService } from './agency.service';
 import { AddAgencyMemberDto } from './dto/add-agency-member.dto';
 import { AssignAgentDto } from './dto/assign-agent.dto';
 import { CreateAgencyOnboardingDto } from './dto/create-agency-onboarding.dto';
+import { CreateOfferDto } from './dto/create-offer.dto';
 
 @ApiTags('Agency')
 @Controller({
@@ -92,5 +93,36 @@ export class AgencyController {
     @Body() dto: AssignAgentDto,
   ) {
     return this.agencyService.assignAgentToProperty(user, propertyId, dto);
+  }
+
+  @Delete('properties/:propertyId/assigned-agent')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Remove assigned agent from property' })
+  removeAssignedAgentFromProperty(
+    @CurrentUser() currentUser: AuthenticatedUser,
+    @Param('propertyId') propertyId: string,
+  ) {
+    return this.agencyService.removeAssignedAgentFromProperty(currentUser, propertyId);
+  }
+
+  @Patch('members/:memberId/deactivate')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Deactivate agency member' })
+  deactivateAgencyMember(@CurrentUser() currentUser: AuthenticatedUser, @Param('memberId') memberId: string) {
+    return this.agencyService.deactivateAgencyMember(currentUser, memberId);
+  }
+
+  @Post('applications/:applicationId/offer')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Create offer for approved application' })
+  createOfferForApplication(
+    @CurrentUser() currentUser: AuthenticatedUser,
+    @Param('applicationId') applicationId: string,
+    @Body() dto: CreateOfferDto,
+  ) {
+    return this.agencyService.createOfferForApplication(currentUser, applicationId, dto);
   }
 }
