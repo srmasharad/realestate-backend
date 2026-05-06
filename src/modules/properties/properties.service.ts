@@ -6,7 +6,7 @@ import { PropertyMediaItem, UploadedImageFile } from 'src/common/types/uploaded-
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 
 import { PrismaService } from '../../database/prisma.service';
-import { AgencyStatus, MediaVisibility, PropertyMediaType, UserRole } from '../../generated/prisma';
+import { AgencyMemberRole, AgencyStatus, MediaVisibility, PropertyMediaType, UserRole } from '../../generated/prisma';
 import { AuthenticatedUser } from '../auth/types/authenticated-user.type';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UploadPropertyMediaDto } from './dto/upload-property-media.dto';
@@ -68,6 +68,8 @@ export class PropertiesService {
         isActive: true,
       },
       select: {
+        id: true,
+        role: true,
         agencyId: true,
         agency: {
           select: {
@@ -90,8 +92,9 @@ export class PropertiesService {
     const property = await this.prisma.property.create({
       data: {
         ...createPropertyDto,
-        createdById: currentUser.id,
         agencyId: membership?.agencyId,
+        assignedAgentMemberId: membership?.role === AgencyMemberRole.AGENT ? membership.id : null,
+        createdById: currentUser.id,
       },
       select: {
         id: true,
@@ -109,7 +112,10 @@ export class PropertiesService {
         parkingSpaces: true,
         isPublished: true,
         createdById: true,
+        agencyId: true,
+        assignedAgentMemberId: true,
         createdAt: true,
+        updatedAt: true,
       },
     });
 

@@ -9,6 +9,7 @@ import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nes
 
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { type AuthenticatedUser } from '../auth/types/authenticated-user.type';
+import { RespondOfferDto } from './dto/respond-offer.dto';
 import { UpsertMyProfileDto } from './dto/upsert-my-profile.dto';
 import { MeService } from './me.service';
 
@@ -84,5 +85,60 @@ export class MeController {
   @ApiOperation({ summary: 'Get current user applications' })
   getMyApplications(@CurrentUser() currentUser: AuthenticatedUser, @Query() query: PaginationQueryDto) {
     return this.meService.getMyApplications(currentUser, query);
+  }
+
+  @Get('offers')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get current user rental offers' })
+  getMyOffers(@CurrentUser() currentUser: AuthenticatedUser, @Query() query: PaginationQueryDto) {
+    return this.meService.getMyOffers(currentUser, query);
+  }
+
+  @Patch('offers/:offerId/respond')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Accept or decline rental offer' })
+  respondToOffer(
+    @CurrentUser() currentUser: AuthenticatedUser,
+    @Param('offerId') offerId: string,
+    @Body() dto: RespondOfferDto,
+  ) {
+    return this.meService.respondToOffer(currentUser, offerId, dto);
+  }
+
+  @Get('payment-requests')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get my payment requests' })
+  getMyPaymentRequests(@CurrentUser() currentUser: AuthenticatedUser, @Query() query: PaginationQueryDto) {
+    return this.meService.getMyPaymentRequests(currentUser, query);
+  }
+
+  @Get('lease-agreements')
+  @UseGuards(JwtAuthGuard)
+  getMyLease(@CurrentUser() user: AuthenticatedUser) {
+    return this.meService.getMyLeaseAgreements(user);
+  }
+
+  @Get('lease-agreements/:leaseAgreementId')
+  @ApiOperation({ summary: 'Get my lease agreement detail' })
+  getMyLeaseAgreementDetail(
+    @CurrentUser() currentUser: AuthenticatedUser,
+    @Param('leaseAgreementId') leaseAgreementId: string,
+  ) {
+    return this.meService.getMyLeaseAgreementDetail(currentUser, leaseAgreementId);
+  }
+
+  @Get('tenancies')
+  @ApiOperation({ summary: 'Get my tenancies' })
+  getMyTenancies(@CurrentUser() currentUser: AuthenticatedUser, @Query() query: PaginationQueryDto) {
+    return this.meService.getMyTenancies(currentUser, query);
+  }
+
+  @Get('tenancies/:tenancyId')
+  @ApiOperation({ summary: 'Get my tenancy detail' })
+  getMyTenancyDetail(@CurrentUser() currentUser: AuthenticatedUser, @Param('tenancyId') tenancyId: string) {
+    return this.meService.getMyTenancyDetail(currentUser, tenancyId);
   }
 }

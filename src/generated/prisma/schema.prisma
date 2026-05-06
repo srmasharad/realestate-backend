@@ -68,8 +68,28 @@ enum AgencyMemberRole {
 enum OfferStatus {
   PENDING
   ACCEPTED
-  REJECTED
+  DECLINED
   EXPIRED
+}
+
+enum PaymentRequestStatus {
+  PENDING
+  PAID
+  CANCELLED
+  OVERDUE
+}
+
+enum LeaseAgreementStatus {
+  DRAFT
+  SENT
+  SIGNED
+  CANCELLED
+}
+
+enum TenancyStatus {
+  ACTIVE
+  ENDED
+  CANCELLED
 }
 
 model User {
@@ -93,6 +113,13 @@ model User {
   agencyMemberships       AgencyMember[]
   passwordResetTokens     PasswordResetToken[]
   offers                  Offer[]
+  paymentRequests         PaymentRequest[]
+  leaseAgreements         LeaseAgreement[]
+  tenancies               Tenancy[]
+
+  createdLeaseAgreements LeaseAgreement[] @relation("LeaseCreatedBy")
+  sentLeaseAgreements    LeaseAgreement[] @relation("LeaseSentBy")
+  signedLeaseAgreements  LeaseAgreement[] @relation("LeaseSignedBy")
 }
 
 model UserMedia {
@@ -153,9 +180,12 @@ model Property {
   assignedAgentMemberId String?
   assignedAgentMember   AgencyMember? @relation("AssignedPropertyAgent", fields: [assignedAgentMemberId], references: [id], onDelete: SetNull)
 
-  application Application[]
-  media       PropertyMedia[]
-  offers      Offer[]
+  application     Application[]
+  media           PropertyMedia[]
+  offers          Offer[]
+  paymentRequests PaymentRequest[]
+  leaseAgreements LeaseAgreement[]
+  tenancies       Tenancy[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -218,8 +248,9 @@ model Agency {
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
 
-  members  AgencyMember[]
-  property Property[]
+  members   AgencyMember[]
+  property  Property[]
+  tenancies Tenancy[]
 }
 
 model AgencyMember {
@@ -255,16 +286,125 @@ model Offer {
   propertyId    String
   applicantId   String
 
-  status    OfferStatus @default(PENDING)
+  status OfferStatus @default(PENDING)
+
+  weeklyRent  Decimal @db.Decimal(12, 2)
+  bondAmount  Decimal @db.Decimal(12, 2)
+  advanceRent Decimal @db.Decimal(12, 2)
+
+  leaseStartDate DateTime
+  leaseEndDate   DateTime
+  leaseMonths    Int
+
   message   String?
   expiresAt DateTime?
 
+  acceptedAt DateTime?
+  declinedAt DateTime?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  paymentRequest PaymentRequest?
+  leaseAgreement LeaseAgreement?
 
   application Application @relation(fields: [applicationId], references: [id])
   property    Property    @relation(fields: [propertyId], references: [id])
   applicant   User        @relation(fields: [applicantId], references: [id])
 
   @@unique([applicationId])
+}
+
+model PaymentRequest {
+  id          String @id @default(uuid())
+  offerId     String @unique
+  propertyId  String
+  applicantId String
+
+  bondAmount  Decimal @db.Decimal(12, 2)
+  advanceRent Decimal @db.Decimal(12, 2)
+  totalAmount Decimal @db.Decimal(12, 2)
+
+  status  PaymentRequestStatus @default(PENDING)
+  dueDate DateTime
+  paidAt  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  offer     Offer    @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  property  Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  applicant User     @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+}
+
+model LeaseAgreement {
+  id          String @id @default(uuid())
+  offerId     String @unique
+  propertyId  String
+  applicantId String
+
+  status LeaseAgreementStatus @default(DRAFT)
+
+  leaseStartDate DateTime
+  leaseEndDate   DateTime
+  leaseMonths    Int
+
+  weeklyRent  Decimal @db.Decimal(12, 2)
+  bondAmount  Decimal @db.Decimal(12, 2)
+  advanceRent Decimal @db.Decimal(12, 2)
+
+  // External signing tracking
+  agreementUrl      String?
+  externalProvider  String? // "DocuSign", "Email", "Adobe"
+  externalReference String? // envelopeId / docId etc.
+
+  sentAt      DateTime?
+  signedAt    DateTime?
+  cancelledAt DateTime?
+
+  // Audit
+  createdById String?
+  sentById    String?
+  signedById  String?
+
+  tenancy Tenancy?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  offer     Offer    @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  property  Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  applicant User     @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+
+  createdBy User? @relation("LeaseCreatedBy", fields: [createdById], references: [id])
+  sentBy    User? @relation("LeaseSentBy", fields: [sentById], references: [id])
+  signedBy  User? @relation("LeaseSignedBy", fields: [signedById], references: [id])
+}
+
+model Tenancy {
+  id               String @id @default(uuid())
+  leaseAgreementId String @unique
+  propertyId       String
+  tenantId         String
+  agencyId         String
+
+  status TenancyStatus @default(ACTIVE)
+
+  startDate DateTime
+  endDate   DateTime
+
+  weeklyRent  Decimal @db.Decimal(12, 2)
+  bondAmount  Decimal @db.Decimal(12, 2)
+  advanceRent Decimal @db.Decimal(12, 2)
+
+  endedAt     DateTime?
+  cancelledAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  leaseAgreement LeaseAgreement @relation(fields: [leaseAgreementId], references: [id], onDelete: Cascade)
+  property       Property       @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  tenant         User           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  agency         Agency         @relation(fields: [agencyId], references: [id], onDelete: Cascade)
 }

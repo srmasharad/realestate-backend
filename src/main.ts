@@ -1,3 +1,4 @@
+import express from 'express';
 import { readFileSync } from 'fs';
 import helmet from 'helmet';
 import { join } from 'path';
@@ -13,6 +14,8 @@ import { TransformResponseInterceptor } from './common/interceptors/transform-re
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
+
+  app.use('/api/v1/payments/webhook', express.raw({ type: 'application/json' })); // Stripe webhook endpoint must receive raw body
 
   app.use(helmet());
 

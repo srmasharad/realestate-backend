@@ -14,6 +14,7 @@ import { MeModule } from './modules/me/me.module';
 import { PropertiesModule } from './modules/properties/properties.module';
 import { UsersModule } from './modules/users/users.module';
 import { AdminModule } from './modules/admin/admin.module';
+import { PaymentsModule } from './modules/payments/payments.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { AdminModule } from './modules/admin/admin.module';
     CloudinaryModule,
     AgencyModule,
     AdminModule,
+    PaymentsModule,
   ],
   controllers: [],
   providers: [],

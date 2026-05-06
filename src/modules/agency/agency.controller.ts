@@ -12,6 +12,7 @@ import { AddAgencyMemberDto } from './dto/add-agency-member.dto';
 import { AssignAgentDto } from './dto/assign-agent.dto';
 import { CreateAgencyOnboardingDto } from './dto/create-agency-onboarding.dto';
 import { CreateOfferDto } from './dto/create-offer.dto';
+import { SendLeaseAgreementDto } from './dto/send-lease-agreement.dto';
 
 @ApiTags('Agency')
 @Controller({
@@ -87,6 +88,7 @@ export class AgencyController {
   @Patch('properties/:propertyId/assign-agent')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiOperation({ summary: 'Assign agent to property' })
   assignAgentToProperty(
     @CurrentUser() user: AuthenticatedUser,
     @Param('propertyId') propertyId: string,
@@ -124,5 +126,81 @@ export class AgencyController {
     @Body() dto: CreateOfferDto,
   ) {
     return this.agencyService.createOfferForApplication(currentUser, applicationId, dto);
+  }
+
+  @Patch('lease-agreements/:id/send')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  sendLease(@CurrentUser() user: AuthenticatedUser, @Param('id') id: string, @Body() dto: SendLeaseAgreementDto) {
+    return this.agencyService.sendLeaseAgreement(user, id, dto);
+  }
+
+  @Patch('lease-agreements/:id/mark-signed')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  markSigned(@CurrentUser() user: AuthenticatedUser, @Param('id') id: string) {
+    return this.agencyService.markLeaseAgreementSigned(user, id);
+  }
+
+  @Get('lease-agreements')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'List agency lease agreements' })
+  getAgencyLeaseAgreements(@CurrentUser() currentUser: AuthenticatedUser, @Query() query: PaginationQueryDto) {
+    return this.agencyService.getAgencyLeaseAgreements(currentUser, query);
+  }
+
+  @Get('lease-agreements/:leaseAgreementId')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get agency lease agreement detail' })
+  getAgencyLeaseAgreementDetail(
+    @CurrentUser() currentUser: AuthenticatedUser,
+    @Param('leaseAgreementId') leaseAgreementId: string,
+  ) {
+    return this.agencyService.getAgencyLeaseAgreementDetail(currentUser, leaseAgreementId);
+  }
+
+  @Patch('lease-agreements/:leaseAgreementId/cancel')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Cancel lease agreement' })
+  cancelLeaseAgreement(
+    @CurrentUser() currentUser: AuthenticatedUser,
+    @Param('leaseAgreementId') leaseAgreementId: string,
+  ) {
+    return this.agencyService.cancelLeaseAgreement(currentUser, leaseAgreementId);
+  }
+
+  @Get('tenancies')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get agency tenancies' })
+  getAgencyTenancies(@CurrentUser() currentUser: AuthenticatedUser, @Query() query: PaginationQueryDto) {
+    return this.agencyService.getAgencyTenancies(currentUser, query);
+  }
+
+  @Get('tenancies/:tenancyId')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get agency tenancy detail' })
+  getAgencyTenancyDetail(@CurrentUser() currentUser: AuthenticatedUser, @Param('tenancyId') tenancyId: string) {
+    return this.agencyService.getAgencyTenancyDetail(currentUser, tenancyId);
+  }
+
+  @Patch('tenancies/:tenancyId/end')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'End tenancy' })
+  endTenancy(@CurrentUser() currentUser: AuthenticatedUser, @Param('tenancyId') tenancyId: string) {
+    return this.agencyService.endTenancy(currentUser, tenancyId);
+  }
+
+  @Patch('tenancies/:tenancyId/cancel')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Cancel tenancy' })
+  cancelTenancy(@CurrentUser() currentUser: AuthenticatedUser, @Param('tenancyId') tenancyId: string) {
+    return this.agencyService.cancelTenancy(currentUser, tenancyId);
   }
 }

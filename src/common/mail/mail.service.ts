@@ -313,18 +313,107 @@ export class MailService {
     const { error } = await this.resend.emails.send({
       from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
       to: [recipient],
-      replyTo: process.env.MAIL_REPLY_TO,
+      // replyTo: process.env.MAIL_REPLY_TO,
       subject: 'You have received a rental offer',
       html: `
       <h2>Rental Offer Received</h2>
       <p>Hello ${fullName},</p>
       <p>You have received a rental offer for <strong>${propertyTitle}</strong>.</p>
-      <p>Please log in to your account to review and respond to the offer.</p>
+      <p>Your rental application has progressed to the formal offer stage.</p>
+      <p>Please log in to your account to review the rental offer, including rent, bond, advance rent, lease dates, and expiry date.</p>
+      <p>You must accept or decline the offer before it expires.</p>
     `,
     });
 
     if (error) {
       throw new InternalServerErrorException('Failed to send offer email');
+    }
+  }
+
+  async sendPaymentSuccessEmail(to: string, fullName: string, propertyTitle: string) {
+    const recipient = process.env.NODE_ENV === 'development' ? (process.env.MAIL_DEV_TO ?? 'delivered@resend.dev') : to;
+
+    const html = `
+    <h2>Payment Confirmed</h2>
+    <p>Hi ${fullName},</p>
+    <p>Your payment for <strong>${propertyTitle}</strong> has been successfully received.</p>
+    <p>The property is now secured for you.</p>
+    <p>Next steps:</p>
+    <ul>
+      <li>Lease agreement will be shared shortly</li>
+      <li>Please prepare for move-in</li>
+    </ul>
+  `;
+
+    await this.resend.emails.send({
+      from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
+      to: [recipient],
+      subject: 'Payment Confirmed — Property Secured',
+      html,
+    });
+  }
+
+  async sendLeaseAgreementReadyEmail(to: string, fullName: string, propertyTitle: string, agreementUrl?: string) {
+    const recipient = process.env.NODE_ENV === 'development' ? (process.env.MAIL_DEV_TO ?? 'delivered@resend.dev') : to;
+
+    const linkSection = agreementUrl ? `<p><a href="${agreementUrl}" target="_blank">View Lease Agreement</a></p>` : '';
+
+    const { error } = await this.resend.emails.send({
+      from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
+      to: [recipient],
+      // replyTo: process.env.MAIL_REPLY_TO,
+      subject: 'Your Lease Agreement is Ready',
+      html: `
+      <h2>Lease Agreement Ready</h2>
+      <p>Hello ${fullName},</p>
+
+      <p>Your lease agreement for <strong>${propertyTitle}</strong> is now ready.</p>
+
+      ${linkSection}
+
+      <p>Please review and sign the agreement using the provided link.</p>
+
+      <p>If you have any questions, please contact the agency.</p>
+
+      <br/>
+      <p>Thank you,</p>
+      <p>Real Estate Team</p>
+    `,
+    });
+
+    if (error) {
+      throw new InternalServerErrorException('Failed to send lease agreement ready email');
+    }
+  }
+
+  async sendLeaseAgreementSignedConfirmationEmail(to: string, fullName: string, propertyTitle: string) {
+    const recipient = process.env.NODE_ENV === 'development' ? (process.env.MAIL_DEV_TO ?? 'delivered@resend.dev') : to;
+
+    const { error } = await this.resend.emails.send({
+      from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
+      to: [recipient],
+      // replyTo: process.env.MAIL_REPLY_TO,
+      subject: 'Lease Agreement Completed',
+      html: `
+      <h2>Lease Agreement Completed</h2>
+
+      <p>Hello ${fullName},</p>
+
+      <p>Your lease agreement for <strong>${propertyTitle}</strong> has been successfully completed.</p>
+
+      <p>The agency has confirmed your signed agreement.</p>
+
+      <p>You will be contacted regarding the next move-in steps.</p>
+
+      <br />
+
+      <p>Thank you,</p>
+      <p>Real Estate Team</p>
+    `,
+    });
+
+    if (error) {
+      throw new InternalServerErrorException('Failed to send signed confirmation email');
     }
   }
 }

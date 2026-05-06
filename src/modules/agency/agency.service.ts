@@ -12,6 +12,7 @@ import { AddAgencyMemberDto } from './dto/add-agency-member.dto';
 import { AssignAgentDto } from './dto/assign-agent.dto';
 import { CreateAgencyOnboardingDto } from './dto/create-agency-onboarding.dto';
 import { CreateOfferDto } from './dto/create-offer.dto';
+import { SendLeaseAgreementDto } from './dto/send-lease-agreement.dto';
 
 type ApplicationDecisionResult = {
   id: string;
@@ -83,6 +84,12 @@ type CreatedOfferResult = {
   message: string | null;
   expiresAt: Date | null;
   createdAt: Date;
+  weeklyRent: unknown;
+  bondAmount: unknown;
+  advanceRent: unknown;
+  leaseStartDate: Date;
+  leaseEndDate: Date;
+  leaseMonths: number;
   application: {
     id: string;
     status: ApplicationStatus;
@@ -96,6 +103,17 @@ type CreatedOfferResult = {
     fullName: string;
     email: string;
   };
+};
+
+type ActivatedTenancyResult = {
+  id: string;
+  status: string;
+  startDate: Date;
+  endDate: Date;
+  weeklyRent: unknown;
+  bondAmount: unknown;
+  advanceRent: unknown;
+  createdAt: Date;
 };
 
 @Injectable()
@@ -558,41 +576,54 @@ export class AgencyService {
 
     const where = {
       agencyId: membership.agencyId,
-      ...(isAgent
-        ? {
-            assignedAgentMemberId: membership.id,
-          }
-        : {}),
-      ...(search
-        ? {
-            OR: [
+      AND: [
+        ...(isAgent
+          ? [
               {
-                title: {
-                  contains: search,
-                  mode: 'insensitive' as const,
-                },
+                OR: [
+                  {
+                    assignedAgentMemberId: membership.id,
+                  },
+                  {
+                    createdById: currentUser.id,
+                  },
+                ],
               },
+            ]
+          : []),
+        ...(search
+          ? [
               {
-                suburb: {
-                  contains: search,
-                  mode: 'insensitive' as const,
-                },
+                OR: [
+                  {
+                    title: {
+                      contains: search,
+                      mode: 'insensitive' as const,
+                    },
+                  },
+                  {
+                    suburb: {
+                      contains: search,
+                      mode: 'insensitive' as const,
+                    },
+                  },
+                  {
+                    state: {
+                      contains: search,
+                      mode: 'insensitive' as const,
+                    },
+                  },
+                  {
+                    postcode: {
+                      contains: search,
+                      mode: 'insensitive' as const,
+                    },
+                  },
+                ],
               },
-              {
-                state: {
-                  contains: search,
-                  mode: 'insensitive' as const,
-                },
-              },
-              {
-                postcode: {
-                  contains: search,
-                  mode: 'insensitive' as const,
-                },
-              },
-            ],
-          }
-        : {}),
+            ]
+          : []),
+      ],
     };
 
     const [properties, total] = await this.prisma.$transaction([
@@ -1216,6 +1247,7 @@ export class AgencyService {
         status: ApplicationStatus.APPROVED,
         property: {
           agencyId: membership.agencyId,
+          isLocked: false,
           ...(isAgent
             ? {
                 assignedAgentMemberId: membership.id,
@@ -1261,14 +1293,34 @@ export class AgencyService {
       throw new BadRequestException('Offer already exists for this application');
     }
 
+    const leaseStartDate = new Date(dto.leaseStartDate);
+    const expiresAt = new Date(dto.expiresAt);
+
+    if (expiresAt >= leaseStartDate) {
+      throw new BadRequestException('Offer expiry date must be before the lease start date');
+    }
+
+    const leaseEndDate = new Date(leaseStartDate);
+    leaseEndDate.setMonth(leaseEndDate.getMonth() + dto.leaseMonths);
+
+    const weeklyRent = dto.weeklyRent;
+    const bondAmount = weeklyRent * 4;
+    const advanceRent = weeklyRent * 2;
+
     const offer: CreatedOfferResult = await this.prisma.offer.create({
       data: {
         applicationId: application.id,
         propertyId: application.propertyId,
         applicantId: application.applicantId,
         status: OfferStatus.PENDING,
+        weeklyRent,
+        bondAmount,
+        advanceRent,
+        leaseStartDate,
+        leaseEndDate,
+        leaseMonths: dto.leaseMonths,
         message: dto.message,
-        expiresAt: dto.expiresAt ? new Date(dto.expiresAt) : undefined,
+        expiresAt,
       },
       select: {
         id: true,
@@ -1276,6 +1328,12 @@ export class AgencyService {
         message: true,
         expiresAt: true,
         createdAt: true,
+        weeklyRent: true,
+        bondAmount: true,
+        advanceRent: true,
+        leaseStartDate: true,
+        leaseEndDate: true,
+        leaseMonths: true,
         application: {
           select: {
             id: true,
@@ -1309,8 +1367,745 @@ export class AgencyService {
     }
 
     return {
-      message: 'Offer created successfully',
+      message: 'Rental offer created successfully',
       offer,
+    };
+  }
+
+  async sendLeaseAgreement(currentUser: AuthenticatedUser, leaseAgreementId: string, dto: SendLeaseAgreementDto) {
+    const membership = await this.getApprovedAgencyMembership(currentUser);
+
+    const lease = await this.prisma.leaseAgreement.findFirst({
+      where: {
+        id: leaseAgreementId,
+        property: {
+          agencyId: membership.agencyId,
+        },
+      },
+      select: {
+        id: true,
+        status: true,
+        applicant: {
+          select: {
+            email: true,
+            fullName: true,
+          },
+        },
+        property: {
+          select: {
+            title: true,
+          },
+        },
+      },
+    });
+
+    if (!lease) throw new NotFoundException('Lease not found');
+
+    if (lease.status === 'SIGNED') {
+      throw new BadRequestException('Already signed');
+    }
+
+    const updated = await this.prisma.leaseAgreement.update({
+      where: { id: lease.id },
+      data: {
+        status: 'SENT',
+        agreementUrl: dto.agreementUrl,
+        externalProvider: dto.externalProvider,
+        externalReference: dto.externalReference,
+        sentAt: new Date(),
+        sentById: currentUser.id,
+      },
+    });
+
+    await this.mailService.sendLeaseAgreementReadyEmail(
+      lease.applicant.email,
+      lease.applicant.fullName,
+      lease.property.title,
+      dto.agreementUrl,
+    );
+
+    return {
+      message: 'Lease sent',
+      leaseAgreement: updated,
+    };
+  }
+
+  async markLeaseAgreementSigned(currentUser: AuthenticatedUser, leaseAgreementId: string) {
+    const membership = await this.getApprovedAgencyMembership(currentUser);
+
+    const lease = await this.prisma.leaseAgreement.findFirst({
+      where: {
+        id: leaseAgreementId,
+        property: {
+          agencyId: membership.agencyId,
+        },
+      },
+      select: {
+        id: true,
+        status: true,
+        propertyId: true,
+        applicantId: true,
+        leaseStartDate: true,
+        leaseEndDate: true,
+        weeklyRent: true,
+        bondAmount: true,
+        advanceRent: true,
+        applicant: {
+          select: {
+            email: true,
+            fullName: true,
+          },
+        },
+        property: {
+          select: {
+            title: true,
+            agencyId: true,
+          },
+        },
+        tenancy: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    if (!lease) throw new NotFoundException('Lease not found');
+
+    if (lease.status !== 'SENT') {
+      throw new BadRequestException('Lease Agreement must be sent first');
+    }
+
+    if (lease.tenancy) {
+      throw new BadRequestException('Tenancy already exists for this lease');
+    }
+
+    if (!lease.property.agencyId) {
+      throw new BadRequestException('Lease property is not linked to an agency');
+    }
+
+    const result = await this.prisma.$transaction(async (tx) => {
+      const updatedLease = await tx.leaseAgreement.update({
+        where: { id: lease.id },
+        data: {
+          status: 'SIGNED',
+          signedAt: new Date(),
+          signedById: currentUser.id,
+        },
+        select: {
+          id: true,
+          status: true,
+          signedAt: true,
+          signedById: true,
+        },
+      });
+
+      const tenancy: ActivatedTenancyResult = await tx.tenancy.create({
+        data: {
+          leaseAgreementId: lease.id,
+          propertyId: lease.propertyId,
+          tenantId: lease.applicantId,
+          agencyId: lease.property.agencyId as string,
+          status: 'ACTIVE',
+          startDate: lease.leaseStartDate,
+          endDate: lease.leaseEndDate,
+          weeklyRent: lease.weeklyRent,
+          bondAmount: lease.bondAmount,
+          advanceRent: lease.advanceRent,
+        },
+        select: {
+          id: true,
+          status: true,
+          startDate: true,
+          endDate: true,
+          weeklyRent: true,
+          bondAmount: true,
+          advanceRent: true,
+          createdAt: true,
+        },
+      });
+
+      return {
+        leaseAgreement: updatedLease,
+        tenancy,
+      };
+    });
+
+    try {
+      await this.mailService.sendLeaseAgreementSignedConfirmationEmail(
+        lease.applicant.email,
+        lease.applicant.fullName,
+        lease.property.title,
+      );
+    } catch (err) {
+      console.error('Signed confirmation email failed', err);
+    }
+
+    return {
+      message: 'Lease agreement marked as signed and tenancy activated successfully',
+      ...result,
+    };
+  }
+
+  async getAgencyLeaseAgreements(currentUser: AuthenticatedUser, query: PaginationQueryDto) {
+    const membership = await this.getApprovedAgencyMembership(currentUser);
+
+    const isAgent = membership.role === AgencyMemberRole.AGENT;
+
+    const page = query.page ?? 1;
+    const limit = query.limit ?? 10;
+    const skip = (page - 1) * limit;
+
+    const where = {
+      property: {
+        agencyId: membership.agencyId,
+        ...(isAgent
+          ? {
+              assignedAgentMemberId: membership.id,
+            }
+          : {}),
+      },
+    };
+
+    const [items, total] = await this.prisma.$transaction([
+      this.prisma.leaseAgreement.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+        select: {
+          id: true,
+          status: true,
+          agreementUrl: true,
+          externalProvider: true,
+          externalReference: true,
+          sentAt: true,
+          signedAt: true,
+          leaseStartDate: true,
+          leaseEndDate: true,
+          leaseMonths: true,
+          weeklyRent: true,
+          bondAmount: true,
+          advanceRent: true,
+          createdAt: true,
+          applicant: {
+            select: {
+              id: true,
+              fullName: true,
+              email: true,
+              phone: true,
+            },
+          },
+          property: {
+            select: {
+              id: true,
+              title: true,
+              suburb: true,
+              state: true,
+              postcode: true,
+            },
+          },
+        },
+      }),
+      this.prisma.leaseAgreement.count({ where }),
+    ]);
+
+    return {
+      items,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
+  }
+
+  async getAgencyLeaseAgreementDetail(currentUser: AuthenticatedUser, leaseAgreementId: string) {
+    const membership = await this.getApprovedAgencyMembership(currentUser);
+
+    const isAgent = membership.role === AgencyMemberRole.AGENT;
+
+    const leaseAgreement = await this.prisma.leaseAgreement.findFirst({
+      where: {
+        id: leaseAgreementId,
+        property: {
+          agencyId: membership.agencyId,
+          ...(isAgent
+            ? {
+                assignedAgentMemberId: membership.id,
+              }
+            : {}),
+        },
+      },
+
+      select: {
+        id: true,
+        status: true,
+        agreementUrl: true,
+        externalProvider: true,
+        externalReference: true,
+        sentAt: true,
+        signedAt: true,
+        cancelledAt: true,
+        leaseStartDate: true,
+        leaseEndDate: true,
+        leaseMonths: true,
+        weeklyRent: true,
+        bondAmount: true,
+        advanceRent: true,
+        createdAt: true,
+        updatedAt: true,
+
+        applicant: {
+          select: {
+            id: true,
+            fullName: true,
+            email: true,
+            phone: true,
+          },
+        },
+
+        property: {
+          select: {
+            id: true,
+            title: true,
+            addressLine1: true,
+            suburb: true,
+            state: true,
+            postcode: true,
+
+            assignedAgentMember: {
+              select: {
+                id: true,
+                role: true,
+
+                user: {
+                  select: {
+                    id: true,
+                    fullName: true,
+                    email: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+
+        offer: {
+          select: {
+            id: true,
+            status: true,
+            acceptedAt: true,
+          },
+        },
+
+        sentBy: {
+          select: {
+            id: true,
+            fullName: true,
+            email: true,
+          },
+        },
+
+        signedBy: {
+          select: {
+            id: true,
+            fullName: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    if (!leaseAgreement) {
+      throw new NotFoundException('Lease agreement not found for this agency');
+    }
+
+    return leaseAgreement;
+  }
+
+  async cancelLeaseAgreement(currentUser: AuthenticatedUser, leaseAgreementId: string) {
+    const membership = await this.getApprovedAgencyMembership(currentUser);
+
+    if (membership.role !== AgencyMemberRole.AGENCY_OWNER && membership.role !== AgencyMemberRole.AGENCY_ADMIN) {
+      throw new ForbiddenException('You are not allowed to cancel lease agreements');
+    }
+
+    const leaseAgreement = await this.prisma.leaseAgreement.findFirst({
+      where: {
+        id: leaseAgreementId,
+        property: {
+          agencyId: membership.agencyId,
+        },
+      },
+      select: {
+        id: true,
+        status: true,
+        applicant: {
+          select: {
+            email: true,
+            fullName: true,
+          },
+        },
+        property: {
+          select: {
+            title: true,
+          },
+        },
+      },
+    });
+
+    if (!leaseAgreement) {
+      throw new NotFoundException('Lease agreement not found for this agency');
+    }
+
+    if (leaseAgreement.status === 'SIGNED') {
+      throw new BadRequestException('Signed lease agreement cannot be cancelled');
+    }
+
+    if (leaseAgreement.status === 'CANCELLED') {
+      throw new BadRequestException('Lease agreement is already cancelled');
+    }
+
+    const updatedLeaseAgreement = await this.prisma.leaseAgreement.update({
+      where: {
+        id: leaseAgreement.id,
+      },
+      data: {
+        status: 'CANCELLED',
+        cancelledAt: new Date(),
+      },
+      select: {
+        id: true,
+        status: true,
+        cancelledAt: true,
+      },
+    });
+
+    return {
+      message: 'Lease agreement cancelled successfully',
+      leaseAgreement: updatedLeaseAgreement,
+    };
+  }
+
+  async getAgencyTenancies(currentUser: AuthenticatedUser, query: PaginationQueryDto) {
+    const membership = await this.getApprovedAgencyMembership(currentUser);
+
+    const isAgent = membership.role === AgencyMemberRole.AGENT;
+
+    const page = query.page ?? 1;
+    const limit = query.limit ?? 10;
+    const skip = (page - 1) * limit;
+
+    const search = query.search;
+
+    const where = {
+      agencyId: membership.agencyId,
+      ...(isAgent
+        ? {
+            property: {
+              assignedAgentMemberId: membership.id,
+            },
+          }
+        : {}),
+      ...(search
+        ? {
+            OR: [
+              {
+                property: {
+                  title: {
+                    contains: search,
+                    mode: 'insensitive' as const,
+                  },
+                },
+              },
+              {
+                tenant: {
+                  fullName: {
+                    contains: search,
+                    mode: 'insensitive' as const,
+                  },
+                },
+              },
+              {
+                tenant: {
+                  email: {
+                    contains: search,
+                    mode: 'insensitive' as const,
+                  },
+                },
+              },
+            ],
+          }
+        : {}),
+    };
+
+    const [items, total] = await this.prisma.$transaction([
+      this.prisma.tenancy.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: {
+          createdAt: 'desc',
+        },
+
+        select: {
+          id: true,
+          status: true,
+          startDate: true,
+          endDate: true,
+          weeklyRent: true,
+          bondAmount: true,
+          advanceRent: true,
+          createdAt: true,
+          property: {
+            select: {
+              id: true,
+              title: true,
+              suburb: true,
+              state: true,
+              postcode: true,
+            },
+          },
+          tenant: {
+            select: {
+              id: true,
+              fullName: true,
+              email: true,
+              phone: true,
+            },
+          },
+          leaseAgreement: {
+            select: {
+              id: true,
+              status: true,
+              agreementUrl: true,
+              signedAt: true,
+            },
+          },
+        },
+      }),
+
+      this.prisma.tenancy.count({
+        where,
+      }),
+    ]);
+
+    return {
+      items,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
+  }
+
+  async getAgencyTenancyDetail(currentUser: AuthenticatedUser, tenancyId: string) {
+    const membership = await this.getApprovedAgencyMembership(currentUser);
+
+    const isAgent = membership.role === AgencyMemberRole.AGENT;
+
+    const tenancy = await this.prisma.tenancy.findFirst({
+      where: {
+        id: tenancyId,
+        agencyId: membership.agencyId,
+        ...(isAgent
+          ? {
+              property: {
+                assignedAgentMemberId: membership.id,
+              },
+            }
+          : {}),
+      },
+      select: {
+        id: true,
+        status: true,
+        startDate: true,
+        endDate: true,
+        weeklyRent: true,
+        bondAmount: true,
+        advanceRent: true,
+        endedAt: true,
+        cancelledAt: true,
+        createdAt: true,
+        updatedAt: true,
+        property: {
+          select: {
+            id: true,
+            title: true,
+            addressLine1: true,
+            suburb: true,
+            state: true,
+            postcode: true,
+            assignedAgentMember: {
+              select: {
+                id: true,
+                user: {
+                  select: {
+                    id: true,
+                    fullName: true,
+                    email: true,
+                  },
+                },
+              },
+            },
+            media: {
+              orderBy: {
+                createdAt: 'asc',
+              },
+              select: {
+                id: true,
+                url: true,
+                isPrimary: true,
+              },
+            },
+          },
+        },
+        tenant: {
+          select: {
+            id: true,
+            fullName: true,
+            email: true,
+            phone: true,
+          },
+        },
+        leaseAgreement: {
+          select: {
+            id: true,
+            status: true,
+            agreementUrl: true,
+            externalProvider: true,
+            externalReference: true,
+            sentAt: true,
+            signedAt: true,
+          },
+        },
+      },
+    });
+
+    if (!tenancy) {
+      throw new NotFoundException('Tenancy not found for this agency');
+    }
+
+    return tenancy;
+  }
+
+  async endTenancy(currentUser: AuthenticatedUser, tenancyId: string) {
+    const membership = await this.getApprovedAgencyMembership(currentUser);
+
+    if (membership.role !== AgencyMemberRole.AGENCY_OWNER && membership.role !== AgencyMemberRole.AGENCY_ADMIN) {
+      throw new ForbiddenException('You are not allowed to end tenancies');
+    }
+
+    const tenancy = await this.prisma.tenancy.findFirst({
+      where: {
+        id: tenancyId,
+        agencyId: membership.agencyId,
+      },
+      select: {
+        id: true,
+        status: true,
+        propertyId: true,
+      },
+    });
+
+    if (!tenancy) {
+      throw new NotFoundException('Tenancy not found for this agency');
+    }
+
+    if (tenancy.status !== 'ACTIVE') {
+      throw new BadRequestException('Only active tenancy can be ended');
+    }
+
+    const result = await this.prisma.$transaction(async (tx) => {
+      const updatedTenancy = await tx.tenancy.update({
+        where: { id: tenancy.id },
+        data: {
+          status: 'ENDED',
+          endedAt: new Date(),
+        },
+        select: {
+          id: true,
+          status: true,
+          endedAt: true,
+        },
+      });
+
+      await tx.property.update({
+        where: { id: tenancy.propertyId },
+        data: {
+          isLocked: false,
+          isPublished: false,
+        },
+      });
+
+      return updatedTenancy;
+    });
+
+    return {
+      message: 'Tenancy ended successfully',
+      tenancy: result,
+    };
+  }
+
+  async cancelTenancy(currentUser: AuthenticatedUser, tenancyId: string) {
+    const membership = await this.getApprovedAgencyMembership(currentUser);
+
+    if (membership.role !== AgencyMemberRole.AGENCY_OWNER && membership.role !== AgencyMemberRole.AGENCY_ADMIN) {
+      throw new ForbiddenException('You are not allowed to cancel tenancies');
+    }
+
+    const tenancy = await this.prisma.tenancy.findFirst({
+      where: {
+        id: tenancyId,
+        agencyId: membership.agencyId,
+      },
+      select: {
+        id: true,
+        status: true,
+        propertyId: true,
+      },
+    });
+
+    if (!tenancy) {
+      throw new NotFoundException('Tenancy not found for this agency');
+    }
+
+    if (tenancy.status !== 'ACTIVE') {
+      throw new BadRequestException('Only active tenancy can be cancelled');
+    }
+
+    const result = await this.prisma.$transaction(async (tx) => {
+      const updatedTenancy = await tx.tenancy.update({
+        where: { id: tenancy.id },
+        data: {
+          status: 'CANCELLED',
+          cancelledAt: new Date(),
+        },
+        select: {
+          id: true,
+          status: true,
+          cancelledAt: true,
+        },
+      });
+
+      await tx.property.update({
+        where: { id: tenancy.propertyId },
+        data: {
+          isLocked: false,
+          isPublished: false,
+        },
+      });
+
+      return updatedTenancy;
+    });
+
+    return {
+      message: 'Tenancy cancelled successfully',
+      tenancy: result,
     };
   }
 }

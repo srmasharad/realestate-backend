@@ -257,8 +257,74 @@ exports.Prisma.OfferScalarFieldEnum = {
   propertyId: 'propertyId',
   applicantId: 'applicantId',
   status: 'status',
+  weeklyRent: 'weeklyRent',
+  bondAmount: 'bondAmount',
+  advanceRent: 'advanceRent',
+  leaseStartDate: 'leaseStartDate',
+  leaseEndDate: 'leaseEndDate',
+  leaseMonths: 'leaseMonths',
   message: 'message',
   expiresAt: 'expiresAt',
+  acceptedAt: 'acceptedAt',
+  declinedAt: 'declinedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PaymentRequestScalarFieldEnum = {
+  id: 'id',
+  offerId: 'offerId',
+  propertyId: 'propertyId',
+  applicantId: 'applicantId',
+  bondAmount: 'bondAmount',
+  advanceRent: 'advanceRent',
+  totalAmount: 'totalAmount',
+  status: 'status',
+  dueDate: 'dueDate',
+  paidAt: 'paidAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LeaseAgreementScalarFieldEnum = {
+  id: 'id',
+  offerId: 'offerId',
+  propertyId: 'propertyId',
+  applicantId: 'applicantId',
+  status: 'status',
+  leaseStartDate: 'leaseStartDate',
+  leaseEndDate: 'leaseEndDate',
+  leaseMonths: 'leaseMonths',
+  weeklyRent: 'weeklyRent',
+  bondAmount: 'bondAmount',
+  advanceRent: 'advanceRent',
+  agreementUrl: 'agreementUrl',
+  externalProvider: 'externalProvider',
+  externalReference: 'externalReference',
+  sentAt: 'sentAt',
+  signedAt: 'signedAt',
+  cancelledAt: 'cancelledAt',
+  createdById: 'createdById',
+  sentById: 'sentById',
+  signedById: 'signedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TenancyScalarFieldEnum = {
+  id: 'id',
+  leaseAgreementId: 'leaseAgreementId',
+  propertyId: 'propertyId',
+  tenantId: 'tenantId',
+  agencyId: 'agencyId',
+  status: 'status',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  weeklyRent: 'weeklyRent',
+  bondAmount: 'bondAmount',
+  advanceRent: 'advanceRent',
+  endedAt: 'endedAt',
+  cancelledAt: 'cancelledAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -332,8 +398,28 @@ exports.AgencyMemberRole = exports.$Enums.AgencyMemberRole = {
 exports.OfferStatus = exports.$Enums.OfferStatus = {
   PENDING: 'PENDING',
   ACCEPTED: 'ACCEPTED',
-  REJECTED: 'REJECTED',
+  DECLINED: 'DECLINED',
   EXPIRED: 'EXPIRED'
+};
+
+exports.PaymentRequestStatus = exports.$Enums.PaymentRequestStatus = {
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  CANCELLED: 'CANCELLED',
+  OVERDUE: 'OVERDUE'
+};
+
+exports.LeaseAgreementStatus = exports.$Enums.LeaseAgreementStatus = {
+  DRAFT: 'DRAFT',
+  SENT: 'SENT',
+  SIGNED: 'SIGNED',
+  CANCELLED: 'CANCELLED'
+};
+
+exports.TenancyStatus = exports.$Enums.TenancyStatus = {
+  ACTIVE: 'ACTIVE',
+  ENDED: 'ENDED',
+  CANCELLED: 'CANCELLED'
 };
 
 exports.Prisma.ModelName = {
@@ -347,7 +433,10 @@ exports.Prisma.ModelName = {
   Agency: 'Agency',
   AgencyMember: 'AgencyMember',
   PasswordResetToken: 'PasswordResetToken',
-  Offer: 'Offer'
+  Offer: 'Offer',
+  PaymentRequest: 'PaymentRequest',
+  LeaseAgreement: 'LeaseAgreement',
+  Tenancy: 'Tenancy'
 };
 
 /**
