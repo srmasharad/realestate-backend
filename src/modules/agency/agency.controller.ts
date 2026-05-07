@@ -203,4 +203,36 @@ export class AgencyController {
   cancelTenancy(@CurrentUser() currentUser: AuthenticatedUser, @Param('tenancyId') tenancyId: string) {
     return this.agencyService.cancelTenancy(currentUser, tenancyId);
   }
+
+  @Get('dashboard/summary')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get agency dashboard summary' })
+  getAgencyDashboardSummary(@CurrentUser() currentUser: AuthenticatedUser) {
+    return this.agencyService.getAgencyDashboardSummary(currentUser);
+  }
+
+  @Get('agents/performance')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get agency agent performance' })
+  getAgencyAgentPerformance(@CurrentUser() currentUser: AuthenticatedUser) {
+    return this.agencyService.getAgencyAgentPerformance(currentUser);
+  }
+
+  @Get('analytics/tenancies')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get agency tenancy analytics' })
+  getAgencyTenancyAnalytics(@CurrentUser() currentUser: AuthenticatedUser) {
+    return this.agencyService.getAgencyTenancyAnalytics(currentUser);
+  }
+
+  @Get('analytics/revenue')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get agency revenue analytics' })
+  getAgencyRevenueAnalytics(@CurrentUser() currentUser: AuthenticatedUser) {
+    return this.agencyService.getAgencyRevenueAnalytics(currentUser);
+  }
 }

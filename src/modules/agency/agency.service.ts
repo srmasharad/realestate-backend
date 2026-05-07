@@ -2108,4 +2108,829 @@ export class AgencyService {
       tenancy: result,
     };
   }
+
+  async getAgencyDashboardSummary(currentUser: AuthenticatedUser) {
+    const membership = await this.getApprovedAgencyMembership(currentUser);
+
+    const isAgent = membership.role === AgencyMemberRole.AGENT;
+
+    const propertyWhere = {
+      agencyId: membership.agencyId,
+      ...(isAgent
+        ? {
+            OR: [{ assignedAgentMemberId: membership.id }, { createdById: currentUser.id }],
+          }
+        : {}),
+    };
+
+    const relatedPropertyFilter = {
+      property: propertyWhere,
+    };
+
+    const [
+      totalProperties,
+      publishedProperties,
+      lockedProperties,
+
+      totalApplications,
+      pendingApplications,
+      approvedApplications,
+      rejectedApplications,
+
+      totalOffers,
+      pendingOffers,
+      acceptedOffers,
+      declinedOffers,
+
+      totalPaymentRequests,
+      pendingPayments,
+      paidPayments,
+      paidAmountResult,
+      pendingAmountResult,
+
+      totalLeaseAgreements,
+      sentLeaseAgreements,
+      signedLeaseAgreements,
+
+      totalTenancies,
+      activeTenancies,
+      endedTenancies,
+      cancelledTenancies,
+    ] = await this.prisma.$transaction([
+      this.prisma.property.count({
+        where: propertyWhere,
+      }),
+      this.prisma.property.count({
+        where: {
+          ...propertyWhere,
+          isPublished: true,
+        },
+      }),
+      this.prisma.property.count({
+        where: {
+          ...propertyWhere,
+          isLocked: true,
+        },
+      }),
+
+      this.prisma.application.count({
+        where: relatedPropertyFilter,
+      }),
+      this.prisma.application.count({
+        where: {
+          ...relatedPropertyFilter,
+          status: 'PENDING',
+        },
+      }),
+      this.prisma.application.count({
+        where: {
+          ...relatedPropertyFilter,
+          status: 'APPROVED',
+        },
+      }),
+      this.prisma.application.count({
+        where: {
+          ...relatedPropertyFilter,
+          status: 'REJECTED',
+        },
+      }),
+
+      this.prisma.offer.count({
+        where: relatedPropertyFilter,
+      }),
+      this.prisma.offer.count({
+        where: {
+          ...relatedPropertyFilter,
+          status: 'PENDING',
+        },
+      }),
+      this.prisma.offer.count({
+        where: {
+          ...relatedPropertyFilter,
+          status: 'ACCEPTED',
+        },
+      }),
+      this.prisma.offer.count({
+        where: {
+          ...relatedPropertyFilter,
+          status: 'DECLINED',
+        },
+      }),
+
+      this.prisma.paymentRequest.count({
+        where: relatedPropertyFilter,
+      }),
+      this.prisma.paymentRequest.count({
+        where: {
+          ...relatedPropertyFilter,
+          status: 'PENDING',
+        },
+      }),
+      this.prisma.paymentRequest.count({
+        where: {
+          ...relatedPropertyFilter,
+          status: 'PAID',
+        },
+      }),
+      this.prisma.paymentRequest.aggregate({
+        where: {
+          ...relatedPropertyFilter,
+          status: 'PAID',
+        },
+        _sum: {
+          totalAmount: true,
+        },
+      }),
+      this.prisma.paymentRequest.aggregate({
+        where: {
+          ...relatedPropertyFilter,
+          status: 'PENDING',
+        },
+        _sum: {
+          totalAmount: true,
+        },
+      }),
+
+      this.prisma.leaseAgreement.count({
+        where: relatedPropertyFilter,
+      }),
+      this.prisma.leaseAgreement.count({
+        where: {
+          ...relatedPropertyFilter,
+          status: 'SENT',
+        },
+      }),
+      this.prisma.leaseAgreement.count({
+        where: {
+          ...relatedPropertyFilter,
+          status: 'SIGNED',
+        },
+      }),
+
+      this.prisma.tenancy.count({
+        where: {
+          agencyId: membership.agencyId,
+          ...(isAgent
+            ? {
+                property: {
+                  OR: [{ assignedAgentMemberId: membership.id }, { createdById: currentUser.id }],
+                },
+              }
+            : {}),
+        },
+      }),
+      this.prisma.tenancy.count({
+        where: {
+          agencyId: membership.agencyId,
+          status: 'ACTIVE',
+          ...(isAgent
+            ? {
+                property: {
+                  OR: [{ assignedAgentMemberId: membership.id }, { createdById: currentUser.id }],
+                },
+              }
+            : {}),
+        },
+      }),
+      this.prisma.tenancy.count({
+        where: {
+          agencyId: membership.agencyId,
+          status: 'ENDED',
+          ...(isAgent
+            ? {
+                property: {
+                  OR: [{ assignedAgentMemberId: membership.id }, { createdById: currentUser.id }],
+                },
+              }
+            : {}),
+        },
+      }),
+      this.prisma.tenancy.count({
+        where: {
+          agencyId: membership.agencyId,
+          status: 'CANCELLED',
+          ...(isAgent
+            ? {
+                property: {
+                  OR: [{ assignedAgentMemberId: membership.id }, { createdById: currentUser.id }],
+                },
+              }
+            : {}),
+        },
+      }),
+    ]);
+
+    return {
+      properties: {
+        total: totalProperties,
+        published: publishedProperties,
+        locked: lockedProperties,
+        vacant: totalProperties - lockedProperties,
+      },
+      applications: {
+        total: totalApplications,
+        pending: pendingApplications,
+        approved: approvedApplications,
+        rejected: rejectedApplications,
+      },
+      offers: {
+        total: totalOffers,
+        pending: pendingOffers,
+        accepted: acceptedOffers,
+        declined: declinedOffers,
+      },
+      payments: {
+        total: totalPaymentRequests,
+        pending: pendingPayments,
+        paid: paidPayments,
+        totalPaidAmount: paidAmountResult._sum.totalAmount ?? 0,
+        totalPendingAmount: pendingAmountResult._sum.totalAmount ?? 0,
+      },
+      leaseAgreements: {
+        total: totalLeaseAgreements,
+        sent: sentLeaseAgreements,
+        signed: signedLeaseAgreements,
+      },
+      tenancies: {
+        total: totalTenancies,
+        active: activeTenancies,
+        ended: endedTenancies,
+        cancelled: cancelledTenancies,
+      },
+    };
+  }
+
+  async getAgencyAgentPerformance(currentUser: AuthenticatedUser) {
+    const membership = await this.getApprovedAgencyMembership(currentUser);
+
+    const isAgent = membership.role === AgencyMemberRole.AGENT;
+
+    const members = await this.prisma.agencyMember.findMany({
+      where: {
+        agencyId: membership.agencyId,
+        isActive: true,
+        role: {
+          in: [AgencyMemberRole.AGENT, AgencyMemberRole.AGENCY_ADMIN],
+        },
+        ...(isAgent
+          ? {
+              id: membership.id,
+            }
+          : {}),
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      select: {
+        id: true,
+        role: true,
+        createdAt: true,
+        user: {
+          select: {
+            id: true,
+            fullName: true,
+            email: true,
+            phone: true,
+          },
+        },
+      },
+    });
+
+    const items = await Promise.all(
+      members.map(async (member) => {
+        const propertyAccessWhere = {
+          agencyId: membership.agencyId,
+          OR: [
+            {
+              assignedAgentMemberId: member.id,
+            },
+            {
+              createdById: member.user.id,
+            },
+          ],
+        };
+
+        const relatedPropertyFilter = {
+          property: propertyAccessWhere,
+        };
+
+        const [
+          assignedProperties,
+          createdProperties,
+          publishedProperties,
+          totalApplications,
+          approvedApplications,
+          totalOffers,
+          acceptedOffers,
+          signedLeaseAgreements,
+          activeTenancies,
+          paidPayments,
+          paidAmountResult,
+        ] = await this.prisma.$transaction([
+          this.prisma.property.count({
+            where: {
+              agencyId: membership.agencyId,
+              assignedAgentMemberId: member.id,
+            },
+          }),
+
+          this.prisma.property.count({
+            where: {
+              agencyId: membership.agencyId,
+              createdById: member.user.id,
+            },
+          }),
+
+          this.prisma.property.count({
+            where: {
+              ...propertyAccessWhere,
+              isPublished: true,
+            },
+          }),
+
+          this.prisma.application.count({
+            where: relatedPropertyFilter,
+          }),
+
+          this.prisma.application.count({
+            where: {
+              ...relatedPropertyFilter,
+              status: ApplicationStatus.APPROVED,
+            },
+          }),
+
+          this.prisma.offer.count({
+            where: relatedPropertyFilter,
+          }),
+
+          this.prisma.offer.count({
+            where: {
+              ...relatedPropertyFilter,
+              status: OfferStatus.ACCEPTED,
+            },
+          }),
+
+          this.prisma.leaseAgreement.count({
+            where: {
+              ...relatedPropertyFilter,
+              status: 'SIGNED',
+            },
+          }),
+
+          this.prisma.tenancy.count({
+            where: {
+              agencyId: membership.agencyId,
+              status: 'ACTIVE',
+              property: {
+                OR: [
+                  {
+                    assignedAgentMemberId: member.id,
+                  },
+                  {
+                    createdById: member.user.id,
+                  },
+                ],
+              },
+            },
+          }),
+
+          this.prisma.paymentRequest.count({
+            where: {
+              ...relatedPropertyFilter,
+              status: 'PAID',
+            },
+          }),
+
+          this.prisma.paymentRequest.aggregate({
+            where: {
+              ...relatedPropertyFilter,
+              status: 'PAID',
+            },
+            _sum: {
+              totalAmount: true,
+            },
+          }),
+        ]);
+
+        return {
+          memberId: member.id,
+          role: member.role,
+          joinedAt: member.createdAt,
+          agent: member.user,
+
+          properties: {
+            assigned: assignedProperties,
+            created: createdProperties,
+            published: publishedProperties,
+          },
+
+          applications: {
+            total: totalApplications,
+            approved: approvedApplications,
+          },
+
+          offers: {
+            total: totalOffers,
+            accepted: acceptedOffers,
+          },
+
+          leases: {
+            signed: signedLeaseAgreements,
+          },
+
+          tenancies: {
+            active: activeTenancies,
+          },
+
+          payments: {
+            paid: paidPayments,
+            totalPaidAmount: paidAmountResult._sum.totalAmount ?? 0,
+          },
+        };
+      }),
+    );
+
+    return {
+      items,
+    };
+  }
+
+  async getAgencyTenancyAnalytics(currentUser: AuthenticatedUser) {
+    const membership = await this.getApprovedAgencyMembership(currentUser);
+
+    const isAgent = membership.role === AgencyMemberRole.AGENT;
+
+    const propertyAccessWhere = {
+      agencyId: membership.agencyId,
+      ...(isAgent
+        ? {
+            OR: [{ assignedAgentMemberId: membership.id }, { createdById: currentUser.id }],
+          }
+        : {}),
+    };
+
+    const tenancyWhere = {
+      agencyId: membership.agencyId,
+      ...(isAgent
+        ? {
+            property: {
+              OR: [{ assignedAgentMemberId: membership.id }, { createdById: currentUser.id }],
+            },
+          }
+        : {}),
+    };
+
+    const now = new Date();
+
+    const next30Days = new Date();
+    next30Days.setDate(next30Days.getDate() + 30);
+
+    const [
+      totalProperties,
+      lockedProperties,
+      publishedProperties,
+      activeTenancies,
+      endedTenancies,
+      cancelledTenancies,
+      upcomingLeaseEndings,
+      tenanciesForAverage,
+    ] = await this.prisma.$transaction([
+      this.prisma.property.count({
+        where: propertyAccessWhere,
+      }),
+
+      this.prisma.property.count({
+        where: {
+          ...propertyAccessWhere,
+          isLocked: true,
+        },
+      }),
+
+      this.prisma.property.count({
+        where: {
+          ...propertyAccessWhere,
+          isPublished: true,
+        },
+      }),
+
+      this.prisma.tenancy.count({
+        where: {
+          ...tenancyWhere,
+          status: 'ACTIVE',
+        },
+      }),
+
+      this.prisma.tenancy.count({
+        where: {
+          ...tenancyWhere,
+          status: 'ENDED',
+        },
+      }),
+
+      this.prisma.tenancy.count({
+        where: {
+          ...tenancyWhere,
+          status: 'CANCELLED',
+        },
+      }),
+
+      this.prisma.tenancy.findMany({
+        where: {
+          ...tenancyWhere,
+          status: 'ACTIVE',
+          endDate: {
+            gte: now,
+            lte: next30Days,
+          },
+        },
+        orderBy: {
+          endDate: 'asc',
+        },
+        select: {
+          id: true,
+          startDate: true,
+          endDate: true,
+          tenant: {
+            select: {
+              id: true,
+              fullName: true,
+              email: true,
+            },
+          },
+          property: {
+            select: {
+              id: true,
+              title: true,
+              suburb: true,
+              state: true,
+            },
+          },
+        },
+      }),
+
+      this.prisma.tenancy.findMany({
+        where: tenancyWhere,
+        select: {
+          startDate: true,
+          endDate: true,
+        },
+      }),
+    ]);
+
+    const totalLeaseDays = tenanciesForAverage.reduce((total, tenancy) => {
+      const start = tenancy.startDate.getTime();
+      const end = tenancy.endDate.getTime();
+      const days = Math.max(0, Math.round((end - start) / (1000 * 60 * 60 * 24)));
+
+      return total + days;
+    }, 0);
+
+    const averageLeaseDurationDays =
+      tenanciesForAverage.length > 0 ? Math.round(totalLeaseDays / tenanciesForAverage.length) : 0;
+
+    return {
+      properties: {
+        total: totalProperties,
+        published: publishedProperties,
+        locked: lockedProperties,
+        vacant: totalProperties - lockedProperties,
+      },
+      tenancies: {
+        active: activeTenancies,
+        ended: endedTenancies,
+        cancelled: cancelledTenancies,
+        averageLeaseDurationDays,
+      },
+      occupancy: {
+        occupiedProperties: lockedProperties,
+        vacantProperties: totalProperties - lockedProperties,
+        occupancyRate: totalProperties > 0 ? Number(((lockedProperties / totalProperties) * 100).toFixed(2)) : 0,
+      },
+      upcomingLeaseEndings,
+    };
+  }
+
+  async getAgencyRevenueAnalytics(currentUser: AuthenticatedUser) {
+    const membership = await this.getApprovedAgencyMembership(currentUser);
+
+    const isAgent = membership.role === AgencyMemberRole.AGENT;
+
+    const propertyAccessWhere = {
+      agencyId: membership.agencyId,
+      ...(isAgent
+        ? {
+            OR: [{ assignedAgentMemberId: membership.id }, { createdById: currentUser.id }],
+          }
+        : {}),
+    };
+
+    const relatedPropertyFilter = {
+      property: propertyAccessWhere,
+    };
+
+    const [
+      totalPayments,
+      pendingPayments,
+      paidPayments,
+      cancelledPayments,
+
+      paidAmountResult,
+      pendingAmountResult,
+
+      paidPaymentRequests,
+
+      properties,
+    ] = await this.prisma.$transaction([
+      this.prisma.paymentRequest.count({
+        where: relatedPropertyFilter,
+      }),
+
+      this.prisma.paymentRequest.count({
+        where: {
+          ...relatedPropertyFilter,
+          status: 'PENDING',
+        },
+      }),
+
+      this.prisma.paymentRequest.count({
+        where: {
+          ...relatedPropertyFilter,
+          status: 'PAID',
+        },
+      }),
+
+      this.prisma.paymentRequest.count({
+        where: {
+          ...relatedPropertyFilter,
+          status: 'CANCELLED',
+        },
+      }),
+
+      this.prisma.paymentRequest.aggregate({
+        where: {
+          ...relatedPropertyFilter,
+          status: 'PAID',
+        },
+        _sum: {
+          totalAmount: true,
+        },
+      }),
+
+      this.prisma.paymentRequest.aggregate({
+        where: {
+          ...relatedPropertyFilter,
+          status: 'PENDING',
+        },
+        _sum: {
+          totalAmount: true,
+        },
+      }),
+
+      this.prisma.paymentRequest.findMany({
+        where: {
+          ...relatedPropertyFilter,
+          status: 'PAID',
+        },
+        orderBy: {
+          paidAt: 'desc',
+        },
+        select: {
+          id: true,
+          totalAmount: true,
+          bondAmount: true,
+          advanceRent: true,
+          paidAt: true,
+          property: {
+            select: {
+              id: true,
+              title: true,
+              suburb: true,
+              state: true,
+              assignedAgentMember: {
+                select: {
+                  id: true,
+                  user: {
+                    select: {
+                      id: true,
+                      fullName: true,
+                      email: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      }),
+
+      this.prisma.property.findMany({
+        where: propertyAccessWhere,
+        select: {
+          id: true,
+          title: true,
+          suburb: true,
+          state: true,
+          assignedAgentMember: {
+            select: {
+              id: true,
+              user: {
+                select: {
+                  id: true,
+                  fullName: true,
+                  email: true,
+                },
+              },
+            },
+          },
+        },
+      }),
+    ]);
+
+    const totalPaidAmount = Number(paidAmountResult._sum.totalAmount ?? 0);
+    const totalPendingAmount = Number(pendingAmountResult._sum.totalAmount ?? 0);
+
+    const averagePaymentValue = paidPayments > 0 ? Number((totalPaidAmount / paidPayments).toFixed(2)) : 0;
+
+    const revenueByProperty = properties.map((property) => {
+      const propertyPayments = paidPaymentRequests.filter((payment) => payment.property.id === property.id);
+
+      const totalAmount = propertyPayments.reduce((sum, payment) => sum + Number(payment.totalAmount), 0);
+
+      return {
+        property: {
+          id: property.id,
+          title: property.title,
+          suburb: property.suburb,
+          state: property.state,
+        },
+        assignedAgent: property.assignedAgentMember
+          ? {
+              id: property.assignedAgentMember.id,
+              fullName: property.assignedAgentMember.user.fullName,
+              email: property.assignedAgentMember.user.email,
+            }
+          : null,
+        paidPayments: propertyPayments.length,
+        totalPaidAmount: Number(totalAmount.toFixed(2)),
+      };
+    });
+
+    const revenueByAgentMap = new Map<
+      string,
+      {
+        agent: {
+          id: string;
+          fullName: string;
+          email: string;
+        };
+        paidPayments: number;
+        totalPaidAmount: number;
+      }
+    >();
+
+    for (const payment of paidPaymentRequests) {
+      const assignedAgent = payment.property.assignedAgentMember;
+
+      if (!assignedAgent) continue;
+
+      const agentId = assignedAgent.id;
+
+      const existing = revenueByAgentMap.get(agentId);
+
+      if (existing) {
+        existing.paidPayments += 1;
+        existing.totalPaidAmount += Number(payment.totalAmount);
+      } else {
+        revenueByAgentMap.set(agentId, {
+          agent: {
+            id: assignedAgent.id,
+            fullName: assignedAgent.user.fullName,
+            email: assignedAgent.user.email,
+          },
+          paidPayments: 1,
+          totalPaidAmount: Number(payment.totalAmount),
+        });
+      }
+    }
+
+    const revenueByAgent = Array.from(revenueByAgentMap.values()).map((item) => ({
+      ...item,
+      totalPaidAmount: Number(item.totalPaidAmount.toFixed(2)),
+    }));
+
+    return {
+      payments: {
+        total: totalPayments,
+        pending: pendingPayments,
+        paid: paidPayments,
+        cancelled: cancelledPayments,
+        totalPaidAmount,
+        totalPendingAmount,
+        averagePaymentValue,
+      },
+      revenueByProperty,
+      revenueByAgent,
+      recentPaidPayments: paidPaymentRequests.slice(0, 10),
+    };
+  }
 }

@@ -72,7 +72,7 @@ export class PaymentsService {
         {
           quantity: 1,
           price_data: {
-            currency: 'aud  ',
+            currency: 'aud',
             unit_amount: amountInCents,
             product_data: {
               name: `Rental Payment for - ${paymentRequest.property.title}`,
