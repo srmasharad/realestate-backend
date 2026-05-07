@@ -16,7 +16,7 @@ export class RegisterDto {
   @IsOptional()
   phone: string;
 
-  @ApiProperty({ example: 'Admin123456', minLength: 8 })
+  @ApiProperty({ example: '12345678', minLength: 8 })
   @IsString()
   @MinLength(8)
   password: string;

@@ -2,6 +2,8 @@ import { Resend } from 'resend';
 
 import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 
+import { VerifyEmailTemplate } from './templates/verify-email.template';
+
 @Injectable()
 export class MailService {
   private readonly logger = new Logger(MailService.name);
@@ -13,7 +15,7 @@ export class MailService {
     }
   }
 
-  async sendVerificationEmail(to: string, token: string) {
+  async sendVerificationEmail(to: string, fullName: string, token: string) {
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
     const verifyUrl = `${frontendUrl}/verify-email?token=${token}`;
 
@@ -23,12 +25,7 @@ export class MailService {
       from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
       to: [recipient],
       subject: 'Real estate - Verify your email',
-      html: `
-				<h2>Verify your email</h2>
-				<p>Please click the link below to verify your account:</p>
-				<p><a href="${verifyUrl}">${verifyUrl}</a></p>
-				<p>This link will expire in 24 hours.</p>
-			`,
+      react: VerifyEmailTemplate({ fullName, verifyUrl }),
     });
 
     if (error) {

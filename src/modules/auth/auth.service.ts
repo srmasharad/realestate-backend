@@ -89,7 +89,7 @@ export class AuthService {
     const verification = await this.createEmailVerificationToken(user.id);
 
     try {
-      await this.mailService.sendVerificationEmail(user.email, verification.token);
+      await this.mailService.sendVerificationEmail(user.email, user.fullName, verification.token);
     } catch (error) {
       console.error(`Failed to send verification email: ${error}`);
     }
@@ -190,6 +190,7 @@ export class AuthService {
       select: {
         id: true,
         email: true,
+        fullName: true,
         isEmailVerified: true,
       },
     });
@@ -204,7 +205,7 @@ export class AuthService {
 
     const verification = await this.createEmailVerificationToken(user.id);
 
-    await this.mailService.sendVerificationEmail(user.email, verification.token);
+    await this.mailService.sendVerificationEmail(user.email, user.fullName, verification.token);
 
     return {
       message: 'Verification email has been re-issued',
