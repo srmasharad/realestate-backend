@@ -3,7 +3,11 @@ import { MailService } from 'src/common/mail/mail.service';
 import { PrismaService } from 'src/database/prisma.service';
 import { AgencyStatus } from 'src/generated/prisma';
 
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { GetAgenciesQueryDto } from './dto/get-agencies-query.dto';
 import { UpdateAgencyStatusDto } from './dto/update-agency-status.dto';
@@ -452,6 +456,7 @@ export class AdminService {
             bathrooms: true,
             parkingSpaces: true,
             isPublished: true,
+            isArchived: true,
             isLocked: true,
             assignedAgentMember: {
               select: {
@@ -509,6 +514,8 @@ export class AdminService {
       approvedAgencies,
       suspendedAgencies,
       totalProperties,
+      activeProperties,
+      archivedProperties,
       publishedProperties,
       lockedProperties,
       totalApplications,
@@ -546,10 +553,25 @@ export class AdminService {
 
       this.prisma.property.count(),
       this.prisma.property.count({
-        where: { isPublished: true },
+        where: { isArchived: false },
       }),
+
       this.prisma.property.count({
-        where: { isLocked: true },
+        where: { isArchived: true },
+      }),
+
+      this.prisma.property.count({
+        where: {
+          isPublished: true,
+          isArchived: false,
+        },
+      }),
+
+      this.prisma.property.count({
+        where: {
+          isLocked: true,
+          isArchived: false,
+        },
       }),
 
       this.prisma.application.count(),
@@ -617,6 +639,8 @@ export class AdminService {
       },
       properties: {
         total: totalProperties,
+        active: activeProperties,
+        archived: archivedProperties,
         published: publishedProperties,
         locked: lockedProperties,
       },
@@ -725,13 +749,17 @@ export class AdminService {
           }),
 
           this.prisma.property.count({
-            where: { agencyId: agency.id },
+            where: {
+              agencyId: agency.id,
+              isArchived: false,
+            },
           }),
 
           this.prisma.property.count({
             where: {
               agencyId: agency.id,
               isPublished: true,
+              isArchived: false,
             },
           }),
 
@@ -739,6 +767,7 @@ export class AdminService {
             where: {
               property: {
                 agencyId: agency.id,
+                isArchived: false,
               },
             },
           }),
@@ -747,6 +776,7 @@ export class AdminService {
             where: {
               property: {
                 agencyId: agency.id,
+                isArchived: false,
               },
               status: 'APPROVED',
             },
@@ -756,6 +786,7 @@ export class AdminService {
             where: {
               property: {
                 agencyId: agency.id,
+                isArchived: false,
               },
             },
           }),
@@ -764,6 +795,7 @@ export class AdminService {
             where: {
               property: {
                 agencyId: agency.id,
+                isArchived: false,
               },
               status: 'ACCEPTED',
             },
@@ -773,6 +805,7 @@ export class AdminService {
             where: {
               property: {
                 agencyId: agency.id,
+                isArchived: false,
               },
               status: 'SIGNED',
             },
@@ -782,6 +815,7 @@ export class AdminService {
             where: {
               property: {
                 agencyId: agency.id,
+                isArchived: false,
               },
               status: 'PAID',
             },
@@ -791,6 +825,7 @@ export class AdminService {
             where: {
               property: {
                 agencyId: agency.id,
+                isArchived: false,
               },
               status: 'PAID',
             },

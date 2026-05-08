@@ -2,9 +2,19 @@ import * as bcrypt from 'bcrypt';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { MailService } from 'src/common/mail/mail.service';
 import { PrismaService } from 'src/database/prisma.service';
-import { AgencyMemberRole, AgencyStatus, ApplicationStatus, OfferStatus } from 'src/generated/prisma';
+import {
+  AgencyMemberRole,
+  AgencyStatus,
+  ApplicationStatus,
+  OfferStatus,
+} from 'src/generated/prisma';
 
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { UpdateApplicationStatusDto } from '../applications/dto/update-application-status.dto';
 import { AuthenticatedUser } from '../auth/types/authenticated-user.type';
@@ -40,6 +50,7 @@ type AutoRejectedApplicationEmailTarget = {
 type PropertyWithAssignedAgent = {
   id: string;
   title: string;
+  isLocked: boolean;
   assignedAgentMember: {
     user: {
       email: string;
@@ -114,6 +125,36 @@ type ActivatedTenancyResult = {
   bondAmount: unknown;
   advanceRent: unknown;
   createdAt: Date;
+};
+
+type AgencyApplicationForDecision = {
+  id: string;
+  status: ApplicationStatus;
+  message: string | null;
+  applicant: {
+    email: string;
+    fullName: string;
+  };
+  property: {
+    id: string;
+    title: string;
+    agencyId: string | null;
+    isArchived: boolean;
+    isLocked: boolean;
+  };
+};
+
+type PropertyForAgentRemoval = {
+  id: string;
+  title: string;
+  isLocked: boolean;
+  assignedAgentMemberId: string | null;
+  assignedAgentMember: {
+    user: {
+      fullName: string;
+      email: string;
+    };
+  } | null;
 };
 
 @Injectable()
@@ -576,6 +617,7 @@ export class AgencyService {
 
     const where = {
       agencyId: membership.agencyId,
+      isArchived: false,
       AND: [
         ...(isAgent
           ? [
@@ -644,6 +686,8 @@ export class AgencyService {
           state: true,
           postcode: true,
           isPublished: true,
+          isArchived: true,
+          isLocked: true,
           createdAt: true,
           media: {
             where: {
@@ -685,6 +729,7 @@ export class AgencyService {
     const where = {
       property: {
         agencyId: membership.agencyId,
+        isArchived: false,
         ...(isAgent
           ? {
               assignedAgentMemberId: membership.id,
@@ -775,14 +820,15 @@ export class AgencyService {
 
     const isAgent = membership.role === AgencyMemberRole.AGENT;
 
-    const application = await this.prisma.application.findFirst({
+    const application: AgencyApplicationForDecision | null = await this.prisma.application.findFirst({
       where: {
         id: applicationId,
         property: {
           agencyId: membership.agencyId,
+          isArchived: false,
           ...(isAgent
             ? {
-                assignedAgentMemberId: membership.id,
+                OR: [{ assignedAgentMemberId: membership.id }, { createdById: currentUser.id }],
               }
             : {}),
         },
@@ -802,6 +848,8 @@ export class AgencyService {
             id: true,
             title: true,
             agencyId: true,
+            isArchived: true,
+            isLocked: true,
           },
         },
       },
@@ -809,6 +857,14 @@ export class AgencyService {
 
     if (!application) {
       throw new NotFoundException('Application not found for this agency');
+    }
+
+    if (application.property.isArchived) {
+      throw new BadRequestException('Archived property applications cannot be updated');
+    }
+
+    if (application.property.isLocked && dto.status === ApplicationStatus.APPROVED) {
+      throw new BadRequestException('Cannot approve application for a locked property');
     }
 
     if (application.status === dto.status) {
@@ -961,10 +1017,13 @@ export class AgencyService {
       where: {
         id: propertyId,
         agencyId: membership.agencyId,
+        isArchived: false,
+        isLocked: false,
       },
       select: {
         id: true,
         title: true,
+        isLocked: true,
         assignedAgentMember: {
           select: {
             user: {
@@ -980,6 +1039,10 @@ export class AgencyService {
 
     if (!property) {
       throw new NotFoundException('Property not found for your agency');
+    }
+
+    if (property.isLocked) {
+      throw new BadRequestException('Cannot assign agent to a locked property');
     }
 
     // Validate target agency member
@@ -1074,14 +1137,16 @@ export class AgencyService {
       throw new ForbiddenException('You are not allowed to remove assigned agents');
     }
 
-    const property = await this.prisma.property.findFirst({
+    const property: PropertyForAgentRemoval | null = await this.prisma.property.findFirst({
       where: {
         id: propertyId,
         agencyId: membership.agencyId,
+        isArchived: false,
       },
       select: {
         id: true,
         title: true,
+        isLocked: true,
         assignedAgentMemberId: true,
         assignedAgentMember: {
           select: {
@@ -1100,11 +1165,21 @@ export class AgencyService {
       throw new NotFoundException('Property not found for your agency');
     }
 
+    if (property.isLocked) {
+      throw new BadRequestException('Cannot remove agent from a locked property');
+    }
+
     if (!property.assignedAgentMemberId) {
       throw new BadRequestException('No agent is assigned to this property');
     }
 
-    const removedAgent = property.assignedAgentMember?.user ?? null;
+    const removedAgent =
+      property.assignedAgentMember === null
+        ? null
+        : {
+            fullName: property.assignedAgentMember.user.fullName,
+            email: property.assignedAgentMember.user.email,
+          };
 
     const updatedProperty = await this.prisma.property.update({
       where: {
@@ -1210,6 +1285,8 @@ export class AgencyService {
       await tx.property.updateMany({
         where: {
           assignedAgentMemberId: memberId,
+          isArchived: false,
+          isLocked: false,
         },
         data: {
           assignedAgentMemberId: null,
@@ -1248,9 +1325,10 @@ export class AgencyService {
         property: {
           agencyId: membership.agencyId,
           isLocked: false,
+          isArchived: false,
           ...(isAgent
             ? {
-                assignedAgentMemberId: membership.id,
+                OR: [{ assignedAgentMemberId: membership.id }, { createdById: currentUser.id }],
               }
             : {}),
         },
@@ -1375,11 +1453,18 @@ export class AgencyService {
   async sendLeaseAgreement(currentUser: AuthenticatedUser, leaseAgreementId: string, dto: SendLeaseAgreementDto) {
     const membership = await this.getApprovedAgencyMembership(currentUser);
 
+    const isAgent = membership.role === AgencyMemberRole.AGENT;
+
     const lease = await this.prisma.leaseAgreement.findFirst({
       where: {
         id: leaseAgreementId,
         property: {
           agencyId: membership.agencyId,
+          ...(isAgent
+            ? {
+                OR: [{ assignedAgentMemberId: membership.id }, { createdById: currentUser.id }],
+              }
+            : {}),
         },
       },
       select: {
@@ -1401,8 +1486,12 @@ export class AgencyService {
 
     if (!lease) throw new NotFoundException('Lease not found');
 
+    if (lease.status === 'CANCELLED') {
+      throw new BadRequestException('Cancelled lease agreement cannot be sent');
+    }
+
     if (lease.status === 'SIGNED') {
-      throw new BadRequestException('Already signed');
+      throw new BadRequestException('Signed lease agreement cannot be sent again');
     }
 
     const updated = await this.prisma.leaseAgreement.update({
@@ -1433,11 +1522,18 @@ export class AgencyService {
   async markLeaseAgreementSigned(currentUser: AuthenticatedUser, leaseAgreementId: string) {
     const membership = await this.getApprovedAgencyMembership(currentUser);
 
+    const isAgent = membership.role === AgencyMemberRole.AGENT;
+
     const lease = await this.prisma.leaseAgreement.findFirst({
       where: {
         id: leaseAgreementId,
         property: {
           agencyId: membership.agencyId,
+          ...(isAgent
+            ? {
+                OR: [{ assignedAgentMemberId: membership.id }, { createdById: currentUser.id }],
+              }
+            : {}),
         },
       },
       select: {
@@ -1561,7 +1657,7 @@ export class AgencyService {
         agencyId: membership.agencyId,
         ...(isAgent
           ? {
-              assignedAgentMemberId: membership.id,
+              OR: [{ assignedAgentMemberId: membership.id }, { createdById: currentUser.id }],
             }
           : {}),
       },
@@ -1633,7 +1729,7 @@ export class AgencyService {
           agencyId: membership.agencyId,
           ...(isAgent
             ? {
-                assignedAgentMemberId: membership.id,
+                OR: [{ assignedAgentMemberId: membership.id }, { createdById: currentUser.id }],
               }
             : {}),
         },
@@ -1753,11 +1849,20 @@ export class AgencyService {
             title: true,
           },
         },
+        tenancy: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
 
     if (!leaseAgreement) {
       throw new NotFoundException('Lease agreement not found for this agency');
+    }
+
+    if (leaseAgreement.tenancy) {
+      throw new BadRequestException('Lease agreement with tenancy cannot be cancelled');
     }
 
     if (leaseAgreement.status === 'SIGNED') {
@@ -1805,7 +1910,7 @@ export class AgencyService {
       ...(isAgent
         ? {
             property: {
-              assignedAgentMemberId: membership.id,
+              OR: [{ assignedAgentMemberId: membership.id }, { createdById: currentUser.id }],
             },
           }
         : {}),
@@ -1915,7 +2020,7 @@ export class AgencyService {
         ...(isAgent
           ? {
               property: {
-                assignedAgentMemberId: membership.id,
+                OR: [{ assignedAgentMemberId: membership.id }, { createdById: currentUser.id }],
               },
             }
           : {}),
@@ -2116,6 +2221,7 @@ export class AgencyService {
 
     const propertyWhere = {
       agencyId: membership.agencyId,
+      isArchived: false,
       ...(isAgent
         ? {
             OR: [{ assignedAgentMemberId: membership.id }, { createdById: currentUser.id }],
@@ -2400,6 +2506,7 @@ export class AgencyService {
       members.map(async (member) => {
         const propertyAccessWhere = {
           agencyId: membership.agencyId,
+          isArchived: false,
           OR: [
             {
               assignedAgentMemberId: member.id,
@@ -2431,6 +2538,7 @@ export class AgencyService {
             where: {
               agencyId: membership.agencyId,
               assignedAgentMemberId: member.id,
+              isArchived: false,
             },
           }),
 
@@ -2438,6 +2546,7 @@ export class AgencyService {
             where: {
               agencyId: membership.agencyId,
               createdById: member.user.id,
+              isArchived: false,
             },
           }),
 
@@ -2562,6 +2671,7 @@ export class AgencyService {
 
     const propertyAccessWhere = {
       agencyId: membership.agencyId,
+      isArchived: false,
       ...(isAgent
         ? {
             OR: [{ assignedAgentMemberId: membership.id }, { createdById: currentUser.id }],
@@ -2717,6 +2827,7 @@ export class AgencyService {
 
     const propertyAccessWhere = {
       agencyId: membership.agencyId,
+      isArchived: false,
       ...(isAgent
         ? {
             OR: [{ assignedAgentMemberId: membership.id }, { createdById: currentUser.id }],

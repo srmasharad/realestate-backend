@@ -6392,9 +6392,11 @@ export namespace Prisma {
     parkingSpaces: number | null
     isPublished: boolean | null
     isLocked: boolean | null
+    isArchived: boolean | null
     createdById: string | null
     agencyId: string | null
     assignedAgentMemberId: string | null
+    deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -6415,9 +6417,11 @@ export namespace Prisma {
     parkingSpaces: number | null
     isPublished: boolean | null
     isLocked: boolean | null
+    isArchived: boolean | null
     createdById: string | null
     agencyId: string | null
     assignedAgentMemberId: string | null
+    deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -6438,9 +6442,11 @@ export namespace Prisma {
     parkingSpaces: number
     isPublished: number
     isLocked: number
+    isArchived: number
     createdById: number
     agencyId: number
     assignedAgentMemberId: number
+    deletedAt: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -6477,9 +6483,11 @@ export namespace Prisma {
     parkingSpaces?: true
     isPublished?: true
     isLocked?: true
+    isArchived?: true
     createdById?: true
     agencyId?: true
     assignedAgentMemberId?: true
+    deletedAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -6500,9 +6508,11 @@ export namespace Prisma {
     parkingSpaces?: true
     isPublished?: true
     isLocked?: true
+    isArchived?: true
     createdById?: true
     agencyId?: true
     assignedAgentMemberId?: true
+    deletedAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -6523,9 +6533,11 @@ export namespace Prisma {
     parkingSpaces?: true
     isPublished?: true
     isLocked?: true
+    isArchived?: true
     createdById?: true
     agencyId?: true
     assignedAgentMemberId?: true
+    deletedAt?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -6633,9 +6645,11 @@ export namespace Prisma {
     parkingSpaces: number | null
     isPublished: boolean
     isLocked: boolean
+    isArchived: boolean
     createdById: string
     agencyId: string | null
     assignedAgentMemberId: string | null
+    deletedAt: Date | null
     createdAt: Date
     updatedAt: Date
     _count: PropertyCountAggregateOutputType | null
@@ -6675,9 +6689,11 @@ export namespace Prisma {
     parkingSpaces?: boolean
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
     createdById?: boolean
     agencyId?: boolean
     assignedAgentMemberId?: boolean
+    deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
@@ -6708,9 +6724,11 @@ export namespace Prisma {
     parkingSpaces?: boolean
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
     createdById?: boolean
     agencyId?: boolean
     assignedAgentMemberId?: boolean
+    deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
@@ -6734,9 +6752,11 @@ export namespace Prisma {
     parkingSpaces?: boolean
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
     createdById?: boolean
     agencyId?: boolean
     assignedAgentMemberId?: boolean
+    deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
@@ -6760,14 +6780,16 @@ export namespace Prisma {
     parkingSpaces?: boolean
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
     createdById?: boolean
     agencyId?: boolean
     assignedAgentMemberId?: boolean
+    deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type PropertyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "listingType" | "propertyType" | "price" | "addressLine1" | "suburb" | "state" | "postcode" | "bedrooms" | "bathrooms" | "parkingSpaces" | "isPublished" | "isLocked" | "createdById" | "agencyId" | "assignedAgentMemberId" | "createdAt" | "updatedAt", ExtArgs["result"]["property"]>
+  export type PropertyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "listingType" | "propertyType" | "price" | "addressLine1" | "suburb" | "state" | "postcode" | "bedrooms" | "bathrooms" | "parkingSpaces" | "isPublished" | "isLocked" | "isArchived" | "createdById" | "agencyId" | "assignedAgentMemberId" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["property"]>
   export type PropertyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     agency?: boolean | Property$agencyArgs<ExtArgs>
@@ -6820,9 +6842,11 @@ export namespace Prisma {
       parkingSpaces: number | null
       isPublished: boolean
       isLocked: boolean
+      isArchived: boolean
       createdById: string
       agencyId: string | null
       assignedAgentMemberId: string | null
+      deletedAt: Date | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["property"]>
@@ -7272,9 +7296,11 @@ export namespace Prisma {
     readonly parkingSpaces: FieldRef<"Property", 'Int'>
     readonly isPublished: FieldRef<"Property", 'Boolean'>
     readonly isLocked: FieldRef<"Property", 'Boolean'>
+    readonly isArchived: FieldRef<"Property", 'Boolean'>
     readonly createdById: FieldRef<"Property", 'String'>
     readonly agencyId: FieldRef<"Property", 'String'>
     readonly assignedAgentMemberId: FieldRef<"Property", 'String'>
+    readonly deletedAt: FieldRef<"Property", 'DateTime'>
     readonly createdAt: FieldRef<"Property", 'DateTime'>
     readonly updatedAt: FieldRef<"Property", 'DateTime'>
   }
@@ -19990,9 +20016,11 @@ export namespace Prisma {
     parkingSpaces: 'parkingSpaces',
     isPublished: 'isPublished',
     isLocked: 'isLocked',
+    isArchived: 'isArchived',
     createdById: 'createdById',
     agencyId: 'agencyId',
     assignedAgentMemberId: 'assignedAgentMemberId',
+    deletedAt: 'deletedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -20780,9 +20808,11 @@ export namespace Prisma {
     parkingSpaces?: IntNullableFilter<"Property"> | number | null
     isPublished?: BoolFilter<"Property"> | boolean
     isLocked?: BoolFilter<"Property"> | boolean
+    isArchived?: BoolFilter<"Property"> | boolean
     createdById?: StringFilter<"Property"> | string
     agencyId?: StringNullableFilter<"Property"> | string | null
     assignedAgentMemberId?: StringNullableFilter<"Property"> | string | null
+    deletedAt?: DateTimeNullableFilter<"Property"> | Date | string | null
     createdAt?: DateTimeFilter<"Property"> | Date | string
     updatedAt?: DateTimeFilter<"Property"> | Date | string
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -20812,9 +20842,11 @@ export namespace Prisma {
     parkingSpaces?: SortOrderInput | SortOrder
     isPublished?: SortOrder
     isLocked?: SortOrder
+    isArchived?: SortOrder
     createdById?: SortOrder
     agencyId?: SortOrderInput | SortOrder
     assignedAgentMemberId?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: UserOrderByWithRelationInput
@@ -20847,9 +20879,11 @@ export namespace Prisma {
     parkingSpaces?: IntNullableFilter<"Property"> | number | null
     isPublished?: BoolFilter<"Property"> | boolean
     isLocked?: BoolFilter<"Property"> | boolean
+    isArchived?: BoolFilter<"Property"> | boolean
     createdById?: StringFilter<"Property"> | string
     agencyId?: StringNullableFilter<"Property"> | string | null
     assignedAgentMemberId?: StringNullableFilter<"Property"> | string | null
+    deletedAt?: DateTimeNullableFilter<"Property"> | Date | string | null
     createdAt?: DateTimeFilter<"Property"> | Date | string
     updatedAt?: DateTimeFilter<"Property"> | Date | string
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -20879,9 +20913,11 @@ export namespace Prisma {
     parkingSpaces?: SortOrderInput | SortOrder
     isPublished?: SortOrder
     isLocked?: SortOrder
+    isArchived?: SortOrder
     createdById?: SortOrder
     agencyId?: SortOrderInput | SortOrder
     assignedAgentMemberId?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: PropertyCountOrderByAggregateInput
@@ -20910,9 +20946,11 @@ export namespace Prisma {
     parkingSpaces?: IntNullableWithAggregatesFilter<"Property"> | number | null
     isPublished?: BoolWithAggregatesFilter<"Property"> | boolean
     isLocked?: BoolWithAggregatesFilter<"Property"> | boolean
+    isArchived?: BoolWithAggregatesFilter<"Property"> | boolean
     createdById?: StringWithAggregatesFilter<"Property"> | string
     agencyId?: StringNullableWithAggregatesFilter<"Property"> | string | null
     assignedAgentMemberId?: StringNullableWithAggregatesFilter<"Property"> | string | null
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"Property"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Property"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Property"> | Date | string
   }
@@ -22226,6 +22264,8 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutPropertiesInput
@@ -22255,9 +22295,11 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
     createdById: string
     agencyId?: string | null
     assignedAgentMemberId?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     application?: ApplicationUncheckedCreateNestedManyWithoutPropertyInput
@@ -22284,6 +22326,8 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutPropertiesNestedInput
@@ -22313,9 +22357,11 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     agencyId?: NullableStringFieldUpdateOperationsInput | string | null
     assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     application?: ApplicationUncheckedUpdateManyWithoutPropertyNestedInput
@@ -22342,9 +22388,11 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
     createdById: string
     agencyId?: string | null
     assignedAgentMemberId?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -22365,6 +22413,8 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -22385,9 +22435,11 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     agencyId?: NullableStringFieldUpdateOperationsInput | string | null
     assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -23894,6 +23946,17 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type AgencyNullableScalarRelationFilter = {
     is?: AgencyWhereInput | null
     isNot?: AgencyWhereInput | null
@@ -23930,9 +23993,11 @@ export namespace Prisma {
     parkingSpaces?: SortOrder
     isPublished?: SortOrder
     isLocked?: SortOrder
+    isArchived?: SortOrder
     createdById?: SortOrder
     agencyId?: SortOrder
     assignedAgentMemberId?: SortOrder
+    deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -23960,9 +24025,11 @@ export namespace Prisma {
     parkingSpaces?: SortOrder
     isPublished?: SortOrder
     isLocked?: SortOrder
+    isArchived?: SortOrder
     createdById?: SortOrder
     agencyId?: SortOrder
     assignedAgentMemberId?: SortOrder
+    deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -23983,9 +24050,11 @@ export namespace Prisma {
     parkingSpaces?: SortOrder
     isPublished?: SortOrder
     isLocked?: SortOrder
+    isArchived?: SortOrder
     createdById?: SortOrder
     agencyId?: SortOrder
     assignedAgentMemberId?: SortOrder
+    deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -24031,6 +24100,20 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type EnumApplicationStatusFilter<$PrismaModel = never> = {
@@ -24095,17 +24178,6 @@ export namespace Prisma {
     _max?: NestedEnumApplicationStatusFilter<$PrismaModel>
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type EmailVerificationTokenCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
@@ -24131,20 +24203,6 @@ export namespace Prisma {
     expiresAt?: SortOrder
     usedAt?: SortOrder
     createdAt?: SortOrder
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type EnumPropertyMediaTypeFilter<$PrismaModel = never> = {
@@ -25514,6 +25572,10 @@ export namespace Prisma {
     divide?: number
   }
 
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
   export type UserUpdateOneRequiredWithoutPropertiesNestedInput = {
     create?: XOR<UserCreateWithoutPropertiesInput, UserUncheckedCreateWithoutPropertiesInput>
     connectOrCreate?: UserCreateOrConnectWithoutPropertiesInput
@@ -25778,10 +25840,6 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutEmailVerificationTokensInput, UserUncheckedCreateWithoutEmailVerificationTokensInput>
     connectOrCreate?: UserCreateOrConnectWithoutEmailVerificationTokensInput
     connect?: UserWhereUniqueInput
-  }
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
   }
 
   export type UserUpdateOneRequiredWithoutEmailVerificationTokensNestedInput = {
@@ -26611,6 +26669,17 @@ export namespace Prisma {
     not?: NestedEnumPropertyTypeFilter<$PrismaModel> | $Enums.PropertyType
   }
 
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type NestedEnumListingTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.ListingType | EnumListingTypeFieldRefInput<$PrismaModel>
     in?: $Enums.ListingType[] | ListEnumListingTypeFieldRefInput<$PrismaModel>
@@ -26658,6 +26727,20 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type NestedEnumApplicationStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ApplicationStatus | EnumApplicationStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ApplicationStatus[] | ListEnumApplicationStatusFieldRefInput<$PrismaModel>
@@ -26673,31 +26756,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumApplicationStatusFilter<$PrismaModel>
     _max?: NestedEnumApplicationStatusFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumPropertyMediaTypeFilter<$PrismaModel = never> = {
@@ -26835,6 +26893,8 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     agency?: AgencyCreateNestedOneWithoutPropertyInput
@@ -26863,8 +26923,10 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
     agencyId?: string | null
     assignedAgentMemberId?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     application?: ApplicationUncheckedCreateNestedManyWithoutPropertyInput
@@ -27473,9 +27535,11 @@ export namespace Prisma {
     parkingSpaces?: IntNullableFilter<"Property"> | number | null
     isPublished?: BoolFilter<"Property"> | boolean
     isLocked?: BoolFilter<"Property"> | boolean
+    isArchived?: BoolFilter<"Property"> | boolean
     createdById?: StringFilter<"Property"> | string
     agencyId?: StringNullableFilter<"Property"> | string | null
     assignedAgentMemberId?: StringNullableFilter<"Property"> | string | null
+    deletedAt?: DateTimeNullableFilter<"Property"> | Date | string | null
     createdAt?: DateTimeFilter<"Property"> | Date | string
     updatedAt?: DateTimeFilter<"Property"> | Date | string
   }
@@ -28766,6 +28830,8 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutPropertiesInput
@@ -28794,9 +28860,11 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
     createdById: string
     agencyId?: string | null
     assignedAgentMemberId?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     media?: PropertyMediaUncheckedCreateNestedManyWithoutPropertyInput
@@ -28944,6 +29012,8 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutPropertiesNestedInput
@@ -28972,9 +29042,11 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     agencyId?: NullableStringFieldUpdateOperationsInput | string | null
     assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     media?: PropertyMediaUncheckedUpdateManyWithoutPropertyNestedInput
@@ -29242,6 +29314,8 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutPropertiesInput
@@ -29270,9 +29344,11 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
     createdById: string
     agencyId?: string | null
     assignedAgentMemberId?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     application?: ApplicationUncheckedCreateNestedManyWithoutPropertyInput
@@ -29314,6 +29390,8 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutPropertiesNestedInput
@@ -29342,9 +29420,11 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     agencyId?: NullableStringFieldUpdateOperationsInput | string | null
     assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     application?: ApplicationUncheckedUpdateManyWithoutPropertyNestedInput
@@ -29400,6 +29480,8 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutPropertiesInput
@@ -29428,8 +29510,10 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
     createdById: string
     assignedAgentMemberId?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     application?: ApplicationUncheckedCreateNestedManyWithoutPropertyInput
@@ -29656,6 +29740,8 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutPropertiesInput
@@ -29684,8 +29770,10 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
     createdById: string
     agencyId?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     application?: ApplicationUncheckedCreateNestedManyWithoutPropertyInput
@@ -30085,6 +30173,8 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutPropertiesInput
@@ -30113,9 +30203,11 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
     createdById: string
     agencyId?: string | null
     assignedAgentMemberId?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     application?: ApplicationUncheckedCreateNestedManyWithoutPropertyInput
@@ -30347,6 +30439,8 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutPropertiesNestedInput
@@ -30375,9 +30469,11 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     agencyId?: NullableStringFieldUpdateOperationsInput | string | null
     assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     application?: ApplicationUncheckedUpdateManyWithoutPropertyNestedInput
@@ -30515,6 +30611,8 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutPropertiesInput
@@ -30543,9 +30641,11 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
     createdById: string
     agencyId?: string | null
     assignedAgentMemberId?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     application?: ApplicationUncheckedCreateNestedManyWithoutPropertyInput
@@ -30699,6 +30799,8 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutPropertiesNestedInput
@@ -30727,9 +30829,11 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     agencyId?: NullableStringFieldUpdateOperationsInput | string | null
     assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     application?: ApplicationUncheckedUpdateManyWithoutPropertyNestedInput
@@ -30906,6 +31010,8 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutPropertiesInput
@@ -30934,9 +31040,11 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
     createdById: string
     agencyId?: string | null
     assignedAgentMemberId?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     application?: ApplicationUncheckedCreateNestedManyWithoutPropertyInput
@@ -31312,6 +31420,8 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutPropertiesNestedInput
@@ -31340,9 +31450,11 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     agencyId?: NullableStringFieldUpdateOperationsInput | string | null
     assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     application?: ApplicationUncheckedUpdateManyWithoutPropertyNestedInput
@@ -31683,6 +31795,8 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutPropertiesInput
@@ -31711,9 +31825,11 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
     createdById: string
     agencyId?: string | null
     assignedAgentMemberId?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     application?: ApplicationUncheckedCreateNestedManyWithoutPropertyInput
@@ -31914,6 +32030,8 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutPropertiesNestedInput
@@ -31942,9 +32060,11 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     agencyId?: NullableStringFieldUpdateOperationsInput | string | null
     assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     application?: ApplicationUncheckedUpdateManyWithoutPropertyNestedInput
@@ -32080,8 +32200,10 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
     agencyId?: string | null
     assignedAgentMemberId?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -32293,6 +32415,8 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     agency?: AgencyUpdateOneWithoutPropertyNestedInput
@@ -32321,8 +32445,10 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
     agencyId?: NullableStringFieldUpdateOperationsInput | string | null
     assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     application?: ApplicationUncheckedUpdateManyWithoutPropertyNestedInput
@@ -32349,8 +32475,10 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
     agencyId?: NullableStringFieldUpdateOperationsInput | string | null
     assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -33357,8 +33485,10 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
     createdById: string
     assignedAgentMemberId?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -33425,6 +33555,8 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutPropertiesNestedInput
@@ -33453,8 +33585,10 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     application?: ApplicationUncheckedUpdateManyWithoutPropertyNestedInput
@@ -33481,8 +33615,10 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     assignedAgentMemberId?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -33554,8 +33690,10 @@ export namespace Prisma {
     parkingSpaces?: number | null
     isPublished?: boolean
     isLocked?: boolean
+    isArchived?: boolean
     createdById: string
     agencyId?: string | null
+    deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -33576,6 +33714,8 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutPropertiesNestedInput
@@ -33604,8 +33744,10 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     agencyId?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     application?: ApplicationUncheckedUpdateManyWithoutPropertyNestedInput
@@ -33632,8 +33774,10 @@ export namespace Prisma {
     parkingSpaces?: NullableIntFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isLocked?: BoolFieldUpdateOperationsInput | boolean
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdById?: StringFieldUpdateOperationsInput | string
     agencyId?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -178,9 +178,11 @@ exports.Prisma.PropertyScalarFieldEnum = {
   parkingSpaces: 'parkingSpaces',
   isPublished: 'isPublished',
   isLocked: 'isLocked',
+  isArchived: 'isArchived',
   createdById: 'createdById',
   agencyId: 'agencyId',
   assignedAgentMemberId: 'assignedAgentMemberId',
+  deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

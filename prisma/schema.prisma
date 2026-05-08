@@ -170,6 +170,7 @@ model Property {
   parkingSpaces Int?
   isPublished   Boolean      @default(false)
   isLocked      Boolean      @default(false)
+  isArchived    Boolean      @default(false)
 
   createdById String
   createdBy   User   @relation(fields: [createdById], references: [id])
@@ -187,8 +188,9 @@ model Property {
   leaseAgreements LeaseAgreement[]
   tenancies       Tenancy[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Application {

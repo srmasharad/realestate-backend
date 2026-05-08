@@ -1,14 +1,30 @@
 import { CloudinaryService } from 'src/common/cloudinary/cloudinary.service';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { PaginatedResponse } from 'src/common/types/paginated-response.type';
-import { PropertyMediaItem, UploadedImageFile } from 'src/common/types/uploaded-image-file.type';
+import {
+  PropertyMediaItem,
+  UploadedImageFile,
+} from 'src/common/types/uploaded-image-file.type';
 
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { PrismaService } from '../../database/prisma.service';
-import { AgencyMemberRole, AgencyStatus, MediaVisibility, PropertyMediaType, UserRole } from '../../generated/prisma';
+import {
+  AgencyMemberRole,
+  AgencyStatus,
+  MediaVisibility,
+  PropertyMediaType,
+  UserRole,
+} from '../../generated/prisma';
 import { AuthenticatedUser } from '../auth/types/authenticated-user.type';
 import { CreatePropertyDto } from './dto/create-property.dto';
+import { UpdatePropertyPublishDto } from './dto/update-property-publish.dto';
+import { UpdatePropertyDto } from './dto/update-property.dto';
 import { UploadPropertyMediaDto } from './dto/upload-property-media.dto';
 
 @Injectable()
@@ -26,11 +42,17 @@ export class PropertiesService {
         id: true,
         agencyId: true,
         createdById: true,
+        isArchived: true,
+        isLocked: true,
       },
     });
 
     if (!property) {
-      throw new ForbiddenException('Property not found');
+      throw new NotFoundException('Property not found');
+    }
+
+    if (property.isArchived) {
+      throw new BadRequestException('Archived properties cannot be managed');
     }
 
     // ADMIN can do everything
@@ -122,6 +144,190 @@ export class PropertiesService {
     return property;
   }
 
+  async update(propertyId: string, dto: UpdatePropertyDto, currentUser: AuthenticatedUser) {
+    const property = await this.prisma.property.findFirst({
+      where: {
+        id: propertyId,
+        isArchived: false,
+      },
+      select: {
+        id: true,
+        agencyId: true,
+        assignedAgentMemberId: true,
+        createdById: true,
+        isPublished: true,
+        isLocked: true,
+        tenancies: {
+          where: {
+            status: 'ACTIVE',
+          },
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    if (!property) {
+      throw new NotFoundException('Property not found');
+    }
+
+    if (!property.agencyId) {
+      throw new BadRequestException('Property is not linked to an agency');
+    }
+
+    if (property.isLocked && currentUser.role !== UserRole.ADMIN) {
+      throw new BadRequestException('Locked properties cannot be modified');
+    }
+
+    // ADMIN override
+    if (currentUser.role !== UserRole.ADMIN) {
+      const membership = await this.prisma.agencyMember.findFirst({
+        where: {
+          userId: currentUser.id,
+          agencyId: property.agencyId,
+          isActive: true,
+        },
+        select: {
+          id: true,
+          role: true,
+        },
+      });
+
+      if (!membership) {
+        throw new ForbiddenException('You do not belong to this agency');
+      }
+
+      const canManage =
+        membership.role === AgencyMemberRole.AGENCY_OWNER ||
+        membership.role === AgencyMemberRole.AGENCY_ADMIN ||
+        property.assignedAgentMemberId === membership.id ||
+        property.createdById === currentUser.id;
+
+      if (!canManage) {
+        throw new ForbiddenException('You are not allowed to update this property');
+      }
+    }
+
+    const activeTenancies = property.tenancies as Array<{ id: string }>;
+
+    // Prevent critical edits during active tenancy
+    if (activeTenancies.length > 0) {
+      if (dto.price || dto.addressLine1 || dto.suburb || dto.state || dto.postcode) {
+        throw new BadRequestException('Critical property details cannot be changed while tenancy is active');
+      }
+    }
+
+    const updatedProperty = await this.prisma.property.update({
+      where: {
+        id: propertyId,
+      },
+      data: {
+        ...dto,
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        listingType: true,
+        propertyType: true,
+        price: true,
+        addressLine1: true,
+        suburb: true,
+        state: true,
+        postcode: true,
+        bedrooms: true,
+        bathrooms: true,
+        parkingSpaces: true,
+        isPublished: true,
+        updatedAt: true,
+      },
+    });
+
+    return {
+      message: 'Property updated successfully',
+      property: updatedProperty,
+    };
+  }
+
+  async remove(propertyId: string, currentUser: AuthenticatedUser) {
+    const property = await this.prisma.property.findFirst({
+      where: {
+        id: propertyId,
+        isArchived: false,
+      },
+      select: {
+        id: true,
+        agencyId: true,
+        assignedAgentMemberId: true,
+        createdById: true,
+        tenancies: {
+          where: {
+            status: 'ACTIVE',
+          },
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    if (!property) {
+      throw new NotFoundException('Property not found');
+    }
+
+    if (!property.agencyId) {
+      throw new BadRequestException('Property is not linked to an agency');
+    }
+
+    if (currentUser.role !== UserRole.ADMIN) {
+      const membership = await this.prisma.agencyMember.findFirst({
+        where: {
+          userId: currentUser.id,
+          agencyId: property.agencyId,
+          isActive: true,
+        },
+        select: {
+          id: true,
+          role: true,
+        },
+      });
+
+      if (!membership) {
+        throw new ForbiddenException('You do not belong to this agency');
+      }
+
+      const canManage =
+        membership.role === AgencyMemberRole.AGENCY_OWNER ||
+        membership.role === AgencyMemberRole.AGENCY_ADMIN ||
+        property.assignedAgentMemberId === membership.id ||
+        property.createdById === currentUser.id;
+
+      if (!canManage) {
+        throw new ForbiddenException('You are not allowed to archive this property');
+      }
+    }
+
+    const activeTenancies = property.tenancies as Array<{ id: string }>;
+
+    if (activeTenancies.length > 0) {
+      throw new BadRequestException('Property cannot be archived while it has an active tenancy');
+    }
+
+    await this.prisma.property.update({
+      where: {
+        id: property.id,
+      },
+      data: {
+        isArchived: true,
+        isPublished: false,
+        deletedAt: new Date(),
+      },
+    });
+
+    return;
+  }
+
   async findPublicProperties(query: PaginationQueryDto): Promise<
     PaginatedResponse<{
       id: string;
@@ -155,6 +361,7 @@ export class PropertiesService {
     const where = search
       ? {
           isPublished: true,
+          isArchived: false,
           OR: [
             {
               title: {
@@ -190,6 +397,7 @@ export class PropertiesService {
         }
       : {
           isPublished: true,
+          isArchived: false,
         };
 
     const [properties, total] = await this.prisma.$transaction([
@@ -264,6 +472,7 @@ export class PropertiesService {
       where: {
         id,
         isPublished: true,
+        isArchived: false,
       },
       select: {
         id: true,
@@ -316,15 +525,6 @@ export class PropertiesService {
 
     if (!files || files.length === 0) {
       throw new BadRequestException('At least one image file is required');
-    }
-
-    const property = await this.prisma.property.findUnique({
-      where: { id: propertyId },
-      select: { id: true, createdById: true },
-    });
-
-    if (!property) {
-      throw new NotFoundException('Property not found');
     }
 
     const existingPrimary = await this.prisma.propertyMedia.findFirst({
@@ -513,6 +713,502 @@ export class PropertiesService {
     return {
       property,
       applications,
+    };
+  }
+
+  async updatePublishStatus(propertyId: string, dto: UpdatePropertyPublishDto, currentUser: AuthenticatedUser) {
+    const property = await this.prisma.property.findFirst({
+      where: {
+        id: propertyId,
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        addressLine1: true,
+        suburb: true,
+        state: true,
+        postcode: true,
+        propertyType: true,
+        listingType: true,
+        price: true,
+        bedrooms: true,
+        bathrooms: true,
+        parkingSpaces: true,
+        isPublished: true,
+        isArchived: true,
+        isLocked: true,
+        agencyId: true,
+        assignedAgentMemberId: true,
+        createdById: true,
+        media: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    if (!property) {
+      throw new NotFoundException('Property not found');
+    }
+
+    if (property.isArchived) {
+      throw new BadRequestException('Archived properties cannot be published');
+    }
+
+    // permission check
+    if (currentUser.role !== UserRole.ADMIN) {
+      const membership = await this.prisma.agencyMember.findFirst({
+        where: {
+          userId: currentUser.id,
+          agencyId: property.agencyId as string,
+          isActive: true,
+        },
+
+        select: {
+          id: true,
+          role: true,
+        },
+      });
+
+      if (!membership) {
+        throw new ForbiddenException('You do not belong to this agency');
+      }
+
+      const canManage =
+        membership.role === AgencyMemberRole.AGENCY_OWNER ||
+        membership.role === AgencyMemberRole.AGENCY_ADMIN ||
+        property.assignedAgentMemberId === membership.id ||
+        property.createdById === currentUser.id;
+
+      if (!canManage) {
+        throw new ForbiddenException('You are not allowed to manage this property');
+      }
+    }
+
+    const mediaItems = property.media as Array<{ id: string }>;
+
+    // only validate when publishing
+    if (dto.isPublished) {
+      if (
+        !property.title ||
+        !property.description ||
+        !property.addressLine1 ||
+        !property.suburb ||
+        !property.state ||
+        !property.postcode ||
+        !property.propertyType ||
+        !property.listingType ||
+        !property.price
+      ) {
+        throw new BadRequestException('Property is missing required fields for publishing');
+      }
+
+      if (mediaItems.length === 0) {
+        throw new BadRequestException('Property must have at least one image before publishing');
+      }
+    }
+
+    const updatedProperty = await this.prisma.property.update({
+      where: {
+        id: propertyId,
+      },
+
+      data: {
+        isPublished: dto.isPublished,
+      },
+
+      select: {
+        id: true,
+        title: true,
+        isPublished: true,
+        updatedAt: true,
+      },
+    });
+
+    return {
+      message: dto.isPublished ? 'Property published successfully' : 'Property unpublished successfully',
+
+      property: updatedProperty,
+    };
+  }
+
+  async restoreProperty(propertyId: string, currentUser: AuthenticatedUser) {
+    const property = await this.prisma.property.findFirst({
+      where: {
+        id: propertyId,
+        createdById: currentUser.id,
+      },
+      select: {
+        id: true,
+        title: true,
+        isArchived: true,
+        isPublished: true,
+        isLocked: true,
+        updatedAt: true,
+      },
+    });
+
+    if (!property) {
+      throw new NotFoundException('Property not found');
+    }
+
+    if (!property.isArchived) {
+      throw new BadRequestException('Property is not archived');
+    }
+
+    const restoredProperty = await this.prisma.property.update({
+      where: {
+        id: propertyId,
+      },
+      data: {
+        isArchived: false,
+      },
+      select: {
+        id: true,
+        title: true,
+        isArchived: true,
+        isPublished: true,
+        isLocked: true,
+        updatedAt: true,
+      },
+    });
+
+    return {
+      message: 'Property restored successfully',
+      property: restoredProperty,
+    };
+  }
+
+  async getManagementDetail(propertyId: string, currentUser: AuthenticatedUser) {
+    const property = await this.prisma.property.findFirst({
+      where: {
+        id: propertyId,
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        listingType: true,
+        propertyType: true,
+        price: true,
+        addressLine1: true,
+        suburb: true,
+        state: true,
+        postcode: true,
+        bedrooms: true,
+        bathrooms: true,
+        parkingSpaces: true,
+        isPublished: true,
+        isArchived: true,
+        isLocked: true,
+        createdAt: true,
+        updatedAt: true,
+        agencyId: true,
+        createdById: true,
+        assignedAgentMemberId: true,
+
+        media: {
+          orderBy: {
+            sortOrder: 'asc',
+          },
+          select: {
+            id: true,
+            url: true,
+            isPrimary: true,
+            visibility: true,
+            sortOrder: true,
+            createdAt: true,
+          },
+        },
+
+        agency: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+            email: true,
+            phone: true,
+          },
+        },
+
+        assignedAgentMember: {
+          select: {
+            id: true,
+            role: true,
+            user: {
+              select: {
+                id: true,
+                fullName: true,
+                email: true,
+                phone: true,
+              },
+            },
+          },
+        },
+
+        createdBy: {
+          select: {
+            id: true,
+            fullName: true,
+            email: true,
+          },
+        },
+
+        application: {
+          orderBy: {
+            createdAt: 'desc',
+          },
+          take: 5,
+          select: {
+            id: true,
+            status: true,
+            createdAt: true,
+            applicant: {
+              select: {
+                id: true,
+                fullName: true,
+                email: true,
+              },
+            },
+          },
+        },
+
+        offers: {
+          orderBy: {
+            createdAt: 'desc',
+          },
+          take: 5,
+          select: {
+            id: true,
+            status: true,
+            weeklyRent: true,
+            bondAmount: true,
+            advanceRent: true,
+            createdAt: true,
+            applicant: {
+              select: {
+                id: true,
+                fullName: true,
+                email: true,
+              },
+            },
+          },
+        },
+
+        leaseAgreements: {
+          orderBy: {
+            createdAt: 'desc',
+          },
+          take: 5,
+          select: {
+            id: true,
+            status: true,
+            sentAt: true,
+            signedAt: true,
+            cancelledAt: true,
+            createdAt: true,
+          },
+        },
+
+        tenancies: {
+          orderBy: {
+            createdAt: 'desc',
+          },
+          take: 5,
+          select: {
+            id: true,
+            status: true,
+            startDate: true,
+            endDate: true,
+            createdAt: true,
+            tenant: {
+              select: {
+                id: true,
+                fullName: true,
+                email: true,
+              },
+            },
+          },
+        },
+
+        paymentRequests: {
+          orderBy: {
+            createdAt: 'desc',
+          },
+          take: 5,
+          select: {
+            id: true,
+            status: true,
+            totalAmount: true,
+            bondAmount: true,
+            advanceRent: true,
+            paidAt: true,
+            createdAt: true,
+          },
+        },
+      },
+    });
+
+    if (!property) {
+      throw new NotFoundException('Property not found');
+    }
+
+    if (!property.agencyId) {
+      throw new BadRequestException('Property is not linked to an agency');
+    }
+
+    if (currentUser.role !== UserRole.ADMIN) {
+      const membership = await this.prisma.agencyMember.findFirst({
+        where: {
+          userId: currentUser.id,
+          agencyId: property.agencyId,
+          isActive: true,
+        },
+        select: {
+          id: true,
+          role: true,
+        },
+      });
+
+      if (!membership) {
+        throw new ForbiddenException('You do not belong to this agency');
+      }
+
+      const canManage =
+        membership.role === AgencyMemberRole.AGENCY_OWNER ||
+        membership.role === AgencyMemberRole.AGENCY_ADMIN ||
+        property.assignedAgentMemberId === membership.id ||
+        property.createdById === currentUser.id;
+
+      if (!canManage) {
+        throw new ForbiddenException('You are not allowed to view this property management detail');
+      }
+    }
+
+    const [
+      totalApplications,
+      pendingApplications,
+      approvedApplications,
+      rejectedApplications,
+
+      totalOffers,
+      pendingOffers,
+      acceptedOffers,
+      declinedOffers,
+
+      totalLeaseAgreements,
+      sentLeaseAgreements,
+      signedLeaseAgreements,
+      cancelledLeaseAgreements,
+
+      totalTenancies,
+      activeTenancies,
+
+      totalPayments,
+      pendingPayments,
+      paidPayments,
+      paidAmount,
+    ] = await this.prisma.$transaction([
+      this.prisma.application.count({
+        where: { propertyId },
+      }),
+      this.prisma.application.count({
+        where: { propertyId, status: 'PENDING' },
+      }),
+      this.prisma.application.count({
+        where: { propertyId, status: 'APPROVED' },
+      }),
+      this.prisma.application.count({
+        where: { propertyId, status: 'REJECTED' },
+      }),
+
+      this.prisma.offer.count({
+        where: { propertyId },
+      }),
+      this.prisma.offer.count({
+        where: { propertyId, status: 'PENDING' },
+      }),
+      this.prisma.offer.count({
+        where: { propertyId, status: 'ACCEPTED' },
+      }),
+      this.prisma.offer.count({
+        where: { propertyId, status: 'DECLINED' },
+      }),
+
+      this.prisma.leaseAgreement.count({
+        where: { propertyId },
+      }),
+      this.prisma.leaseAgreement.count({
+        where: { propertyId, status: 'SENT' },
+      }),
+      this.prisma.leaseAgreement.count({
+        where: { propertyId, status: 'SIGNED' },
+      }),
+      this.prisma.leaseAgreement.count({
+        where: { propertyId, status: 'CANCELLED' },
+      }),
+
+      this.prisma.tenancy.count({
+        where: { propertyId },
+      }),
+      this.prisma.tenancy.count({
+        where: { propertyId, status: 'ACTIVE' },
+      }),
+
+      this.prisma.paymentRequest.count({
+        where: { propertyId },
+      }),
+      this.prisma.paymentRequest.count({
+        where: { propertyId, status: 'PENDING' },
+      }),
+      this.prisma.paymentRequest.count({
+        where: { propertyId, status: 'PAID' },
+      }),
+      this.prisma.paymentRequest.aggregate({
+        where: {
+          propertyId,
+          status: 'PAID',
+        },
+        _sum: {
+          totalAmount: true,
+        },
+      }),
+    ]);
+
+    return {
+      property,
+      summary: {
+        applications: {
+          total: totalApplications,
+          pending: pendingApplications,
+          approved: approvedApplications,
+          rejected: rejectedApplications,
+        },
+        offers: {
+          total: totalOffers,
+          pending: pendingOffers,
+          accepted: acceptedOffers,
+          declined: declinedOffers,
+        },
+        leaseAgreements: {
+          total: totalLeaseAgreements,
+          sent: sentLeaseAgreements,
+          signed: signedLeaseAgreements,
+          cancelled: cancelledLeaseAgreements,
+        },
+        tenancies: {
+          total: totalTenancies,
+          active: activeTenancies,
+        },
+        payments: {
+          total: totalPayments,
+          pending: pendingPayments,
+          paid: paidPayments,
+          totalPaidAmount: paidAmount._sum.totalAmount ?? 0,
+        },
+      },
     };
   }
 }

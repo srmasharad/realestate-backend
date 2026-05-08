@@ -6,6 +6,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Patch,
   Post,
@@ -14,11 +15,19 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { type AuthenticatedUser } from '../auth/types/authenticated-user.type';
 import { CreatePropertyDto } from './dto/create-property.dto';
+import { UpdatePropertyPublishDto } from './dto/update-property-publish.dto';
+import { UpdatePropertyDto } from './dto/update-property.dto';
 import { UploadPropertyMediaDto } from './dto/upload-property-media.dto';
 import { PropertiesService } from './properties.service';
 
@@ -36,6 +45,52 @@ export class PropertiesController {
   @ApiOperation({ summary: 'Create a new property' })
   create(@Body() createPropertyDto: CreatePropertyDto, @CurrentUser() currentUser: AuthenticatedUser) {
     return this.propertyService.create(createPropertyDto, currentUser);
+  }
+
+  @Patch(':propertyId')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update property',
+  })
+  update(
+    @Param('propertyId') propertyId: string,
+    @Body() dto: UpdatePropertyDto,
+    @CurrentUser() currentUser: AuthenticatedUser,
+  ) {
+    return this.propertyService.update(propertyId, dto, currentUser);
+  }
+
+  @Delete(':propertyId')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Archive property' })
+  @HttpCode(204)
+  remove(@Param('propertyId') propertyId: string, @CurrentUser() currentUser: AuthenticatedUser) {
+    return this.propertyService.remove(propertyId, currentUser);
+  }
+
+  @Patch(':propertyId/restore')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Restore archived property',
+  })
+  restoreProperty(@Param('propertyId') propertyId: string, @CurrentUser() currentUser: AuthenticatedUser) {
+    return this.propertyService.restoreProperty(propertyId, currentUser);
+  }
+
+  @Patch(':propertyId/publish')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Publish or unpublish property' })
+  @ApiBody({ type: UpdatePropertyPublishDto })
+  updatePublishStatus(
+    @Param('propertyId') propertyId: string,
+    @Body() dto: UpdatePropertyPublishDto,
+    @CurrentUser() currentUser: AuthenticatedUser,
+  ) {
+    return this.propertyService.updatePublishStatus(propertyId, dto, currentUser);
   }
 
   @Post(':propertyId/media')
@@ -101,5 +156,13 @@ export class PropertiesController {
   @ApiOperation({ summary: 'Get applications for a property' })
   getApplicationsForProperty(@Param('propertyId') propertyId: string, @CurrentUser() currentUser: AuthenticatedUser) {
     return this.propertyService.getApplicationsForProperty(propertyId, currentUser);
+  }
+
+  @Get(':propertyId/manage')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get property management detail' })
+  getManagementDetail(@Param('propertyId') propertyId: string, @CurrentUser() currentUser: AuthenticatedUser) {
+    return this.propertyService.getManagementDetail(propertyId, currentUser);
   }
 }
