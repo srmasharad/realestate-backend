@@ -27,6 +27,17 @@ import { UpdatePropertyPublishDto } from './dto/update-property-publish.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 import { UploadPropertyMediaDto } from './dto/upload-property-media.dto';
 
+type PropertyAnalyticsProperty = {
+  id: string;
+  title: string;
+  agencyId: string | null;
+  createdById: string;
+  assignedAgentMemberId: string | null;
+  isPublished: boolean;
+  isArchived: boolean;
+  isLocked: boolean;
+};
+
 @Injectable()
 export class PropertiesService {
   constructor(
@@ -1208,6 +1219,224 @@ export class PropertiesService {
           paid: paidPayments,
           totalPaidAmount: paidAmount._sum.totalAmount ?? 0,
         },
+      },
+    };
+  }
+
+  async getPropertyAnalytics(propertyId: string, currentUser: AuthenticatedUser) {
+    const property: PropertyAnalyticsProperty | null = await this.prisma.property.findFirst({
+      where: {
+        id: propertyId,
+      },
+      select: {
+        id: true,
+        title: true,
+        agencyId: true,
+        createdById: true,
+        assignedAgentMemberId: true,
+        isPublished: true,
+        isArchived: true,
+        isLocked: true,
+      },
+    });
+
+    if (!property) {
+      throw new NotFoundException('Property not found');
+    }
+
+    if (!property.agencyId) {
+      throw new BadRequestException('Property is not linked to an agency');
+    }
+
+    if (currentUser.role !== UserRole.ADMIN) {
+      const membership = await this.prisma.agencyMember.findFirst({
+        where: {
+          userId: currentUser.id,
+          agencyId: property.agencyId,
+          isActive: true,
+        },
+        select: {
+          id: true,
+          role: true,
+        },
+      });
+
+      if (!membership) {
+        throw new ForbiddenException('You do not belong to this agency');
+      }
+
+      const canManage =
+        membership.role === AgencyMemberRole.AGENCY_OWNER ||
+        membership.role === AgencyMemberRole.AGENCY_ADMIN ||
+        property.assignedAgentMemberId === membership.id ||
+        property.createdById === currentUser.id;
+
+      if (!canManage) {
+        throw new ForbiddenException('You are not allowed to view this property analytics');
+      }
+    }
+
+    const [
+      totalApplications,
+      pendingApplications,
+      approvedApplications,
+      rejectedApplications,
+
+      totalOffers,
+      pendingOffers,
+      acceptedOffers,
+      declinedOffers,
+
+      totalLeaseAgreements,
+      draftLeaseAgreements,
+      sentLeaseAgreements,
+      signedLeaseAgreements,
+      cancelledLeaseAgreements,
+
+      totalTenancies,
+      activeTenancies,
+      endedTenancies,
+      cancelledTenancies,
+
+      totalPayments,
+      pendingPayments,
+      paidPayments,
+      cancelledPayments,
+      paidAmount,
+      pendingAmount,
+    ] = await this.prisma.$transaction([
+      this.prisma.application.count({
+        where: { propertyId },
+      }),
+      this.prisma.application.count({
+        where: { propertyId, status: 'PENDING' },
+      }),
+      this.prisma.application.count({
+        where: { propertyId, status: 'APPROVED' },
+      }),
+      this.prisma.application.count({
+        where: { propertyId, status: 'REJECTED' },
+      }),
+
+      this.prisma.offer.count({
+        where: { propertyId },
+      }),
+      this.prisma.offer.count({
+        where: { propertyId, status: 'PENDING' },
+      }),
+      this.prisma.offer.count({
+        where: { propertyId, status: 'ACCEPTED' },
+      }),
+      this.prisma.offer.count({
+        where: { propertyId, status: 'DECLINED' },
+      }),
+
+      this.prisma.leaseAgreement.count({
+        where: { propertyId },
+      }),
+      this.prisma.leaseAgreement.count({
+        where: { propertyId, status: 'DRAFT' },
+      }),
+      this.prisma.leaseAgreement.count({
+        where: { propertyId, status: 'SENT' },
+      }),
+      this.prisma.leaseAgreement.count({
+        where: { propertyId, status: 'SIGNED' },
+      }),
+      this.prisma.leaseAgreement.count({
+        where: { propertyId, status: 'CANCELLED' },
+      }),
+
+      this.prisma.tenancy.count({
+        where: { propertyId },
+      }),
+      this.prisma.tenancy.count({
+        where: { propertyId, status: 'ACTIVE' },
+      }),
+      this.prisma.tenancy.count({
+        where: { propertyId, status: 'ENDED' },
+      }),
+      this.prisma.tenancy.count({
+        where: { propertyId, status: 'CANCELLED' },
+      }),
+
+      this.prisma.paymentRequest.count({
+        where: { propertyId },
+      }),
+      this.prisma.paymentRequest.count({
+        where: { propertyId, status: 'PENDING' },
+      }),
+      this.prisma.paymentRequest.count({
+        where: { propertyId, status: 'PAID' },
+      }),
+      this.prisma.paymentRequest.count({
+        where: { propertyId, status: 'CANCELLED' },
+      }),
+      this.prisma.paymentRequest.aggregate({
+        where: {
+          propertyId,
+          status: 'PAID',
+        },
+        _sum: {
+          totalAmount: true,
+        },
+      }),
+      this.prisma.paymentRequest.aggregate({
+        where: {
+          propertyId,
+          status: 'PENDING',
+        },
+        _sum: {
+          totalAmount: true,
+        },
+      }),
+    ]);
+
+    return {
+      property: {
+        id: property.id,
+        title: property.title,
+        isPublished: property.isPublished,
+        isArchived: property.isArchived,
+        isLocked: property.isLocked,
+      },
+
+      applications: {
+        total: totalApplications,
+        pending: pendingApplications,
+        approved: approvedApplications,
+        rejected: rejectedApplications,
+      },
+
+      offers: {
+        total: totalOffers,
+        pending: pendingOffers,
+        accepted: acceptedOffers,
+        declined: declinedOffers,
+      },
+
+      leaseAgreements: {
+        total: totalLeaseAgreements,
+        draft: draftLeaseAgreements,
+        sent: sentLeaseAgreements,
+        signed: signedLeaseAgreements,
+        cancelled: cancelledLeaseAgreements,
+      },
+
+      tenancies: {
+        total: totalTenancies,
+        active: activeTenancies,
+        ended: endedTenancies,
+        cancelled: cancelledTenancies,
+      },
+
+      payments: {
+        total: totalPayments,
+        pending: pendingPayments,
+        paid: paidPayments,
+        cancelled: cancelledPayments,
+        totalPaidAmount: paidAmount._sum.totalAmount ?? 0,
+        totalPendingAmount: pendingAmount._sum.totalAmount ?? 0,
       },
     };
   }

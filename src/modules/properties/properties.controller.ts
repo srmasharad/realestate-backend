@@ -165,4 +165,12 @@ export class PropertiesController {
   getManagementDetail(@Param('propertyId') propertyId: string, @CurrentUser() currentUser: AuthenticatedUser) {
     return this.propertyService.getManagementDetail(propertyId, currentUser);
   }
+
+  @Get(':propertyId/analytics')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get property analytics snapshot' })
+  getPropertyAnalytics(@Param('propertyId') propertyId: string, @CurrentUser() currentUser: AuthenticatedUser) {
+    return this.propertyService.getPropertyAnalytics(propertyId, currentUser);
+  }
 }
