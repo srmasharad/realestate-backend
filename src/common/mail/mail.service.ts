@@ -2,6 +2,18 @@ import { Resend } from 'resend';
 
 import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 
+import { AgencyMemberAddedEmailTemplate } from './templates/agency-member-added-email.template';
+import { AgencyMemberDeactivatedEmailTemplate } from './templates/agency-member-deactivated-email.template';
+import { AgencyOnboardingAdminEmailTemplate } from './templates/agency-onboarding-admin-email.template';
+import { AgencyOnboardingReceivedEmailTemplate } from './templates/agency-onboarding-received-email.template';
+import { AgencyStatusEmailTemplate } from './templates/agency-status-email.template';
+import { AgentPropertyAssignmentEmailTemplate } from './templates/agent-property-assignment-email.template';
+import { ApplicationStatusEmailTemplate } from './templates/application-status-email.template';
+import { LeaseAgreementReadyEmailTemplate } from './templates/lease-agreement-ready-email.template';
+import { LeaseAgreementSignedEmailTemplate } from './templates/lease-agreement-signed-email.template';
+import { OfferCreatedEmailTemplate } from './templates/offer-created-email.template';
+import { PasswordResetEmailTemplate } from './templates/password-reset-email.template';
+import { PaymentSuccessEmailTemplate } from './templates/payment-success-email.template';
 import { VerifyEmailTemplate } from './templates/verify-email.template';
 
 @Injectable()
@@ -26,15 +38,6 @@ export class MailService {
       to: [recipient],
       subject: 'Real estate - Verify your email',
       react: VerifyEmailTemplate({ fullName, verifyUrl }),
-      // html: `
-      // 	<h2>Verify your email</h2>
-
-      //   <p>Hello ${fullName},</p>
-
-      // 	<p>Please click the link below to verify your account:</p>
-      // 	<p><a href="${verifyUrl}">${verifyUrl}</a></p>
-      // 	<p>This link will expire in 24 hours.</p>
-      // `,
     });
 
     if (error) {
@@ -64,28 +67,13 @@ export class MailService {
         ? 'Your property application has been approved'
         : 'Your property application has been rejected';
 
-    const html =
-      status === 'APPROVED'
-        ? `
-        <h2>Application Approved</h2>
-        <p>Hello ${fullName},</p>
-        <p>Your application for <strong>${propertyTitle}</strong> has been approved.</p>
-        <p>Our team will contact you with the next steps.</p>
-      `
-        : `
-        <h2>Application Update</h2>
-        <p>Hello ${fullName},</p>
-        <p>Your application for <strong>${propertyTitle}</strong> has not been successful at this stage.</p>
-        <p>Thank you for your interest.</p>
-      `;
-
     const recipient = process.env.NODE_ENV === 'development' ? (process.env.MAIL_DEV_TO ?? 'delivered@resend.dev') : to;
 
     const { error } = await this.resend.emails.send({
       from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
       to: [recipient],
       subject,
-      html,
+      react: ApplicationStatusEmailTemplate({ fullName, propertyTitle, status }),
     });
 
     if (error) {
@@ -100,13 +88,7 @@ export class MailService {
       from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
       to: [recipient],
       subject: 'Your agency onboarding request has been received',
-      html: `
-      <h2>Agency onboarding received</h2>
-      <p>Hello ${contactName},</p>
-      <p>Your agency onboarding request for <strong>${agencyName}</strong> has been received.</p>
-      <p>Your request is currently pending admin review.</p>
-      <p>We will notify you again once your agency has been approved or rejected.</p>
-    `,
+      react: AgencyOnboardingReceivedEmailTemplate({ contactName, agencyName }),
     });
 
     if (error) {
@@ -128,14 +110,7 @@ export class MailService {
       from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
       to: [recipient],
       subject: 'New agency onboarding request submitted',
-      html: `
-      <h2>New agency onboarding request</h2>
-      <p>A new agency onboarding request has been submitted.</p>
-      <p><strong>Agency:</strong> ${agencyName}</p>
-      <p><strong>Contact Name:</strong> ${contactName}</p>
-      <p><strong>Contact Email:</strong> ${contactEmail}</p>
-      <p><strong>Status:</strong> PENDING</p>
-    `,
+      react: AgencyOnboardingAdminEmailTemplate({ agencyName, contactName, contactEmail }),
     });
 
     if (error) {
@@ -150,12 +125,7 @@ export class MailService {
       from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
       to: [recipient],
       subject: 'Your agency has been approved',
-      html: `
-      <h2>Agency approved</h2>
-      <p>Hello ${contactName},</p>
-      <p>Your agency <strong>${agencyName}</strong> has been approved.</p>
-      <p>You can now continue with agency-related operations on the platform.</p>
-    `,
+      react: AgencyStatusEmailTemplate({ contactName, agencyName, status: 'APPROVED' }),
     });
 
     if (error) {
@@ -170,12 +140,7 @@ export class MailService {
       from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
       to: [recipient],
       subject: 'Your agency onboarding request was not approved',
-      html: `
-      <h2>Agency onboarding update</h2>
-      <p>Hello ${contactName},</p>
-      <p>Your agency onboarding request for <strong>${agencyName}</strong> was not approved.</p>
-      <p>If needed, the platform team may contact you with further details.</p>
-    `,
+      react: AgencyStatusEmailTemplate({ contactName, agencyName, status: 'REJECTED' }),
     });
 
     if (error) {
@@ -190,12 +155,7 @@ export class MailService {
       from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
       to: [recipient],
       subject: 'Your agency account has been suspended',
-      html: `
-      <h2>Agency suspended</h2>
-      <p>Hello ${contactName},</p>
-      <p>Your agency <strong>${agencyName}</strong> has been suspended.</p>
-      <p>If you believe this is a mistake, please contact platform support.</p>
-    `,
+      react: AgencyStatusEmailTemplate({ contactName, agencyName, status: 'SUSPENDED' }),
     });
 
     if (error) {
@@ -216,14 +176,7 @@ export class MailService {
       from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
       to: [recipient],
       subject: `You have been added to ${agencyName}`,
-      html: `
-      <h2>Agency account created</h2>
-      <p>Hello ${fullName},</p>
-      <p>You have been added to <strong>${agencyName}</strong> as <strong>${role}</strong>.</p>
-      <p>You can log in using this temporary password:</p>
-      <p><strong>${temporaryPassword}</strong></p>
-      <p>Please change your password after logging in.</p>
-    `,
+      react: AgencyMemberAddedEmailTemplate({ fullName, agencyName, role, temporaryPassword }),
     });
 
     if (error) {
@@ -238,11 +191,7 @@ export class MailService {
       from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
       to: [recipient],
       subject: `You have been assigned to ${propertyTitle}`,
-      html: `
-      <h2>Property assignment</h2>
-      <p>Hello ${fullName},</p>
-      <p>You have been assigned to manage <strong>${propertyTitle}</strong> for <strong>${agencyName}</strong>.</p>
-    `,
+      react: AgentPropertyAssignmentEmailTemplate({ fullName, propertyTitle, agencyName, action: 'ASSIGNED' }),
     });
 
     if (error) {
@@ -257,11 +206,7 @@ export class MailService {
       from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
       to: [recipient],
       subject: `You have been removed from ${propertyTitle}`,
-      html: `
-      <h2>Property assignment removed</h2>
-      <p>Hello ${fullName},</p>
-      <p>You have been removed from managing <strong>${propertyTitle}</strong> for <strong>${agencyName}</strong>.</p>
-    `,
+      react: AgentPropertyAssignmentEmailTemplate({ fullName, propertyTitle, agencyName, action: 'REMOVED' }),
     });
 
     if (error) {
@@ -276,15 +221,7 @@ export class MailService {
       from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
       to: [recipient],
       subject: 'Reset your password',
-      html: `
-      <h2>Password Reset Request</h2>
-      <p>Hello ${fullName},</p>
-      <p>We received a request to reset your password.</p>
-      <p>Click the link below to reset your password:</p>
-      <p><a href="${resetUrl}">Reset Password</a></p>
-      <p>This link will expire soon.</p>
-      <p>If you did not request this, you can ignore this email.</p>
-    `,
+      react: PasswordResetEmailTemplate({ fullName, resetUrl }),
     });
 
     if (error) {
@@ -299,13 +236,7 @@ export class MailService {
       from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
       to: [recipient],
       subject: 'You have been removed from the agency',
-      html: `
-      <div style="font-family: Arial, sans-serif;">
-        <h2>Hello ${fullName},</h2>
-        <p>You have been removed from <strong>${agencyName}</strong>.</p>
-        <p>If you believe this was a mistake, please contact the agency.</p>
-      </div>
-    `,
+      react: AgencyMemberDeactivatedEmailTemplate({ fullName, agencyName }),
     });
 
     if (error) {
@@ -321,14 +252,7 @@ export class MailService {
       to: [recipient],
       // replyTo: process.env.MAIL_REPLY_TO,
       subject: 'You have received a rental offer',
-      html: `
-      <h2>Rental Offer Received</h2>
-      <p>Hello ${fullName},</p>
-      <p>You have received a rental offer for <strong>${propertyTitle}</strong>.</p>
-      <p>Your rental application has progressed to the formal offer stage.</p>
-      <p>Please log in to your account to review the rental offer, including rent, bond, advance rent, lease dates, and expiry date.</p>
-      <p>You must accept or decline the offer before it expires.</p>
-    `,
+      react: OfferCreatedEmailTemplate({ fullName, propertyTitle }),
     });
 
     if (error) {
@@ -339,52 +263,23 @@ export class MailService {
   async sendPaymentSuccessEmail(to: string, fullName: string, propertyTitle: string) {
     const recipient = process.env.NODE_ENV === 'development' ? (process.env.MAIL_DEV_TO ?? 'delivered@resend.dev') : to;
 
-    const html = `
-    <h2>Payment Confirmed</h2>
-    <p>Hi ${fullName},</p>
-    <p>Your payment for <strong>${propertyTitle}</strong> has been successfully received.</p>
-    <p>The property is now secured for you.</p>
-    <p>Next steps:</p>
-    <ul>
-      <li>Lease agreement will be shared shortly</li>
-      <li>Please prepare for move-in</li>
-    </ul>
-  `;
-
     await this.resend.emails.send({
       from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
       to: [recipient],
       subject: 'Payment Confirmed — Property Secured',
-      html,
+      react: PaymentSuccessEmailTemplate({ fullName, propertyTitle }),
     });
   }
 
   async sendLeaseAgreementReadyEmail(to: string, fullName: string, propertyTitle: string, agreementUrl?: string) {
     const recipient = process.env.NODE_ENV === 'development' ? (process.env.MAIL_DEV_TO ?? 'delivered@resend.dev') : to;
 
-    const linkSection = agreementUrl ? `<p><a href="${agreementUrl}" target="_blank">View Lease Agreement</a></p>` : '';
-
     const { error } = await this.resend.emails.send({
       from: process.env.MAIL_FROM ?? 'Acme <onboarding@resend.dev>',
       to: [recipient],
       // replyTo: process.env.MAIL_REPLY_TO,
       subject: 'Your Lease Agreement is Ready',
-      html: `
-      <h2>Lease Agreement Ready</h2>
-      <p>Hello ${fullName},</p>
-
-      <p>Your lease agreement for <strong>${propertyTitle}</strong> is now ready.</p>
-
-      ${linkSection}
-
-      <p>Please review and sign the agreement using the provided link.</p>
-
-      <p>If you have any questions, please contact the agency.</p>
-
-      <br/>
-      <p>Thank you,</p>
-      <p>Real Estate Team</p>
-    `,
+      react: LeaseAgreementReadyEmailTemplate({ fullName, propertyTitle, agreementUrl }),
     });
 
     if (error) {
@@ -400,22 +295,7 @@ export class MailService {
       to: [recipient],
       // replyTo: process.env.MAIL_REPLY_TO,
       subject: 'Lease Agreement Completed',
-      html: `
-      <h2>Lease Agreement Completed</h2>
-
-      <p>Hello ${fullName},</p>
-
-      <p>Your lease agreement for <strong>${propertyTitle}</strong> has been successfully completed.</p>
-
-      <p>The agency has confirmed your signed agreement.</p>
-
-      <p>You will be contacted regarding the next move-in steps.</p>
-
-      <br />
-
-      <p>Thank you,</p>
-      <p>Real Estate Team</p>
-    `,
+      react: LeaseAgreementSignedEmailTemplate({ fullName, propertyTitle }),
     });
 
     if (error) {
