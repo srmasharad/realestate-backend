@@ -1,39 +1,23 @@
 import { CloudinaryService } from 'src/common/cloudinary/cloudinary.service';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { PaginatedResponse } from 'src/common/types/paginated-response.type';
-import {
-  PropertyMediaItem,
-  UploadedImageFile,
-} from 'src/common/types/uploaded-image-file.type';
+import { PropertyMediaItem, UploadedImageFile } from 'src/common/types/uploaded-image-file.type';
 
-import {
-  BadRequestException,
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 
 import { PrismaService } from '../../database/prisma.service';
-import {
-  AgencyMemberRole,
-  AgencyStatus,
-  MediaVisibility,
-  PropertyMediaType,
-  UserRole,
-} from '../../generated/prisma';
+import { AgencyMemberRole, AgencyStatus, MediaVisibility, PropertyMediaType, UserRole } from '../../generated/prisma';
 import { AuthenticatedUser } from '../auth/types/authenticated-user.type';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyPublishDto } from './dto/update-property-publish.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 import { UploadPropertyMediaDto } from './dto/upload-property-media.dto';
 
-type PropertyAnalyticsProperty = {
+type ManageablePropertyAccess = {
   id: string;
-  title: string;
   agencyId: string | null;
   createdById: string;
   assignedAgentMemberId: string | null;
-  isPublished: boolean;
   isArchived: boolean;
   isLocked: boolean;
 };
@@ -45,14 +29,21 @@ export class PropertiesService {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
-  private async ensureCanManageProperty(currentUser: AuthenticatedUser, propertyId: string) {
+  private async ensureCanManageProperty(
+    currentUser: AuthenticatedUser,
+    propertyId: string,
+    options?: {
+      allowArchived?: boolean;
+    },
+  ): Promise<ManageablePropertyAccess> {
     // Get Property
-    const property = await this.prisma.property.findUnique({
+    const property = await this.prisma.property.findFirst({
       where: { id: propertyId },
       select: {
         id: true,
         agencyId: true,
         createdById: true,
+        assignedAgentMemberId: true,
         isArchived: true,
         isLocked: true,
       },
@@ -62,36 +53,59 @@ export class PropertiesService {
       throw new NotFoundException('Property not found');
     }
 
-    if (property.isArchived) {
+    const typedProperty: ManageablePropertyAccess = {
+      id: property.id,
+      agencyId: property.agencyId,
+      createdById: property.createdById,
+      assignedAgentMemberId: property.assignedAgentMemberId,
+      isArchived: property.isArchived,
+      isLocked: property.isLocked,
+    };
+
+    if (!typedProperty.agencyId) {
+      throw new BadRequestException('Property is not linked to an agency');
+    }
+
+    if (typedProperty.isArchived && !options?.allowArchived) {
       throw new BadRequestException('Archived properties cannot be managed');
     }
 
-    // ADMIN can do everything
     if (currentUser.role === UserRole.ADMIN) {
-      return property;
+      return typedProperty;
     }
 
     // Find user's agency membership
     const membership = await this.prisma.agencyMember.findFirst({
       where: {
         userId: currentUser.id,
+        agencyId: typedProperty.agencyId,
         isActive: true,
         agency: {
           status: AgencyStatus.APPROVED,
         },
       },
       select: {
-        agencyId: true,
+        id: true,
         role: true,
       },
     });
 
     // Validate ownership
-    if (!membership || property.agencyId !== membership.agencyId) {
-      throw new ForbiddenException('Your are not allowed to manage this property');
+    if (!membership) {
+      throw new ForbiddenException('You do not belong to this agency');
     }
 
-    return property;
+    const canManage =
+      membership.role === AgencyMemberRole.AGENCY_OWNER ||
+      membership.role === AgencyMemberRole.AGENCY_ADMIN ||
+      typedProperty.assignedAgentMemberId === membership.id ||
+      typedProperty.createdById === currentUser.id;
+
+    if (!canManage) {
+      throw new ForbiddenException('You are not allowed to manage this property');
+    }
+
+    return typedProperty;
   }
 
   async create(createPropertyDto: CreatePropertyDto, currentUser: AuthenticatedUser) {
@@ -156,18 +170,17 @@ export class PropertiesService {
   }
 
   async update(propertyId: string, dto: UpdatePropertyDto, currentUser: AuthenticatedUser) {
-    const property = await this.prisma.property.findFirst({
+    const property = await this.ensureCanManageProperty(currentUser, propertyId);
+
+    if (property.isLocked && currentUser.role !== UserRole.ADMIN) {
+      throw new BadRequestException('Locked properties cannot be modified');
+    }
+
+    const tenancyInfo = await this.prisma.property.findUnique({
       where: {
         id: propertyId,
-        isArchived: false,
       },
       select: {
-        id: true,
-        agencyId: true,
-        assignedAgentMemberId: true,
-        createdById: true,
-        isPublished: true,
-        isLocked: true,
         tenancies: {
           where: {
             status: 'ACTIVE',
@@ -179,48 +192,11 @@ export class PropertiesService {
       },
     });
 
-    if (!property) {
+    if (!tenancyInfo) {
       throw new NotFoundException('Property not found');
     }
 
-    if (!property.agencyId) {
-      throw new BadRequestException('Property is not linked to an agency');
-    }
-
-    if (property.isLocked && currentUser.role !== UserRole.ADMIN) {
-      throw new BadRequestException('Locked properties cannot be modified');
-    }
-
-    // ADMIN override
-    if (currentUser.role !== UserRole.ADMIN) {
-      const membership = await this.prisma.agencyMember.findFirst({
-        where: {
-          userId: currentUser.id,
-          agencyId: property.agencyId,
-          isActive: true,
-        },
-        select: {
-          id: true,
-          role: true,
-        },
-      });
-
-      if (!membership) {
-        throw new ForbiddenException('You do not belong to this agency');
-      }
-
-      const canManage =
-        membership.role === AgencyMemberRole.AGENCY_OWNER ||
-        membership.role === AgencyMemberRole.AGENCY_ADMIN ||
-        property.assignedAgentMemberId === membership.id ||
-        property.createdById === currentUser.id;
-
-      if (!canManage) {
-        throw new ForbiddenException('You are not allowed to update this property');
-      }
-    }
-
-    const activeTenancies = property.tenancies as Array<{ id: string }>;
+    const activeTenancies = tenancyInfo.tenancies as Array<{ id: string }>;
 
     // Prevent critical edits during active tenancy
     if (activeTenancies.length > 0) {
@@ -251,6 +227,8 @@ export class PropertiesService {
         bathrooms: true,
         parkingSpaces: true,
         isPublished: true,
+        isArchived: true,
+        isLocked: true,
         updatedAt: true,
       },
     });
@@ -262,64 +240,23 @@ export class PropertiesService {
   }
 
   async remove(propertyId: string, currentUser: AuthenticatedUser) {
-    const property = await this.prisma.property.findFirst({
-      where: {
-        id: propertyId,
-        isArchived: false,
-      },
+    const property = await this.ensureCanManageProperty(currentUser, propertyId);
+
+    const tenancyInfo = await this.prisma.property.findUnique({
+      where: { id: property.id },
       select: {
-        id: true,
-        agencyId: true,
-        assignedAgentMemberId: true,
-        createdById: true,
         tenancies: {
-          where: {
-            status: 'ACTIVE',
-          },
-          select: {
-            id: true,
-          },
+          where: { status: 'ACTIVE' },
+          select: { id: true },
         },
       },
     });
 
-    if (!property) {
+    if (!tenancyInfo) {
       throw new NotFoundException('Property not found');
     }
 
-    if (!property.agencyId) {
-      throw new BadRequestException('Property is not linked to an agency');
-    }
-
-    if (currentUser.role !== UserRole.ADMIN) {
-      const membership = await this.prisma.agencyMember.findFirst({
-        where: {
-          userId: currentUser.id,
-          agencyId: property.agencyId,
-          isActive: true,
-        },
-        select: {
-          id: true,
-          role: true,
-        },
-      });
-
-      if (!membership) {
-        throw new ForbiddenException('You do not belong to this agency');
-      }
-
-      const canManage =
-        membership.role === AgencyMemberRole.AGENCY_OWNER ||
-        membership.role === AgencyMemberRole.AGENCY_ADMIN ||
-        property.assignedAgentMemberId === membership.id ||
-        property.createdById === currentUser.id;
-
-      if (!canManage) {
-        throw new ForbiddenException('You are not allowed to archive this property');
-      }
-    }
-
-    const activeTenancies = property.tenancies as Array<{ id: string }>;
+    const activeTenancies = tenancyInfo.tenancies as Array<{ id: string }>;
 
     if (activeTenancies.length > 0) {
       throw new BadRequestException('Property cannot be archived while it has an active tenancy');
@@ -373,6 +310,7 @@ export class PropertiesService {
       ? {
           isPublished: true,
           isArchived: false,
+          isLocked: false,
           OR: [
             {
               title: {
@@ -409,6 +347,7 @@ export class PropertiesService {
       : {
           isPublished: true,
           isArchived: false,
+          isLocked: false,
         };
 
     const [properties, total] = await this.prisma.$transaction([
@@ -484,6 +423,7 @@ export class PropertiesService {
         id,
         isPublished: true,
         isArchived: false,
+        isLocked: false,
       },
       select: {
         id: true,
@@ -728,6 +668,8 @@ export class PropertiesService {
   }
 
   async updatePublishStatus(propertyId: string, dto: UpdatePropertyPublishDto, currentUser: AuthenticatedUser) {
+    await this.ensureCanManageProperty(currentUser, propertyId);
+
     const property = await this.prisma.property.findFirst({
       where: {
         id: propertyId,
@@ -768,34 +710,8 @@ export class PropertiesService {
       throw new BadRequestException('Archived properties cannot be published');
     }
 
-    // permission check
-    if (currentUser.role !== UserRole.ADMIN) {
-      const membership = await this.prisma.agencyMember.findFirst({
-        where: {
-          userId: currentUser.id,
-          agencyId: property.agencyId as string,
-          isActive: true,
-        },
-
-        select: {
-          id: true,
-          role: true,
-        },
-      });
-
-      if (!membership) {
-        throw new ForbiddenException('You do not belong to this agency');
-      }
-
-      const canManage =
-        membership.role === AgencyMemberRole.AGENCY_OWNER ||
-        membership.role === AgencyMemberRole.AGENCY_ADMIN ||
-        property.assignedAgentMemberId === membership.id ||
-        property.createdById === currentUser.id;
-
-      if (!canManage) {
-        throw new ForbiddenException('You are not allowed to manage this property');
-      }
+    if (dto.isPublished && property.isLocked) {
+      throw new BadRequestException('Locked properties cannot be published');
     }
 
     const mediaItems = property.media as Array<{ id: string }>;
@@ -825,45 +741,29 @@ export class PropertiesService {
       where: {
         id: propertyId,
       },
-
       data: {
         isPublished: dto.isPublished,
       },
-
       select: {
         id: true,
         title: true,
         isPublished: true,
+        isArchived: true,
+        isLocked: true,
         updatedAt: true,
       },
     });
 
     return {
       message: dto.isPublished ? 'Property published successfully' : 'Property unpublished successfully',
-
       property: updatedProperty,
     };
   }
 
   async restoreProperty(propertyId: string, currentUser: AuthenticatedUser) {
-    const property = await this.prisma.property.findFirst({
-      where: {
-        id: propertyId,
-        createdById: currentUser.id,
-      },
-      select: {
-        id: true,
-        title: true,
-        isArchived: true,
-        isPublished: true,
-        isLocked: true,
-        updatedAt: true,
-      },
+    const property = await this.ensureCanManageProperty(currentUser, propertyId, {
+      allowArchived: true,
     });
-
-    if (!property) {
-      throw new NotFoundException('Property not found');
-    }
 
     if (!property.isArchived) {
       throw new BadRequestException('Property is not archived');
@@ -875,6 +775,8 @@ export class PropertiesService {
       },
       data: {
         isArchived: false,
+        deletedAt: null,
+        isPublished: false,
       },
       select: {
         id: true,
@@ -1224,20 +1126,8 @@ export class PropertiesService {
   }
 
   async getPropertyAnalytics(propertyId: string, currentUser: AuthenticatedUser) {
-    const property: PropertyAnalyticsProperty | null = await this.prisma.property.findFirst({
-      where: {
-        id: propertyId,
-      },
-      select: {
-        id: true,
-        title: true,
-        agencyId: true,
-        createdById: true,
-        assignedAgentMemberId: true,
-        isPublished: true,
-        isArchived: true,
-        isLocked: true,
-      },
+    const property = await this.ensureCanManageProperty(currentUser, propertyId, {
+      allowArchived: true,
     });
 
     if (!property) {
@@ -1248,32 +1138,21 @@ export class PropertiesService {
       throw new BadRequestException('Property is not linked to an agency');
     }
 
-    if (currentUser.role !== UserRole.ADMIN) {
-      const membership = await this.prisma.agencyMember.findFirst({
-        where: {
-          userId: currentUser.id,
-          agencyId: property.agencyId,
-          isActive: true,
-        },
-        select: {
-          id: true,
-          role: true,
-        },
-      });
+    const propertyInfo = await this.prisma.property.findUnique({
+      where: {
+        id: property.id,
+      },
+      select: {
+        id: true,
+        title: true,
+        isPublished: true,
+        isArchived: true,
+        isLocked: true,
+      },
+    });
 
-      if (!membership) {
-        throw new ForbiddenException('You do not belong to this agency');
-      }
-
-      const canManage =
-        membership.role === AgencyMemberRole.AGENCY_OWNER ||
-        membership.role === AgencyMemberRole.AGENCY_ADMIN ||
-        property.assignedAgentMemberId === membership.id ||
-        property.createdById === currentUser.id;
-
-      if (!canManage) {
-        throw new ForbiddenException('You are not allowed to view this property analytics');
-      }
+    if (!propertyInfo) {
+      throw new NotFoundException('Property not found');
     }
 
     const [
@@ -1393,13 +1272,7 @@ export class PropertiesService {
     ]);
 
     return {
-      property: {
-        id: property.id,
-        title: property.title,
-        isPublished: property.isPublished,
-        isArchived: property.isArchived,
-        isLocked: property.isLocked,
-      },
+      property: propertyInfo,
 
       applications: {
         total: totalApplications,
