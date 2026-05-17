@@ -2,12 +2,7 @@ import { MailService } from 'src/common/mail/mail.service';
 import { PrismaService } from 'src/database/prisma.service';
 import { ApplicationStatus } from 'src/generated/prisma';
 
-import {
-  BadRequestException,
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 
 import { AuthenticatedUser } from '../auth/types/authenticated-user.type';
 import { CreateApplicationDto } from './dto/create-application.dto';

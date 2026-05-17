@@ -6,7 +6,14 @@ import { PropertyMediaItem, UploadedImageFile } from 'src/common/types/uploaded-
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 
 import { PrismaService } from '../../database/prisma.service';
-import { AgencyMemberRole, AgencyStatus, MediaVisibility, PropertyMediaType, UserRole } from '../../generated/prisma';
+import {
+  AgencyMemberRole,
+  AgencyStatus,
+  MediaVisibility,
+  PropertyMediaType,
+  UserMediaType,
+  UserRole,
+} from '../../generated/prisma';
 import { AuthenticatedUser } from '../auth/types/authenticated-user.type';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyPublishDto } from './dto/update-property-publish.dto';
@@ -296,6 +303,25 @@ export class PropertiesService {
         url: string;
         isPrimary: boolean;
       } | null;
+      agency: {
+        id: string;
+        name: string;
+        slug: string;
+        phone: string | null;
+        email: string;
+      } | null;
+
+      assignedAgent: {
+        id: string;
+        fullName: string;
+        email: string;
+        phone: string | null;
+        isActive: boolean;
+        profileImage: {
+          id: string;
+          url: string;
+        } | null;
+      } | null;
     }>
   > {
     const page = query.page ?? 1;
@@ -385,6 +411,40 @@ export class PropertiesService {
             },
             take: 1,
           },
+          agency: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+              phone: true,
+              email: true,
+            },
+          },
+          assignedAgentMember: {
+            select: {
+              id: true,
+              user: {
+                select: {
+                  id: true,
+                  fullName: true,
+                  email: true,
+                  phone: true,
+                  isActive: true,
+                  media: {
+                    where: {
+                      mediaType: UserMediaType.PROFILE_IMAGE,
+                      isPrimary: true,
+                    },
+                    select: {
+                      id: true,
+                      url: true,
+                    },
+                    take: 1,
+                  },
+                },
+              },
+            },
+          },
           createdAt: true,
         },
       }),
@@ -407,6 +467,17 @@ export class PropertiesService {
         parkingSpaces: property.parkingSpaces,
         createdAt: property.createdAt,
         primaryImage: property.media[0] ?? null,
+        agency: property.agency,
+        assignedAgent: property.assignedAgentMember
+          ? {
+              id: property.assignedAgentMember.id,
+              fullName: property.assignedAgentMember.user.fullName,
+              email: property.assignedAgentMember.user.email,
+              phone: property.assignedAgentMember.user.phone,
+              isActive: property.assignedAgentMember.user.isActive,
+              profileImage: property.assignedAgentMember.user.media[0] ?? null,
+            }
+          : null,
       })),
       meta: {
         page,
@@ -441,6 +512,40 @@ export class PropertiesService {
         parkingSpaces: true,
         isPublished: true,
         createdAt: true,
+        agency: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+            phone: true,
+            email: true,
+          },
+        },
+        assignedAgentMember: {
+          select: {
+            id: true,
+            role: true,
+            user: {
+              select: {
+                id: true,
+                fullName: true,
+                email: true,
+                phone: true,
+                media: {
+                  where: {
+                    mediaType: UserMediaType.PROFILE_IMAGE,
+                    isPrimary: true,
+                  },
+                  select: {
+                    id: true,
+                    url: true,
+                  },
+                  take: 1,
+                },
+              },
+            },
+          },
+        },
         media: {
           where: {
             visibility: MediaVisibility.PUBLIC,
@@ -856,6 +961,17 @@ export class PropertiesService {
                 fullName: true,
                 email: true,
                 phone: true,
+                media: {
+                  where: {
+                    mediaType: UserMediaType.PROFILE_IMAGE,
+                    isPrimary: true,
+                  },
+                  select: {
+                    id: true,
+                    url: true,
+                  },
+                  take: 1,
+                },
               },
             },
           },

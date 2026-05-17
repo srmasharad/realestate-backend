@@ -4,17 +4,8 @@ import { RolesGuard } from 'src/common/guards/roles.guard';
 import { VerifiedEmailGuard } from 'src/common/guards/verified-email.guard';
 import { UserRole } from 'src/generated/prisma';
 
-import {
-  Body,
-  Controller,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { type AuthenticatedUser } from '../auth/types/authenticated-user.type';

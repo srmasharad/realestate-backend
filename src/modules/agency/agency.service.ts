@@ -2,19 +2,9 @@ import * as bcrypt from 'bcrypt';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { MailService } from 'src/common/mail/mail.service';
 import { PrismaService } from 'src/database/prisma.service';
-import {
-  AgencyMemberRole,
-  AgencyStatus,
-  ApplicationStatus,
-  OfferStatus,
-} from 'src/generated/prisma';
+import { AgencyMemberRole, AgencyStatus, ApplicationStatus, OfferStatus, UserMediaType } from 'src/generated/prisma';
 
-import {
-  BadRequestException,
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 
 import { UpdateApplicationStatusDto } from '../applications/dto/update-application-status.dto';
 import { AuthenticatedUser } from '../auth/types/authenticated-user.type';
@@ -193,6 +183,14 @@ export class AgencyService {
     }
 
     return membership;
+  }
+
+  private calculateLeaseEndDate(startDate: Date, leaseMonths: number) {
+    const leaseEndDate = new Date(startDate);
+
+    leaseEndDate.setMonth(leaseEndDate.getMonth() + leaseMonths);
+
+    return leaseEndDate;
   }
 
   async createOnboarding(dto: CreateAgencyOnboardingDto) {
@@ -584,6 +582,17 @@ export class AgencyService {
               email: true,
               phone: true,
               isActive: true,
+              media: {
+                where: {
+                  mediaType: UserMediaType.PROFILE_IMAGE,
+                  isPrimary: true,
+                },
+                select: {
+                  id: true,
+                  url: true,
+                },
+                take: 1,
+              },
             },
           },
         },
@@ -732,7 +741,7 @@ export class AgencyService {
         isArchived: false,
         ...(isAgent
           ? {
-              assignedAgentMemberId: membership.id,
+              OR: [{ assignedAgentMemberId: membership.id }, { createdById: currentUser.id }],
             }
           : {}),
       },
@@ -794,14 +803,91 @@ export class AgencyService {
               email: true,
             },
           },
+          offer: {
+            select: {
+              id: true,
+              status: true,
+              acceptedAt: true,
+              declinedAt: true,
+
+              paymentRequest: {
+                select: {
+                  id: true,
+                  status: true,
+                  paidAt: true,
+                  totalAmount: true,
+                },
+              },
+
+              leaseAgreement: {
+                select: {
+                  id: true,
+                  status: true,
+                  sentAt: true,
+                  signedAt: true,
+                  cancelledAt: true,
+
+                  tenancy: {
+                    select: {
+                      id: true,
+                      status: true,
+                      startDate: true,
+                      endDate: true,
+                      endedAt: true,
+                      cancelledAt: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       }),
 
       this.prisma.application.count({ where }),
     ]);
 
+    const items = applications.map((application) => {
+      const offer = application.offer;
+
+      const paymentRequest = offer?.paymentRequest ?? null;
+
+      const leaseAgreement = offer?.leaseAgreement ?? null;
+
+      const tenancy = leaseAgreement?.tenancy ?? null;
+
+      let workflowStatus: string = application.status;
+
+      if (tenancy?.status === 'ACTIVE') {
+        workflowStatus = 'TENANCY_ACTIVE';
+      } else if (tenancy?.status === 'ENDED') {
+        workflowStatus = 'TENANCY_ENDED';
+      } else if (tenancy?.status === 'CANCELLED') {
+        workflowStatus = 'TENANCY_CANCELLED';
+      } else if (leaseAgreement?.status === 'SIGNED') {
+        workflowStatus = 'LEASE_SIGNED';
+      } else if (leaseAgreement?.status === 'SENT') {
+        workflowStatus = 'LEASE_SENT';
+      } else if (paymentRequest?.status === 'PAID') {
+        workflowStatus = 'PAYMENT_PAID';
+      } else if (paymentRequest?.status === 'PENDING') {
+        workflowStatus = 'PAYMENT_PENDING';
+      } else if (offer?.status === 'ACCEPTED') {
+        workflowStatus = 'OFFER_ACCEPTED';
+      } else if (offer?.status === 'DECLINED') {
+        workflowStatus = 'OFFER_DECLINED';
+      } else if (offer?.status === 'PENDING') {
+        workflowStatus = 'OFFER_PENDING';
+      }
+
+      return {
+        ...application,
+        workflowStatus,
+      };
+    });
+
     return {
-      items: applications,
+      items,
       meta: {
         total,
         page,
@@ -857,6 +943,60 @@ export class AgencyService {
 
     if (!application) {
       throw new NotFoundException('Application not found for this agency');
+    }
+
+    // Prevent modification after signed lease
+    const signedLease = await this.prisma.leaseAgreement.findFirst({
+      where: {
+        offer: {
+          applicationId,
+        },
+        status: 'SIGNED',
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (signedLease) {
+      throw new BadRequestException('Application cannot be modified after lease agreement is signed');
+    }
+
+    // Prevent modification after active tenancy
+    const activeTenancy = await this.prisma.tenancy.findFirst({
+      where: {
+        leaseAgreement: {
+          offer: {
+            applicationId,
+          },
+        },
+        status: 'ACTIVE',
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (activeTenancy) {
+      throw new BadRequestException('Application cannot be modified after tenancy activation');
+    }
+
+    // Prevent modification after payment completed
+
+    const paidPayment = await this.prisma.paymentRequest.findFirst({
+      where: {
+        offer: {
+          applicationId,
+        },
+        status: 'PAID',
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (paidPayment) {
+      throw new BadRequestException('Application cannot be modified after payment completion');
     }
 
     if (application.property.isArchived) {
@@ -1378,8 +1518,7 @@ export class AgencyService {
       throw new BadRequestException('Offer expiry date must be before the lease start date');
     }
 
-    const leaseEndDate = new Date(leaseStartDate);
-    leaseEndDate.setMonth(leaseEndDate.getMonth() + dto.leaseMonths);
+    const leaseEndDate = this.calculateLeaseEndDate(leaseStartDate, dto.leaseMonths);
 
     const weeklyRent = dto.weeklyRent;
     const bondAmount = weeklyRent * 4;
@@ -2053,6 +2192,19 @@ export class AgencyService {
                     id: true,
                     fullName: true,
                     email: true,
+                    phone: true,
+                    isActive: true,
+                    media: {
+                      where: {
+                        mediaType: UserMediaType.PROFILE_IMAGE,
+                        isPrimary: true,
+                      },
+                      select: {
+                        id: true,
+                        url: true,
+                      },
+                      take: 1,
+                    },
                   },
                 },
               },

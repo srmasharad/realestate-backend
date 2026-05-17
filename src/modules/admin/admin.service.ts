@@ -1,13 +1,9 @@
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { MailService } from 'src/common/mail/mail.service';
 import { PrismaService } from 'src/database/prisma.service';
-import { AgencyStatus } from 'src/generated/prisma';
+import { AgencyStatus, UserMediaType } from 'src/generated/prisma';
 
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 
 import { GetAgenciesQueryDto } from './dto/get-agencies-query.dto';
 import { UpdateAgencyStatusDto } from './dto/update-agency-status.dto';
@@ -375,6 +371,20 @@ export class AdminService {
                       id: true,
                       fullName: true,
                       email: true,
+                      phone: true,
+                      isActive: true,
+
+                      media: {
+                        where: {
+                          mediaType: UserMediaType.PROFILE_IMAGE,
+                          isPrimary: true,
+                        },
+                        select: {
+                          id: true,
+                          url: true,
+                        },
+                        take: 1,
+                      },
                     },
                   },
                 },
@@ -467,6 +477,19 @@ export class AdminService {
                     id: true,
                     fullName: true,
                     email: true,
+                    phone: true,
+                    isActive: true,
+                    media: {
+                      where: {
+                        mediaType: UserMediaType.PROFILE_IMAGE,
+                        isPrimary: true,
+                      },
+                      select: {
+                        id: true,
+                        url: true,
+                      },
+                      take: 1,
+                    },
                   },
                 },
               },
