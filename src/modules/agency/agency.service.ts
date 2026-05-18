@@ -1,6 +1,7 @@
 import * as bcrypt from 'bcrypt';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { MailService } from 'src/common/mail/mail.service';
+import { addMonths } from 'src/common/utils/date.utils';
 import { PrismaService } from 'src/database/prisma.service';
 import { AgencyMemberRole, AgencyStatus, ApplicationStatus, OfferStatus, UserMediaType } from 'src/generated/prisma';
 
@@ -186,11 +187,7 @@ export class AgencyService {
   }
 
   private calculateLeaseEndDate(startDate: Date, leaseMonths: number) {
-    const leaseEndDate = new Date(startDate);
-
-    leaseEndDate.setMonth(leaseEndDate.getMonth() + leaseMonths);
-
-    return leaseEndDate;
+    return addMonths(startDate, leaseMonths);
   }
 
   async createOnboarding(dto: CreateAgencyOnboardingDto) {
@@ -1681,7 +1678,7 @@ export class AgencyService {
         propertyId: true,
         applicantId: true,
         leaseStartDate: true,
-        leaseEndDate: true,
+        leaseMonths: true,
         weeklyRent: true,
         bondAmount: true,
         advanceRent: true,
@@ -1719,11 +1716,14 @@ export class AgencyService {
       throw new BadRequestException('Lease property is not linked to an agency');
     }
 
+    const leaseEndDate = this.calculateLeaseEndDate(lease.leaseStartDate, lease.leaseMonths);
+
     const result = await this.prisma.$transaction(async (tx) => {
       const updatedLease = await tx.leaseAgreement.update({
         where: { id: lease.id },
         data: {
           status: 'SIGNED',
+          leaseEndDate,
           signedAt: new Date(),
           signedById: currentUser.id,
         },
@@ -1743,7 +1743,7 @@ export class AgencyService {
           agencyId: lease.property.agencyId as string,
           status: 'ACTIVE',
           startDate: lease.leaseStartDate,
-          endDate: lease.leaseEndDate,
+          endDate: leaseEndDate,
           weeklyRent: lease.weeklyRent,
           bondAmount: lease.bondAmount,
           advanceRent: lease.advanceRent,
@@ -2277,16 +2277,20 @@ export class AgencyService {
       throw new BadRequestException('Only active tenancy can be ended');
     }
 
+    const endedAt = new Date();
+
     const result = await this.prisma.$transaction(async (tx) => {
       const updatedTenancy = await tx.tenancy.update({
         where: { id: tenancy.id },
         data: {
           status: 'ENDED',
-          endedAt: new Date(),
+          endDate: endedAt,
+          endedAt,
         },
         select: {
           id: true,
           status: true,
+          endDate: true,
           endedAt: true,
         },
       });
@@ -2335,16 +2339,20 @@ export class AgencyService {
       throw new BadRequestException('Only active tenancy can be cancelled');
     }
 
+    const cancelledAt = new Date();
+
     const result = await this.prisma.$transaction(async (tx) => {
       const updatedTenancy = await tx.tenancy.update({
         where: { id: tenancy.id },
         data: {
           status: 'CANCELLED',
-          cancelledAt: new Date(),
+          endDate: cancelledAt,
+          cancelledAt,
         },
         select: {
           id: true,
           status: true,
+          endDate: true,
           cancelledAt: true,
         },
       });

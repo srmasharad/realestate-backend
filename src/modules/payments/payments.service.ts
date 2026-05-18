@@ -1,5 +1,6 @@
 import { Request } from 'express';
 import { MailService } from 'src/common/mail/mail.service';
+import { addMonths } from 'src/common/utils/date.utils';
 import { PrismaService } from 'src/database/prisma.service';
 import { PaymentRequestStatus } from 'src/generated/prisma';
 import Stripe from 'stripe';
@@ -153,6 +154,8 @@ export class PaymentsService {
       throw new BadRequestException('Offer not accepted');
     }
 
+    const leaseEndDate = addMonths(paymentRequest.offer.leaseStartDate, paymentRequest.offer.leaseMonths);
+
     await this.prisma.$transaction(async (tx) => {
       // Mark payment as PAID
       await tx.paymentRequest.update({
@@ -188,14 +191,21 @@ export class PaymentsService {
         where: {
           offerId: paymentRequest.offerId,
         },
-        update: {},
+        update: {
+          leaseStartDate: paymentRequest.offer.leaseStartDate,
+          leaseEndDate,
+          leaseMonths: paymentRequest.offer.leaseMonths,
+          weeklyRent: paymentRequest.offer.weeklyRent,
+          bondAmount: paymentRequest.bondAmount,
+          advanceRent: paymentRequest.advanceRent,
+        },
         create: {
           offerId: paymentRequest.offerId,
           propertyId: paymentRequest.propertyId,
           applicantId: paymentRequest.applicantId,
           status: 'DRAFT',
           leaseStartDate: paymentRequest.offer.leaseStartDate,
-          leaseEndDate: paymentRequest.offer.leaseEndDate,
+          leaseEndDate,
           leaseMonths: paymentRequest.offer.leaseMonths,
           weeklyRent: paymentRequest.offer.weeklyRent,
           bondAmount: paymentRequest.bondAmount,
