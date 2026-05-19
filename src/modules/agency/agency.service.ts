@@ -1049,9 +1049,8 @@ export class AgencyService {
             NOT: {
               id: applicationId,
             },
-            status: {
-              not: 'REJECTED',
-            },
+            status: ApplicationStatus.PENDING,
+            offer: null,
           },
           select: {
             applicant: {
@@ -1074,9 +1073,11 @@ export class AgencyService {
             NOT: {
               id: applicationId,
             },
+            status: ApplicationStatus.PENDING,
+            offer: null,
           },
           data: {
-            status: 'REJECTED',
+            status: ApplicationStatus.REJECTED,
           },
         });
 
