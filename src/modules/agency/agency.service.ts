@@ -442,6 +442,7 @@ export class AgencyService {
           phone: dto.phone,
           passwordHash,
           isEmailVerified: false,
+          mustChangePassword: true,
         },
         select: {
           id: true,

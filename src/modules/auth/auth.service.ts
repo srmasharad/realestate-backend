@@ -9,6 +9,7 @@ import { BadRequestException, Injectable, NotFoundException, UnauthorizedExcepti
 import { JwtService } from '@nestjs/jwt';
 
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { ForceChangePasswordDto } from './dto/force-change-password.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { GoogleAuthDto } from './dto/google-auth.dto';
 import { LoginDto } from './dto/login.dto';
@@ -129,6 +130,7 @@ export class AuthService {
     return {
       message: 'Login successful',
       accessToken,
+      requiresPasswordChange: user.mustChangePassword,
       user: {
         id: user.id,
         fullName: user.fullName,
@@ -449,6 +451,48 @@ export class AuthService {
     return {
       user,
       accessToken,
+    };
+  }
+
+  async forceChangePassword(currentUser: AuthenticatedUser, dto: ForceChangePasswordDto) {
+    if (dto.newPassword !== dto.confirmPassword) {
+      throw new BadRequestException('Passwords do not match');
+    }
+
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: currentUser.id,
+      },
+      select: {
+        id: true,
+        mustChangePassword: true,
+        passwordHash: true,
+      },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid user');
+    }
+
+    if (!user.mustChangePassword) {
+      throw new BadRequestException('Password change is not required for this account');
+    }
+
+    const newPasswordHash = await bcrypt.hash(dto.newPassword, 10);
+
+    await this.prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        passwordHash: newPasswordHash,
+        mustChangePassword: false,
+        passwordChangedAt: new Date(),
+      },
+    });
+
+    return {
+      message: 'Password created successfully. Please login again with your new password.',
     };
   }
 }

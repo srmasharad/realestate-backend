@@ -5,6 +5,7 @@ import { ApiBadRequestResponse, ApiBearerAuth, ApiOperation, ApiTags, ApiUnautho
 
 import { AuthService } from './auth.service';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { ForceChangePasswordDto } from './dto/force-change-password.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { GoogleAuthDto } from './dto/google-auth.dto';
 import { LoginDto } from './dto/login.dto';
@@ -77,6 +78,16 @@ export class AuthController {
   @ApiOperation({ summary: 'Change current user password' })
   changePassword(@CurrentUser() currentUser: AuthenticatedUser, @Body() dto: ChangePasswordDto) {
     return this.authService.changePassword(currentUser, dto);
+  }
+
+  @Patch('force-change-password')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Force change password after first login',
+  })
+  forceChangePassword(@CurrentUser() currentUser: AuthenticatedUser, @Body() dto: ForceChangePasswordDto) {
+    return this.authService.forceChangePassword(currentUser, dto);
   }
 
   @Post('google')
